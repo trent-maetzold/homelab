@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+services:
+  sonarr:
+    container_name: sonarr
+    image: lscr.io/linuxserver/sonarr:latest
+    restart: unless-stopped
+    ports:
+      - 8989:8989
+    volumes:
+      - /mnt/user/appdata/sonarr/hd/config:/config
+      - /mnt/user/data:/data
+    networks:
+      - pvr
+    environment:
+      PUID: "99"
+      PGID: "100"
+      UMASK: "022"
+      TZ: America/Chicago
+    labels:
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr.png
+      net.unraid.docker.webui: http://[IP]:[PORT:8989]
+      net.unraid.docker.shell: /bin/bash
+  sonarr_4k:
+    container_name: sonarr_4k
+    image: lscr.io/linuxserver/sonarr:latest
+    restart: unless-stopped
+    ports:
+      - 8990:8989
+    volumes:
+      - /mnt/user/appdata/sonarr/4k/config:/config
+      - /mnt/user/data:/data
+    networks:
+      - pvr
+    environment:
+      PUID: "99"
+      PGID: "100"
+      UMASK: "022"
+      TZ: America/Chicago
+    labels:
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr-4k.png
+      net.unraid.docker.webui: http://[IP]:[PORT:8990]
+      net.unraid.docker.shell: /bin/bash
+  sonarr_anime:
+    container_name: sonarr_anime
+    image: lscr.io/linuxserver/sonarr:latest
+    restart: unless-stopped
+    ports:
+      - 8991:8989
+    volumes:
+      - /mnt/user/appdata/sonarr/anime/config:/config
+      - /mnt/user/data:/data
+    networks:
+      - pvr
+    environment:
+      PUID: "99"
+      PGID: "100"
+      UMASK: "022"
+      TZ: America/Chicago
+    labels:
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr.png
+      net.unraid.docker.webui: http://[IP]:[PORT:8991]
+      net.unraid.docker.shell: /bin/bash
+networks:
+  pvr:
+    external: true

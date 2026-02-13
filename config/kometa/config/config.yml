@@ -1,0 +1,170 @@
+libraries:
+  Movies:
+    operations:
+      delete_collections:
+        configured: false
+        managed: true
+      mass_content_rating_update:
+      - mdb_commonsense0
+      - mdb_age_rating0
+    template_variables:
+      collection_mode: hide_items
+      collection_filtering: user
+    collection_files:
+    - default: basic
+    - default: imdb
+      template_variables:
+        use_lowest: false
+        radarr_add_missing_top: true
+    - default: tmdb
+    - default: genre
+    - default: franchise
+    - default: universe
+    - default: decade
+    - default: seasonal
+      template_variables:
+        use_lgbtq: false
+        use_latinx: false
+        schedule_christmas: range(11/01-01/05)
+        radarr_add_missing_christmas: true
+    - default: collectionless
+    remove_overlays: false
+    overlay_files:
+    - default: ribbon
+    - default: resolution
+    - default: audio_codec
+    - default: versions
+    - default: mediastinger
+  TV Shows:
+    operations:
+      delete_collections:
+        configured: false
+        managed: true
+      mass_content_rating_update:
+      - mdb_commonsense0
+      - mdb_age_rating0
+    template_variables:
+      collection_mode: hide_items
+      collection_filtering: user
+    collection_files:
+    - default: basic
+    - default: imdb
+      template_variables:
+        use_lowest: false
+        sonarr_add_missing_top: true
+    - default: tmdb
+    - default: genre
+    - default: franchise
+    - default: universe
+    - default: decade
+    - default: collectionless
+    remove_overlays: false
+    overlay_files:
+    - default: ribbon
+    - default: resolution
+    - default: audio_codec
+    - default: versions
+    - default: status
+playlist_files:
+- default: playlist
+  template_variables:
+    libraries: Movies, TV Shows
+
+settings:
+  verify_ssl: true
+  run_order:
+  - operations
+  - metadata
+  - collections
+  - overlays
+  cache: true
+  cache_expiration: 60
+  asset_directory: config/assets
+  asset_folders: true
+  asset_depth: 0
+  create_asset_folders: true
+  prioritize_assets: false
+  dimensional_asset_rename: false
+  download_url_assets: true
+  show_missing_assets: true
+  show_missing_season_assets: false
+  show_missing_episode_assets: false
+  show_asset_not_needed: true
+  sync_mode: sync
+  default_collection_order:
+  minimum_items: 1
+  item_refresh_delay: 0
+  delete_below_minimum: false
+  delete_not_scheduled: false
+  run_again_delay: 0
+  missing_only_released: false
+  only_filter_missing: false
+  show_unmanaged: true
+  show_unconfigured: true
+  show_filtered: false
+  show_options: false
+  show_missing: true
+  save_report: false
+  tvdb_language: default
+  ignore_ids:
+  ignore_imdb_ids:
+  playlist_sync_to_users: all
+  playlist_exclude_users:
+  playlist_report: true
+  custom_repo:
+  overlay_artwork_filetype: jpg
+  overlay_artwork_quality: 75
+
+  show_unfiltered: false
+plex:
+  url: <<plexurl>>
+  token: <<plextoken>>
+  timeout: 300
+  db_cache:
+  clean_bundles: true
+  empty_trash: true
+  optimize: true
+  verify_ssl:
+tmdb:
+  apikey: <<tmdbkey>>
+  language: en
+  cache_expiration: 60
+  region: US
+mdblist:
+  apikey: <<mdbkey>>
+  cache_expiration: 60
+radarr:
+  url: <<radarrurl>>
+  token: <<radarrapikey>>
+  root_folder_path: /data/media/movies
+  radarr_path: /data/media/movies
+  plex_path: /media/movies
+  availability: announced
+  quality_profile: Any
+  search: true
+  add_missing: false
+  add_existing: false
+  upgrade_existing: false
+  monitor_existing: false
+  ignore_cache: false
+  monitor: true
+  tag:
+sonarr:
+  url: <<sonarrurl>>
+  token: <<sonarrapikey>>
+  root_folder_path: /data/media/tv
+  sonarr_path: /data/media/tv
+  plex_path: /media/tv
+  quality_profile: Any
+  search: true
+  add_missing: false
+  add_existing: false
+  upgrade_existing: false
+  monitor_existing: false
+  ignore_cache: false
+  monitor: all
+  language_profile:
+  series_type: standard
+  season_folder: true
+  tag:
+  cutoff_search: false

@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+services:
+  plex:
+    container_name: plex
+    image: lscr.io/linuxserver/plex:latest
+    restart: unless-stopped
+    volumes:
+      - /mnt/user/appdata/plex/config:/config
+      - /mnt/user/appdata/plex/transcode:/transcode
+      - /mnt/user/data/media:/media:ro
+    network_mode: host
+    environment:
+      PUID: "99"
+      PGID: "100"
+      UMASK: "022"
+      TZ: America/Chicago
+      PLEX_PASS: "yes"
+    labels:
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/plex.png
+      net.unraid.docker.webui: https://app.plex.tv
+      net.unraid.docker.shell: /bin/bash

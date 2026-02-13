@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+services:
+  headscale:
+    container_name: headscale
+    image: headscale/headscale:latest
+    restart: unless-stopped
+    command: serve
+    volumes:
+      - /mnt/user/appdata/headscale/config:/etc/headscale
+      - /mnt/user/appdata/headscale/data:/var/lib/headscale
+      - /var/run/headscale:/var/run/headscale
+    networks:
+      - proxy
+    labels:
+      traefik.enable: true
+      traefik.http.routers.headscale.rule: Host(`hs.trkm.io`)
+      traefik.http.routers.headscale.entrypoints: websecure
+      traefik.http.services.headscale.loadBalancer.server.port: 8080
+  headscale-ui:
+    container_name: headscale-ui
+    image: ghcr.io/gurucomputing/headscale-ui:latest
+    restart: unless-stopped
+    networks:
+      - proxy
+    labels:
+      traefik.enable: true
+      traefik.http.routers.headscale-ui.rule: Host(`hs.trkm.io`) && PathPrefix(`/web`)
+      traefik.http.routers.headscale-ui.entrypoints: websecure
+      traefik.http.services.headscale-ui.loadBalancer.server.port: 80
+networks:
+  proxy:
+    external: true

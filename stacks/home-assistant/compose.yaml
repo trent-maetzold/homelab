@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+services:
+  home_assistant:
+    container_name: home_assistant
+    image: lscr.io/linuxserver/homeassistant:latest
+    restart: unless-stopped
+    volumes:
+      - /mnt/user/appdata/home_assistant/config:/config
+    networks:
+      br0:
+        ipv4_address: 10.10.20.3
+      proxy: null
+    environment:
+      PUID: "99"
+      PGID: "100"
+      UMASK: "022"
+      TZ: America/Chicago
+    labels:
+      traefik.enable: true
+      traefik.http.routers.home_assistant.rule: Host(`ha.trkm.io`)
+      traefik.http.services.home_assistant.loadBalancer.server.port: 8123
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/home-assistant.png
+      net.unraid.docker.webui: https://ha.trkm.io
+      net.unraid.docker.shell: /bin/bash
+networks:
+  br0:
+    external: true
+  proxy:
+    external: true

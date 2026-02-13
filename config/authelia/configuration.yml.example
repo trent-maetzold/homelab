@@ -1,0 +1,64 @@
+# Authelia config - copy to /mnt/user/appdata/authelia/config/configuration.yml
+# Docs: https://www.authelia.com/configuration/
+
+server:
+  address: tcp://0.0.0.0:9091/
+
+log:
+  level: info
+
+theme: dark
+
+totp:
+  issuer: trkm.io
+  period: 30
+  skew: 1
+
+authentication_backend:
+  file:
+    path: /config/users_database.yml
+    password:
+      algorithm: argon2id
+      iterations: 3
+      memory: 65536
+      parallelism: 4
+      salt_length: 16
+
+access_control:
+  default_policy: deny
+  rules:
+    # Public endpoints
+    - domain: "public.trkm.io"
+      policy: bypass
+    # Two-factor for sensitive services  
+    - domain: "*.trkm.io"
+      policy: two_factor
+
+session:
+  name: authelia_session
+  domain: trkm.io
+  expiration: 1h
+  inactivity: 5m
+  remember_me: 1M
+  redis:
+    host: authelia-redis
+    port: 6379
+
+regulation:
+  max_retries: 3
+  find_time: 2m
+  ban_time: 5m
+
+storage:
+  local:
+    path: /config/db.sqlite3
+
+notifier:
+  # For testing - replace with SMTP for production
+  filesystem:
+    filename: /config/notification.txt
+  # smtp:
+  #   address: smtp://mail.trkm.io:587
+  #   username: authelia@trkm.io
+  #   password: "password"
+  #   sender: "Authelia <authelia@trkm.io>"

@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+services:
+  recyclarr:
+    container_name: recyclarr
+    image: ghcr.io/recyclarr/recyclarr:latest
+    user: 99:100
+    restart: unless-stopped
+    volumes:
+      - /mnt/user/appdata/recyclarr/config:/config
+    networks:
+      - pvr
+    environment:
+      CRON_SCHEDULE: "@daily"
+      RECYCLARR_CREATE_CONFIG: "false"
+      TZ: America/Chicago
+    labels:
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/recyclarr.png
+      net.unraid.docker.webui: ""
+      net.unraid.docker.shell: /bin/bash
+networks:
+  pvr:
+    external: true

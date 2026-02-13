@@ -1,0 +1,29 @@
+{
+  "groups": {
+    "group:admin": ["trent@"]
+  },
+  "tagOwners": {
+    "tag:server": ["group:admin"],
+    "tag:dmz": ["group:admin"]
+  },
+  "acls": [
+    // Admins can access everything
+    {
+      "action": "accept",
+      "src": ["group:admin"],
+      "dst": ["*:*"]
+    },
+    // DMZ (traefik) can reach any server on HTTP/HTTPS ports
+    {
+      "action": "accept",
+      "src": ["tag:dmz"],
+      "dst": ["tag:server:80,443,8080,8096,32400"]
+    },
+    // Servers can talk to each other
+    {
+      "action": "accept",
+      "src": ["tag:server"],
+      "dst": ["tag:server:*"]
+    }
+  ]
+}

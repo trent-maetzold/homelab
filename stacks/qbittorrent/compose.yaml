@@ -1,0 +1,21 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+services:
+  qbittorrent:
+    container_name: qbittorrent
+    image: lscr.io/linuxserver/qbittorrent:latest
+    restart: unless-stopped
+    volumes:
+      - /mnt/user/appdata/qbittorrent/config:/config
+      - /mnt/user/data/torrents:/data/torrents
+    network_mode: container:gluetun
+    environment:
+      PUID: "99"
+      PGID: "100"
+      UMASK: "022"
+      TZ: America/Chicago
+      WEBUI_PORT: "8081"
+      TORRENTING_PORT: "6881"
+    labels:
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/qbittorrent.png
+      net.unraid.docker.webui: http://[IP]:[PORT:8081]
+      net.unraid.docker.shell: /bin/bash

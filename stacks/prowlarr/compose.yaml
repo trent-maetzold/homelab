@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+services:
+  prowlarr:
+    container_name: prowlarr
+    image: lscr.io/linuxserver/prowlarr:latest
+    restart: unless-stopped
+    ports:
+      - 9696:9696
+    volumes:
+      - /mnt/user/appdata/prowlarr/config:/config
+    networks:
+      - pvr
+    environment:
+      PUID: "99"
+      PGID: "100"
+      UMASK: "022"
+      TZ: America/Chicago
+    labels:
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/prowlarr.png
+      net.unraid.docker.webui: http://[IP]:[PORT:9696]
+      net.unraid.docker.shell: /bin/bash
+networks:
+  pvr:
+    external: true

@@ -1,0 +1,46 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+services:
+  baikal:
+    container_name: baikal
+    image: ckulka/baikal:nginx
+    restart: unless-stopped
+    ports:
+      - 8079:80
+    volumes:
+      - /mnt/user/appdata/baikal/config:/var/www/baikal/config
+      - /mnt/user/appdata/baikal/Specific:/var/www/baikal/Specific
+    networks:
+      - net
+      - proxy
+    labels:
+      traefik.enable: true
+      traefik.http.routers.baikal.rule: Host(`dav.trkm.io`)
+      traefik.http.services.baikal.loadBalancer.server.port: 80
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/fc362ea4207f0e2e5a6975ff97c3984c1a396505/webp/baikal.webp
+      net.unraid.docker.webui: https://dav.trkm.io
+      net.unraid.docker.shell: /bin/bash
+  db:
+    container_name: baikal_db
+    image: lscr.io/linuxserver/mariadb:10.11.6
+    restart: unless-stopped
+    volumes:
+      - /mnt/user/appdata/baikal/db/config:/config
+    networks:
+      - net
+    environment:
+      PUID: "99"
+      PGID: "100"
+      UMASK: "022"
+      TZ: America/Chicago
+      MYSQL_DATABASE: baikal
+      MYSQL_USER: baikal
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    labels:
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/fc362ea4207f0e2e5a6975ff97c3984c1a396505/png/mariadb.png
+      net.unraid.docker.webui: ""
+      net.unraid.docker.shell: /bin/bash
+networks:
+  net: null
+  proxy:
+    external: true

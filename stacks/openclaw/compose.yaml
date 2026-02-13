@@ -1,0 +1,83 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+services:
+  openclaw:
+    container_name: openclaw
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - dind
+      - protonmail-bridge
+    volumes:
+      # openclaw data
+      - /mnt/user/appdata/openclaw/home:/home/node
+      - /mnt/user/appdata/openclaw/certs:/certs/client:ro
+      - /mnt/user/appdata/openclaw/appdata:/mnt/user/appdata
+      # host references (read-only)
+      - /mnt/user/appdata:/mnt/user/appdata-ro:ro
+      - /mnt/user/data:/mnt/user/data-ro:ro
+      # unraid shares
+      - /mnt/user/isos:/mnt/user/isos
+      - /mnt/user/domains/templates:/mnt/user/domains/templates
+      # media (read-only)
+      - /mnt/user/docs:/mnt/user/docs:ro
+      - /mnt/user/immich-data:/mnt/user/immich-data:ro
+      - /mnt/user/photos:/mnt/user/photos:ro
+      - /mnt/user/photos_manual:/mnt/user/photos_manual:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - proxy
+      - net
+    environment:
+      TZ: America/Chicago
+      DOCKER_HOST: tcp://dind:2376
+      DOCKER_TLS_VERIFY: "1"
+      DOCKER_CERT_PATH: /certs/client
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_GATEWAY_TOKEN}
+      YNAB_API_KEY: ${YNAB_API_KEY}
+      BRAVE_API_KEY: ${BRAVE_API_KEY}
+      PORTAINER_URL: ${PORTAINER_URL}
+      PORTAINER_API_KEY: ${PORTAINER_API_KEY}
+      IMAP_HOST: protonmail-bridge
+      IMAP_PORT: "143"
+      SMTP_HOST: protonmail-bridge
+      SMTP_PORT: "25"
+      PROTONMAIL_USER: ${PROTONMAIL_USER}
+      PROTONMAIL_PASS: ${PROTONMAIL_PASS}
+    labels:
+      net.unraid.docker.icon: https://openclaw.ai/icon.png
+      net.unraid.docker.webui: https://claw.trkm.io/
+      traefik.enable: true
+      traefik.http.routers.openclaw.rule: Host(`claw.trkm.io`)
+      traefik.http.services.openclaw.loadBalancer.server.port: 18789
+
+  dind:
+    container_name: openclaw-dind
+    image: docker:dind
+    restart: unless-stopped
+    privileged: true
+    volumes:
+      - /mnt/user/appdata/openclaw/dind:/var/lib/docker
+      - /mnt/user/appdata/openclaw/certs:/certs
+      - /mnt/user/appdata/openclaw/appdata:/mnt/user/appdata
+    networks:
+      - net
+    environment:
+      DOCKER_TLS_CERTDIR: /certs
+
+  protonmail-bridge:
+    container_name: openclaw-mail
+    image: shenxn/protonmail-bridge:latest
+    restart: unless-stopped
+    volumes:
+      - /mnt/user/appdata/openclaw/mail:/root
+    networks:
+      - net
+
+networks:
+  proxy:
+    external: true
+  net: null

@@ -1,0 +1,13 @@
+# Authelia users file - copy to /mnt/user/appdata/authelia/config/users_database.yml
+# Generate password hash: docker run authelia/authelia:latest authelia crypto hash generate argon2
+
+users:
+  trent:
+    disabled: false
+    displayname: "Trent"
+    # Generate with: docker run authelia/authelia:latest authelia crypto hash generate argon2
+    password: "$argon2id$v=19$m=65536,t=3,p=4$REPLACE_WITH_HASH"
+    email: trent@trkm.io
+    groups:
+      - admins
+      - users
