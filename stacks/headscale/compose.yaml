@@ -16,6 +16,9 @@ services:
       traefik.enable: true
       traefik.http.routers.headscale.rule: Host(`hs.trkm.io`)
       traefik.http.services.headscale.loadBalancer.server.port: 8080
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/headscale.png
+      net.unraid.docker.webui: https://hs.trkm.io/admin
+      net.unraid.docker.shell: /bin/sh
 
   headplane:
     container_name: headplane
@@ -40,6 +43,9 @@ services:
       traefik.enable: true
       traefik.http.routers.headplane.rule: Host(`hs.trkm.io`) && PathPrefix(`/admin`)
       traefik.http.services.headplane.loadBalancer.server.port: 3000
+      net.unraid.docker.icon: https://raw.githubusercontent.com/tale/headplane/refs/heads/main/public/favicon.ico
+      net.unraid.docker.webui: https://hs.trkm.io/admin
+      net.unraid.docker.shell: /bin/sh
 
 networks:
   proxy:
