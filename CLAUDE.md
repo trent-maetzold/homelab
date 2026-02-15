@@ -56,7 +56,16 @@ Omit keys that don't apply. Don't reorder.
 - Internal stack networks defined at the bottom of the file
 
 ### Labels
-- Unraid icon labels use dashboard-icons PNG URLs
+- Unraid labels on every service:
+  - `net.unraid.docker.icon`: dashboard-icons PNG URL — try
+    `https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/<name>.png`
+    first, but curl to verify it returns 200. If not found on `main`,
+    search the repo tree (`png/` dir via GitHub API) for the correct
+    filename. If no icon exists for the service, omit the label.
+  - `net.unraid.docker.webui`: the web UI URL (empty string if none)
+  - `net.unraid.docker.shell`: `/bin/bash` if available, `/bin/sh`
+    otherwise — test with `podman run --rm --entrypoint /bin/bash <image> -c "echo ok"`
+    to verify before using `/bin/bash`
 - Traefik labels follow the standard router/service pattern
 
 ### Consistency

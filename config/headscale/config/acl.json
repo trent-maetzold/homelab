@@ -1,6 +1,6 @@
 {
   "groups": {
-    "group:admin": ["trent@"]
+    "group:admin": ["trkm@"]
   },
   "tagOwners": {
     "tag:server": ["group:admin"],
