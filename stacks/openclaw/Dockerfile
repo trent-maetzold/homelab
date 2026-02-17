@@ -20,12 +20,7 @@ RUN install -m 0755 -d /etc/apt/keyrings && \
 # Install apt packages
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-      git \
-      curl \
       jq \
-      ca-certificates \
-      gnupg \
-      procps \
       docker-ce-cli \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
