@@ -1,6 +1,6 @@
 {
   "groups": {
-    "group:admin": ["trkm@"]
+    "group:admin": ["tm@"]
   },
   "tagOwners": {
     "tag:server": ["group:admin"],
@@ -24,6 +24,14 @@
       "action": "accept",
       "src": ["tag:server"],
       "dst": ["tag:server:*"]
+    }
+  ],
+  "ssh": [
+    {
+      "action": "accept",
+      "src": ["group:admin"],
+      "dst": ["autogroup:member", "autogroup:tagged"],
+      "users": ["root", "autogroup:nonroot"]
     }
   ]
 }

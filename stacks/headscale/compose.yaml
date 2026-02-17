@@ -22,7 +22,7 @@ services:
 
   headplane:
     container_name: headplane
-    image: ghcr.io/tale/headplane:latest
+    image: ghcr.io/tale/headplane:0.6.2-beta.5
     restart: unless-stopped
     volumes:
       - /mnt/user/appdata/headplane/config:/etc/headplane
