@@ -19,8 +19,6 @@ RUN apt-get update && \
       jq \
       docker-ce-cli \
       build-essential \
-      python3 \
-      python3-venv \
       golang-go \
       rustc \
       cargo \
