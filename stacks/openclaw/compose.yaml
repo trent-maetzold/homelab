@@ -7,9 +7,6 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
-    depends_on:
-      - dind
-      - protonmail-bridge
     volumes:
       # openclaw data
       - /mnt/user/appdata/openclaw/home:/home/node
@@ -37,19 +34,12 @@ services:
       DOCKER_CERT_PATH: /certs/client
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
       OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_GATEWAY_TOKEN}
-      YNAB_API_KEY: ${YNAB_API_KEY}
       BRAVE_API_KEY: ${BRAVE_API_KEY}
-      PORTAINER_URL: ${PORTAINER_URL}
-      PORTAINER_API_KEY: ${PORTAINER_API_KEY}
-      IMAP_HOST: protonmail-bridge
-      IMAP_PORT: "143"
-      SMTP_HOST: protonmail-bridge
-      SMTP_PORT: "25"
-      PROTONMAIL_USER: ${PROTONMAIL_USER}
-      PROTONMAIL_PASS: ${PROTONMAIL_PASS}
+      MCP_TOKEN: ${MCP_TOKEN}
     labels:
-      net.unraid.docker.icon: https://openclaw.ai/icon.png
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/openclaw.png
       net.unraid.docker.webui: https://claw.trkm.io/
+      net.unraid.docker.shell: /bin/bash
       traefik.enable: true
       traefik.http.routers.openclaw.rule: Host(`claw.trkm.io`)
       traefik.http.services.openclaw.loadBalancer.server.port: 18789
@@ -67,15 +57,9 @@ services:
       - net
     environment:
       DOCKER_TLS_CERTDIR: /certs
-
-  protonmail-bridge:
-    container_name: openclaw-mail
-    image: shenxn/protonmail-bridge:latest
-    restart: unless-stopped
-    volumes:
-      - /mnt/user/appdata/openclaw/mail:/root
-    networks:
-      - net
+    labels:
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/docker.png
+      net.unraid.docker.shell: /bin/sh
 
 networks:
   proxy:
