@@ -1,4 +1,4 @@
-FROM node:22-bookworm
+FROM node:lts-trixie
 
 # Install Bun (required for build scripts)
 RUN curl -fsSL https://bun.sh/install | bash
@@ -10,7 +10,7 @@ RUN corepack enable
 RUN install -m 0755 -d /etc/apt/keyrings && \
     curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc && \
     chmod a+r /etc/apt/keyrings/docker.asc && \
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian bookworm stable" > /etc/apt/sources.list.d/docker.list
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian $(. /etc/os-release && echo $VERSION_CODENAME) stable" > /etc/apt/sources.list.d/docker.list
 
 # Install apt packages
 RUN apt-get update && \
@@ -21,6 +21,9 @@ RUN apt-get update && \
       build-essential \
       python3 \
       python3-venv \
+      golang-go \
+      rustc \
+      cargo \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install uv (Python package manager)
@@ -28,16 +31,6 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
     mv /root/.local/bin/uv /usr/local/bin/uv && \
     mv /root/.local/bin/uvx /usr/local/bin/uvx && \
     rm -rf /root/.local
-
-# Install Rust (system-wide)
-ENV RUSTUP_HOME=/usr/local/rustup
-ENV CARGO_HOME=/usr/local/cargo
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
-ENV PATH="/usr/local/cargo/bin:${PATH}"
-
-# Install Go
-RUN curl -fsSL https://go.dev/dl/go1.24.0.linux-amd64.tar.gz | tar -C /usr/local -xzf -
-ENV PATH="/usr/local/go/bin:${PATH}"
 
 # Clone and build OpenClaw
 WORKDIR /app
