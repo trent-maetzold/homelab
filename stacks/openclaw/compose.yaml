@@ -51,9 +51,6 @@ services:
     image: docker:dind
     restart: unless-stopped
     privileged: true
-    labels:
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/docker.png
-      net.unraid.docker.shell: /bin/sh
     volumes:
       - /mnt/user/appdata/openclaw/dind:/var/lib/docker
       - /mnt/user/appdata/openclaw/certs:/certs
@@ -62,6 +59,9 @@ services:
       - net
     environment:
       DOCKER_TLS_CERTDIR: /certs
+    labels:
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/docker.png
+      net.unraid.docker.shell: /bin/sh
 
 networks:
   proxy:
