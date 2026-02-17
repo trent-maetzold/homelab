@@ -40,6 +40,7 @@ services:
       MCP_TOKEN: ${MCP_TOKEN}
     labels:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/main/png/openclaw.png
+      net.unraid.docker.shell: bash
       net.unraid.docker.webui: https://claw.trkm.io/
       traefik.enable: true
       traefik.http.routers.openclaw.rule: Host(`claw.trkm.io`)
@@ -50,6 +51,9 @@ services:
     image: docker:dind
     restart: unless-stopped
     privileged: true
+    labels:
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/main/png/docker.png
+      net.unraid.docker.shell: sh
     volumes:
       - /mnt/user/appdata/openclaw/dind:/var/lib/docker
       - /mnt/user/appdata/openclaw/certs:/certs
