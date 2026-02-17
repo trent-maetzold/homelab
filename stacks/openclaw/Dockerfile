@@ -58,8 +58,5 @@ EXPOSE 18789
 RUN chown -R node:node /app
 USER node
 
-# Create global install directories
-RUN mkdir -p /home/node/.npm-global /home/node/.local/bin /home/node/go
-
 ENTRYPOINT ["tini", "--"]
 CMD ["node", "openclaw.mjs", "gateway", "--bind", "lan", "--port", "18789"]
