@@ -13,9 +13,10 @@ services:
       # openclaw data
       - /mnt/user/appdata/openclaw/home:/home/node
       - /mnt/user/appdata/openclaw/certs:/certs/client:ro
+      - /mnt/user/appdata/openclaw/appdata:/mnt/user/appdata
       # host references (read-only)
-      - /mnt/user/appdata:/mnt/user/appdata:ro
-      - /mnt/user/data:/mnt/user/data:ro
+      - /mnt/user/appdata:/mnt/user/appdata-ro:ro
+      - /mnt/user/data:/mnt/user/data-ro:ro
       # unraid shares
       - /mnt/user/isos:/mnt/user/isos
       - /mnt/user/domains/templates:/mnt/user/domains/templates
@@ -52,6 +53,7 @@ services:
     volumes:
       - /mnt/user/appdata/openclaw/dind:/var/lib/docker
       - /mnt/user/appdata/openclaw/certs:/certs
+      - /mnt/user/appdata/openclaw/appdata:/mnt/user/appdata
     networks:
       - net
     environment:
