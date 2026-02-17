@@ -39,7 +39,7 @@ services:
       BRAVE_API_KEY: ${BRAVE_API_KEY}
       MCP_TOKEN: ${MCP_TOKEN}
     labels:
-      net.unraid.docker.icon: https://openclaw.ai/icon.png
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/main/png/openclaw.png
       net.unraid.docker.webui: https://claw.trkm.io/
       traefik.enable: true
       traefik.http.routers.openclaw.rule: Host(`claw.trkm.io`)
