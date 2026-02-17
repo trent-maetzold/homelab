@@ -39,9 +39,9 @@ services:
       BRAVE_API_KEY: ${BRAVE_API_KEY}
       MCP_TOKEN: ${MCP_TOKEN}
     labels:
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/main/png/openclaw.png
-      net.unraid.docker.shell: bash
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/openclaw.png
       net.unraid.docker.webui: https://claw.trkm.io/
+      net.unraid.docker.shell: /bin/bash
       traefik.enable: true
       traefik.http.routers.openclaw.rule: Host(`claw.trkm.io`)
       traefik.http.services.openclaw.loadBalancer.server.port: 18789
@@ -52,8 +52,8 @@ services:
     restart: unless-stopped
     privileged: true
     labels:
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/main/png/docker.png
-      net.unraid.docker.shell: sh
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/docker.png
+      net.unraid.docker.shell: /bin/sh
     volumes:
       - /mnt/user/appdata/openclaw/dind:/var/lib/docker
       - /mnt/user/appdata/openclaw/certs:/certs
