@@ -1,10 +1,5 @@
 FROM node:22-bookworm
 
-# Install tini for proper PID 1 signal handling
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends tini && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
-
 # Install Bun (required for build scripts)
 RUN curl -fsSL https://bun.sh/install | bash
 ENV PATH="/root/.bun/bin:${PATH}"
@@ -20,6 +15,7 @@ RUN install -m 0755 -d /etc/apt/keyrings && \
 # Install apt packages
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+      tini \
       jq \
       docker-ce-cli \
       build-essential \
