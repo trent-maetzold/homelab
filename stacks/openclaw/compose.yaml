@@ -7,8 +7,6 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
-    depends_on:
-      - dind
     volumes:
       # openclaw data
       - /mnt/user/appdata/openclaw/home:/home/node
