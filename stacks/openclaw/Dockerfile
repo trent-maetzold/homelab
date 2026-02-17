@@ -1,5 +1,10 @@
 FROM node:22-bookworm
 
+# Install tini for proper PID 1 signal handling
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends tini && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # Install Bun (required for build scripts)
 RUN curl -fsSL https://bun.sh/install | bash
 ENV PATH="/root/.bun/bin:${PATH}"
@@ -65,11 +70,16 @@ RUN OPENCLAW_A2UI_SKIP_MISSING=1 pnpm build
 ENV OPENCLAW_PREFER_PNPM=1
 RUN pnpm ui:build
 
+# Runtime config
 ENV NODE_ENV=production
+ENV HOME=/home/node
+ENV TERM=xterm-256color
+
+EXPOSE 18789
 
 # Use existing node user (uid 1000) from base image
 RUN chown -R node:node /app
-
 USER node
 
-CMD ["node", "openclaw.mjs", "gateway", "--allow-unconfigured", "--bind", "lan"]
+ENTRYPOINT ["tini", "--"]
+CMD ["node", "openclaw.mjs", "gateway", "--bind", "lan", "--port", "18789"]
