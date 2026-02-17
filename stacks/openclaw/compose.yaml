@@ -9,15 +9,13 @@ services:
     restart: unless-stopped
     depends_on:
       - dind
-      - protonmail-bridge
     volumes:
       # openclaw data
       - /mnt/user/appdata/openclaw/home:/home/node
       - /mnt/user/appdata/openclaw/certs:/certs/client:ro
-      - /mnt/user/appdata/openclaw/appdata:/mnt/user/appdata
       # host references (read-only)
-      - /mnt/user/appdata:/mnt/user/appdata-ro:ro
-      - /mnt/user/data:/mnt/user/data-ro:ro
+      - /mnt/user/appdata:/mnt/user/appdata:ro
+      - /mnt/user/data:/mnt/user/data:ro
       # unraid shares
       - /mnt/user/isos:/mnt/user/isos
       - /mnt/user/domains/templates:/mnt/user/domains/templates
@@ -37,16 +35,8 @@ services:
       DOCKER_CERT_PATH: /certs/client
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
       OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_GATEWAY_TOKEN}
-      YNAB_API_KEY: ${YNAB_API_KEY}
       BRAVE_API_KEY: ${BRAVE_API_KEY}
-      PORTAINER_URL: ${PORTAINER_URL}
-      PORTAINER_API_KEY: ${PORTAINER_API_KEY}
-      IMAP_HOST: protonmail-bridge
-      IMAP_PORT: "143"
-      SMTP_HOST: protonmail-bridge
-      SMTP_PORT: "25"
-      PROTONMAIL_USER: ${PROTONMAIL_USER}
-      PROTONMAIL_PASS: ${PROTONMAIL_PASS}
+      MCP_TOKEN: ${MCP_TOKEN}
     labels:
       net.unraid.docker.icon: https://openclaw.ai/icon.png
       net.unraid.docker.webui: https://claw.trkm.io/
@@ -62,20 +52,10 @@ services:
     volumes:
       - /mnt/user/appdata/openclaw/dind:/var/lib/docker
       - /mnt/user/appdata/openclaw/certs:/certs
-      - /mnt/user/appdata/openclaw/appdata:/mnt/user/appdata
     networks:
       - net
     environment:
       DOCKER_TLS_CERTDIR: /certs
-
-  protonmail-bridge:
-    container_name: openclaw-mail
-    image: shenxn/protonmail-bridge:latest
-    restart: unless-stopped
-    volumes:
-      - /mnt/user/appdata/openclaw/mail:/root
-    networks:
-      - net
 
 networks:
   proxy:
