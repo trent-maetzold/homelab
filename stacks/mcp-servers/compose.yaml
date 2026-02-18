@@ -11,9 +11,12 @@ services:
       MCP_TRANSPORT: sse
       MCP_HOST: 0.0.0.0
       MCP_PORT: 8000
+      MCP_TOKEN: ${MCP_TOKEN}
       CONTAINER_PROVIDER__DEFAULT__TYPE: portainer
       CONTAINER_PROVIDER__DEFAULT__URL: http://portainer:9000
       CONTAINER_PROVIDER__DEFAULT__TOKEN: ${PORTAINER_API_KEY}
+      CONTAINER_PROVIDER__DEFAULT__GIT_USERNAME: ${GITLAB_API_USER}
+      CONTAINER_PROVIDER__DEFAULT__GIT_TOKEN_REPO_READ: ${GIT_TOKEN_REPO_READ}
     labels:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/portainer.png
 
@@ -28,9 +31,10 @@ services:
       MCP_TRANSPORT: sse
       MCP_HOST: 0.0.0.0
       MCP_PORT: 8000
+      MCP_TOKEN: ${MCP_TOKEN}
       GIT_PROVIDER__DEFAULT__TYPE: gitlab
       GIT_PROVIDER__DEFAULT__URL: https://gitlab.com
-      GIT_PROVIDER__DEFAULT__TOKEN: ${GITLAB_PAT}
+      GIT_PROVIDER__DEFAULT__TOKEN: ${GITLAB_API_TOKEN}
     labels:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/gitlab.png
 
