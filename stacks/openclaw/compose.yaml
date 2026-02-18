@@ -37,8 +37,8 @@ services:
       OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_GATEWAY_TOKEN}
       BRAVE_API_KEY: ${BRAVE_API_KEY}
       MCP_TOKEN: ${MCP_TOKEN}
-      MCP_PORTAINER_URL: http://mcp-container:8000
-      MCP_GIT_URL: http://mcp-git:8000
+      MCP_PORTAINER_URL: http://mcp-portainer:8000
+      MCP_GITLAB_URL: http://mcp-gitlab:8000
     labels:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/openclaw.png
       net.unraid.docker.webui: https://claw.trkm.io/
