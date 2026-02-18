@@ -26,6 +26,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     networks:
       - proxy
+      - mcp
       - net
     environment:
       TZ: America/Chicago
@@ -63,5 +64,7 @@ services:
 
 networks:
   proxy:
+    external: true
+  mcp:
     external: true
   net: null

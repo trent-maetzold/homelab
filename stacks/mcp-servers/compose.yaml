@@ -1,0 +1,39 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+services:
+  mcp-container:
+    container_name: mcp-container
+    image: registry.gitlab.com/trkm/mcp-container:latest
+    restart: unless-stopped
+    networks:
+      - mcp
+    environment:
+      TZ: America/Chicago
+      MCP_TRANSPORT: sse
+      MCP_HOST: 0.0.0.0
+      MCP_PORT: 8000
+      CONTAINER_PROVIDER__DEFAULT__TYPE: portainer
+      CONTAINER_PROVIDER__DEFAULT__URL: http://portainer:9000
+      CONTAINER_PROVIDER__DEFAULT__TOKEN: ${PORTAINER_API_KEY}
+    labels:
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/portainer.png
+
+  mcp-git:
+    container_name: mcp-git
+    image: registry.gitlab.com/trkm/mcp-git:latest
+    restart: unless-stopped
+    networks:
+      - mcp
+    environment:
+      TZ: America/Chicago
+      MCP_TRANSPORT: sse
+      MCP_HOST: 0.0.0.0
+      MCP_PORT: 8000
+      GIT_PROVIDER__DEFAULT__TYPE: gitlab
+      GIT_PROVIDER__DEFAULT__URL: https://gitlab.com
+      GIT_PROVIDER__DEFAULT__TOKEN: ${GITLAB_PAT}
+    labels:
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/gitlab.png
+
+networks:
+  mcp:
+    external: true
