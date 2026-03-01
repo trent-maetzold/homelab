@@ -6,6 +6,7 @@ services:
     restart: unless-stopped
     volumes:
       - /mnt/user/appdata/gitlab-runner/config:/etc/gitlab-runner
+      - /mnt/user/appdata/gitlab-runner/builds:/builds
       - /var/run/docker.sock:/var/run/docker.sock
     labels:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/gitlab.png
