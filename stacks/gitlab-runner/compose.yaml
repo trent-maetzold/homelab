@@ -5,9 +5,9 @@ services:
     image: gitlab/gitlab-runner:latest
     restart: unless-stopped
     depends_on:
-      - docker
+      - dind
     environment:
-      DOCKER_HOST: tcp://docker:2376
+      DOCKER_HOST: tcp://dind:2376
       DOCKER_TLS_VERIFY: 1
       DOCKER_CERT_PATH: /certs/client
     volumes:
@@ -18,10 +18,10 @@ services:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/gitlab.png
       net.unraid.docker.shell: /bin/bash
 
-  docker:
+  dind:
     container_name: gitlab-runner-dind
     image: docker:dind
-    hostname: docker
+    hostname: dind
     restart: unless-stopped
     privileged: true
     environment:
