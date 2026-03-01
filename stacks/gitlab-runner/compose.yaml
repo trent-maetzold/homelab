@@ -21,6 +21,7 @@ services:
   dind:
     container_name: gitlab-runner-dind
     image: docker:dind
+    hostname: dind
     restart: unless-stopped
     privileged: true
     environment:
