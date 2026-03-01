@@ -13,6 +13,7 @@ services:
     volumes:
       - /mnt/user/appdata/gitlab-runner/config:/etc/gitlab-runner
       - /mnt/user/appdata/gitlab-runner/builds:/builds
+      - /mnt/user/appdata/gitlab-runner/cache:/cache
       - /mnt/user/appdata/gitlab-runner/dind/certs:/certs:ro
     labels:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/gitlab.png
