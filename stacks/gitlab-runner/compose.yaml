@@ -29,7 +29,7 @@ services:
       DOCKER_TLS_CERTDIR: /certs
     volumes:
       - /mnt/user/appdata/gitlab-runner/dind/certs:/certs
-      - /mnt/user/appdata/gitlab-runner/dind/data:/var/lib/docker
+      - /mnt/cache/appdata/gitlab-runner/dind/data:/var/lib/docker
     labels:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/docker.png
       net.unraid.docker.shell: /bin/sh
