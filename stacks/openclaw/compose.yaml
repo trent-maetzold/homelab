@@ -3,9 +3,7 @@
 services:
   openclaw:
     container_name: openclaw
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: registry.gitlab.com/hardmcp/openclaw:latest
     restart: unless-stopped
     volumes:
       # openclaw data
