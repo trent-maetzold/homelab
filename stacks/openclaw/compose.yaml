@@ -3,9 +3,7 @@
 services:
   openclaw:
     container_name: openclaw
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: registry.gitlab.com/hardmcp/openclaw:latest
     restart: unless-stopped
     volumes:
       # openclaw data
@@ -33,7 +31,7 @@ services:
       DOCKER_HOST: tcp://dind:2376
       DOCKER_TLS_VERIFY: "1"
       DOCKER_CERT_PATH: /certs/client
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      ANTHROPIC_OAUTH_TOKEN: ${ANTHROPIC_OAUTH_TOKEN}
       OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_GATEWAY_TOKEN}
       BRAVE_API_KEY: ${BRAVE_API_KEY}
       MCP_TOKEN: ${MCP_TOKEN}
@@ -48,7 +46,7 @@ services:
       traefik.http.services.openclaw.loadBalancer.server.port: 18789
 
   dind:
-    container_name: openclaw-dind
+    container_name: openclaw_dind
     image: docker:dind
     restart: unless-stopped
     privileged: true
@@ -59,6 +57,7 @@ services:
     networks:
       - net
     environment:
+      TZ: America/Chicago
       DOCKER_TLS_CERTDIR: /certs
     labels:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/docker.png
@@ -69,4 +68,4 @@ networks:
     external: true
   mcp:
     external: true
-  net: null
+  net:

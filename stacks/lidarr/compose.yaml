@@ -1,4 +1,5 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
 services:
   lidarr:
     container_name: lidarr
@@ -11,15 +12,22 @@ services:
       - /mnt/user/data:/data
     networks:
       - pvr
+      - proxy
     environment:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
       TZ: America/Chicago
     labels:
+      traefik.enable: true
+      traefik.http.routers.lidarr.rule: Host(`lidarr.trkm.io`)
+      traefik.http.services.lidarr.loadBalancer.server.port: 8686
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/lidarr.png
-      net.unraid.docker.webui: http://[IP]:[PORT:8686]
+      net.unraid.docker.webui: https://lidarr.trkm.io
       net.unraid.docker.shell: /bin/bash
+
 networks:
   pvr:
+    external: true
+  proxy:
     external: true

@@ -1,4 +1,5 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
 services:
   qbittorrent:
     container_name: qbittorrent
@@ -16,6 +17,9 @@ services:
       WEBUI_PORT: "8081"
       TORRENTING_PORT: "6881"
     labels:
+      traefik.enable: true
+      traefik.http.routers.qbittorrent.rule: Host(`qbittorrent.trkm.io`)
+      traefik.http.services.qbittorrent.loadBalancer.server.port: 8081
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/qbittorrent.png
-      net.unraid.docker.webui: http://[IP]:[PORT:8081]
+      net.unraid.docker.webui: https://qbittorrent.trkm.io
       net.unraid.docker.shell: /bin/bash

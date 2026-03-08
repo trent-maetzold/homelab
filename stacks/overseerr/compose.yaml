@@ -1,4 +1,5 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
 services:
   overseerr:
     container_name: overseerr
@@ -22,6 +23,7 @@ services:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/overseerr.png
       net.unraid.docker.webui: https://overseerr.trkm.io
       net.unraid.docker.shell: /bin/bash
+
 networks:
   proxy:
     external: true

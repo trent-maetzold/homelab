@@ -1,22 +1,24 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
 services:
   gluetun:
     container_name: gluetun
     image: qmcgaw/gluetun:latest
     restart: unless-stopped
-    cap_add:
-      - NET_ADMIN
-    devices:
-      - /dev/net/tun:/dev/net/tun
     ports:
       - 8080:8080
       - 8081:8081
       - 6881:6881
       - 6881:6881/udp
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
     volumes:
       - /mnt/user/appdata/qbittorrent/vpn:/gluetun
     networks:
       - pvr
+      - proxy
     environment:
       TZ: America/Chicago
       VPN_SERVICE_PROVIDER: protonvpn
@@ -25,8 +27,10 @@ services:
       SERVER_CITIES: Chicago
     labels:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/gluetun.png
-      net.unraid.docker.webui: ""
       net.unraid.docker.shell: /bin/sh
+
 networks:
   pvr:
+    external: true
+  proxy:
     external: true

@@ -1,4 +1,5 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
 services:
   authelia:
     container_name: authelia
@@ -6,13 +7,13 @@ services:
     restart: unless-stopped
     volumes:
       - /mnt/user/appdata/authelia/config:/config
+    networks:
+      - proxy
     environment:
       TZ: America/Chicago
       AUTHELIA_JWT_SECRET_FILE: /config/secrets/jwt
       AUTHELIA_SESSION_SECRET_FILE: /config/secrets/session
       AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE: /config/secrets/storage
-    networks:
-      - proxy
     labels:
       traefik.enable: true
       traefik.http.routers.authelia.rule: Host(`auth.trkm.io`)
@@ -20,15 +21,22 @@ services:
       traefik.http.middlewares.authelia.forwardAuth.address: http://authelia:9091/api/authz/forward-auth
       traefik.http.middlewares.authelia.forwardAuth.trustForwardHeader: true
       traefik.http.middlewares.authelia.forwardAuth.authResponseHeaders: Remote-User,Remote-Groups,Remote-Email,Remote-Name
+
   authelia-redis:
-    container_name: authelia-redis
+    container_name: authelia_redis
     image: redis:alpine
     restart: unless-stopped
     volumes:
       - /mnt/user/appdata/authelia/redis:/data
     networks:
       - proxy
+    environment:
+      TZ: America/Chicago
+    labels:
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/redis.png
+      net.unraid.docker.shell: /bin/sh
     command: redis-server --appendonly yes
+
 networks:
   proxy:
     external: true

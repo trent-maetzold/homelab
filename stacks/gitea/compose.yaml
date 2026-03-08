@@ -1,11 +1,10 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
 services:
   gitea:
     container_name: gitea
     image: gitea/gitea:latest
     restart: unless-stopped
-    depends_on:
-      - gitea-db
     ports:
       - 3000:3000
       - "2222:22"
@@ -35,23 +34,31 @@ services:
       GITEA__mailer__SMTP_PORT: "587"
       GITEA__mailer__USER: ${GITEA_SMTP_USER}
       GITEA__mailer__PASSWD: ${GITEA_SMTP_TOKEN}
+    depends_on:
+      - gitea-db
     labels:
       traefik.enable: true
       traefik.http.routers.gitea.rule: Host(`git.trkm.io`)
       traefik.http.services.gitea.loadBalancer.server.port: 3000
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/gitea.png
+      net.unraid.docker.webui: https://git.trkm.io
+      net.unraid.docker.shell: /bin/bash
+
   gitea-db:
-    container_name: gitea-db
+    container_name: gitea_db
     image: postgres:16-alpine
     restart: unless-stopped
     volumes:
       - /mnt/user/appdata/gitea/postgres:/var/lib/postgresql/data
+    networks:
+      - net
     environment:
+      TZ: America/Chicago
       POSTGRES_DB: gitea
       POSTGRES_USER: gitea
       POSTGRES_PASSWORD: ${GITEA_DB_PASSWORD}
-    networks:
-      - net
+
 networks:
   proxy:
     external: true
-  net: null
+  net:

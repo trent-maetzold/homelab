@@ -1,4 +1,5 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
 services:
   kometa:
     container_name: kometa
@@ -21,8 +22,8 @@ services:
       KOMETA_SONARRAPIKEY: ${SONARR_APIKEY}
     labels:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/kometa.png
-      net.unraid.docker.webui: ""
       net.unraid.docker.shell: /bin/bash
+
 networks:
   pvr:
     external: true

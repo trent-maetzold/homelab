@@ -1,39 +1,25 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
 services:
-  tailscale:
-    container_name: traefik-tailscale
-    image: tailscale/tailscale:latest
-    hostname: traefik-dmz
-    restart: unless-stopped
-    cap_add:
-      - NET_ADMIN
-      - SYS_MODULE
-    volumes:
-      - /mnt/user/appdata/traefik/ts:/var/lib/tailscale
-      - /dev/net/tun:/dev/net/tun
-    environment:
-      TS_STATE_DIR: /var/lib/tailscale
-      TS_SOCKET: /var/lib/tailscale/tailscaled.sock
-      TS_USERSPACE: false
-      TS_LOGIN_SERVER: https://hs.trkm.io
-    networks:
-      dmz:
-        ipv4_address: 10.10.30.10
-      proxy: null
   traefik:
     container_name: traefik
     image: traefik:v3.6
     restart: unless-stopped
-    depends_on:
-      - tailscale
-    network_mode: service:tailscale
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /mnt/user/appdata/traefik/dynamic:/etc/traefik/dynamic
       - /mnt/user/appdata/traefik/letsencrypt:/letsencrypt
       - /mnt/user/appdata/traefik/log:/var/log
-      - /mnt/user/appdata/traefik/ts:/var/lib/tailscale:ro
+    networks:
+      br0:
+        ipv4_address: 10.10.20.10
+      proxy:
     environment:
+      TZ: America/Chicago
       CF_API_EMAIL: tkm89@proton.me
       CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN}
       CF_ZONE_API_TOKEN: ${CF_ZONE_API_TOKEN}
@@ -66,24 +52,33 @@ services:
       traefik.http.services.traefik.loadBalancer.server.port: 8080
       net.unraid.docker.icon: https://raw.githubusercontent.com/ibracorp/unraid-templates/master/traefik/traefik.png
       net.unraid.docker.webui: https://traefik.trkm.io
-      net.unraid.docker.shell: /bin/bash
-  traefik-tunnel:
-    container_name: traefik-tunnel
-    image: cloudflare/cloudflared:latest
+      net.unraid.docker.shell: bash
+
+  tailscale:
+    container_name: traefik_tailscale
+    image: ghcr.io/tailscale/tailscale:latest
     restart: unless-stopped
-    networks:
-      - proxy
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    volumes:
+      - /mnt/user/appdata/tailscale-proxy/state:/var/lib/tailscale
+      - /dev/net/tun:/dev/net/tun
+    network_mode: service:traefik
     environment:
-      TUNNEL_TOKEN: ${CLOUDFLARED_TUNNEL_TOKEN}
-    command: tunnel run
+      TZ: America/Chicago
+      TS_AUTHKEY: ${TS_AUTHKEY}
+      TS_HOSTNAME: proxy
+      TS_STATE_DIR: /var/lib/tailscale
+      TS_EXTRA_ARGS: --login-server=https://hs.trkm.io
+    depends_on:
+      - traefik
+    labels:
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/tailscale.png
+      net.unraid.docker.shell: /bin/sh
+
 networks:
-  dmz:
-    driver: ipvlan
-    driver_opts:
-      parent: br0.30
-    ipam:
-      config:
-        - subnet: 10.10.30.0/24
-          gateway: 10.10.30.1
+  br0:
+    external: true
   proxy:
     external: true
