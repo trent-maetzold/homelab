@@ -12,14 +12,18 @@ services:
       - /mnt/user/data:/data
     networks:
       - pvr
+      - proxy
     environment:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
       TZ: America/Chicago
     labels:
+      traefik.enable: true
+      traefik.http.routers.sonarr.rule: Host(`sonarr.trkm.io`)
+      traefik.http.services.sonarr.loadBalancer.server.port: 8989
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr.png
-      net.unraid.docker.webui: http://[IP]:[PORT:8989]
+      net.unraid.docker.webui: https://sonarr.trkm.io
       net.unraid.docker.shell: /bin/bash
 
   sonarr-4k:
@@ -33,14 +37,18 @@ services:
       - /mnt/user/data:/data
     networks:
       - pvr
+      - proxy
     environment:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
       TZ: America/Chicago
     labels:
+      traefik.enable: true
+      traefik.http.routers.sonarr_4k.rule: Host(`sonarr.trkm.io`) && PathPrefix(`/4k`)
+      traefik.http.services.sonarr_4k.loadBalancer.server.port: 8989
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr-4k.png
-      net.unraid.docker.webui: http://[IP]:[PORT:8990]
+      net.unraid.docker.webui: https://sonarr.trkm.io/4k
       net.unraid.docker.shell: /bin/bash
 
   sonarr-anime:
@@ -54,16 +62,22 @@ services:
       - /mnt/user/data:/data
     networks:
       - pvr
+      - proxy
     environment:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
       TZ: America/Chicago
     labels:
+      traefik.enable: true
+      traefik.http.routers.sonarr_anime.rule: Host(`sonarr.trkm.io`) && PathPrefix(`/anime`)
+      traefik.http.services.sonarr_anime.loadBalancer.server.port: 8989
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr.png
-      net.unraid.docker.webui: http://[IP]:[PORT:8991]
+      net.unraid.docker.webui: https://sonarr.trkm.io/anime
       net.unraid.docker.shell: /bin/bash
 
 networks:
   pvr:
+    external: true
+  proxy:
     external: true

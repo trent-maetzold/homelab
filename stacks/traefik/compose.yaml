@@ -51,8 +51,31 @@ services:
       traefik.http.routers.traefik.rule: Host(`traefik.trkm.io`)
       traefik.http.services.traefik.loadBalancer.server.port: 8080
       net.unraid.docker.icon: https://raw.githubusercontent.com/ibracorp/unraid-templates/master/traefik/traefik.png
-      net.unraid.docker.webui: http://[IP]:[PORT:8080]
+      net.unraid.docker.webui: https://traefik.trkm.io
       net.unraid.docker.shell: bash
+
+  tailscale:
+    container_name: traefik_tailscale
+    image: ghcr.io/tailscale/tailscale:latest
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    volumes:
+      - /mnt/user/appdata/tailscale-proxy/state:/var/lib/tailscale
+      - /dev/net/tun:/dev/net/tun
+    network_mode: service:traefik
+    environment:
+      TZ: America/Chicago
+      TS_AUTHKEY: ${TS_AUTHKEY}
+      TS_HOSTNAME: proxy
+      TS_STATE_DIR: /var/lib/tailscale
+      TS_EXTRA_ARGS: --login-server=https://hs.trkm.io
+    depends_on:
+      - traefik
+    labels:
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/tailscale.png
+      net.unraid.docker.shell: /bin/sh
 
 networks:
   br0:

@@ -11,16 +11,22 @@ services:
       - /mnt/user/appdata/prowlarr/config:/config
     networks:
       - pvr
+      - proxy
     environment:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
       TZ: America/Chicago
     labels:
+      traefik.enable: true
+      traefik.http.routers.prowlarr.rule: Host(`prowlarr.trkm.io`)
+      traefik.http.services.prowlarr.loadBalancer.server.port: 9696
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/prowlarr.png
-      net.unraid.docker.webui: http://[IP]:[PORT:9696]
+      net.unraid.docker.webui: https://prowlarr.trkm.io
       net.unraid.docker.shell: /bin/bash
 
 networks:
   pvr:
+    external: true
+  proxy:
     external: true

@@ -5,19 +5,20 @@ services:
     container_name: gluetun
     image: qmcgaw/gluetun:latest
     restart: unless-stopped
-    cap_add:
-      - NET_ADMIN
-    devices:
-      - /dev/net/tun:/dev/net/tun
     ports:
       - 8080:8080
       - 8081:8081
       - 6881:6881
       - 6881:6881/udp
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
     volumes:
       - /mnt/user/appdata/qbittorrent/vpn:/gluetun
     networks:
       - pvr
+      - proxy
     environment:
       TZ: America/Chicago
       VPN_SERVICE_PROVIDER: protonvpn
@@ -30,4 +31,6 @@ services:
 
 networks:
   pvr:
+    external: true
+  proxy:
     external: true
