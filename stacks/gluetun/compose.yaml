@@ -1,4 +1,5 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
 services:
   gluetun:
     container_name: gluetun
@@ -25,8 +26,8 @@ services:
       SERVER_CITIES: Chicago
     labels:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/gluetun.png
-      net.unraid.docker.webui: ""
       net.unraid.docker.shell: /bin/sh
+
 networks:
   pvr:
     external: true

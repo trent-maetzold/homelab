@@ -10,6 +10,8 @@ services:
       - /mnt/user/appdata/headscale/data:/var/lib/headscale
     networks:
       - proxy
+    environment:
+      TZ: America/Chicago
     command: serve
     labels:
       me.tale.headplane.target: headscale
@@ -31,6 +33,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - proxy
+    environment:
+      TZ: America/Chicago
     depends_on:
       - headscale
     healthcheck:

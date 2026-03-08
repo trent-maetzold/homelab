@@ -1,4 +1,5 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
 services:
   radarr:
     container_name: radarr
@@ -20,7 +21,8 @@ services:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/radarr.png
       net.unraid.docker.webui: http://[IP]:[PORT:7878]
       net.unraid.docker.shell: /bin/bash
-  radarr_4k:
+
+  radarr-4k:
     container_name: radarr_4k
     image: lscr.io/linuxserver/radarr:latest
     restart: unless-stopped
@@ -40,7 +42,8 @@ services:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/radarr-4k.png
       net.unraid.docker.webui: http://[IP]:[PORT:7879]
       net.unraid.docker.shell: /bin/bash
-  radarr_anime:
+
+  radarr-anime:
     container_name: radarr_anime
     image: lscr.io/linuxserver/radarr:latest
     restart: unless-stopped
@@ -60,6 +63,7 @@ services:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/radarr.png
       net.unraid.docker.webui: http://[IP]:[PORT:7880]
       net.unraid.docker.shell: /bin/bash
+
 networks:
   pvr:
     external: true

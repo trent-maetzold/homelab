@@ -1,4 +1,5 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
 services:
   sonarr:
     container_name: sonarr
@@ -20,7 +21,8 @@ services:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr.png
       net.unraid.docker.webui: http://[IP]:[PORT:8989]
       net.unraid.docker.shell: /bin/bash
-  sonarr_4k:
+
+  sonarr-4k:
     container_name: sonarr_4k
     image: lscr.io/linuxserver/sonarr:latest
     restart: unless-stopped
@@ -40,7 +42,8 @@ services:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr-4k.png
       net.unraid.docker.webui: http://[IP]:[PORT:8990]
       net.unraid.docker.shell: /bin/bash
-  sonarr_anime:
+
+  sonarr-anime:
     container_name: sonarr_anime
     image: lscr.io/linuxserver/sonarr:latest
     restart: unless-stopped
@@ -60,6 +63,7 @@ services:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr.png
       net.unraid.docker.webui: http://[IP]:[PORT:8991]
       net.unraid.docker.shell: /bin/bash
+
 networks:
   pvr:
     external: true

@@ -1,4 +1,5 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
 services:
   flaresolverr:
     container_name: flaresolverr
@@ -7,11 +8,12 @@ services:
     networks:
       - pvr
     environment:
+      TZ: America/Chicago
       LOG_LEVEL: info
     labels:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/flaresolverr.png
-      net.unraid.docker.webui: ""
       net.unraid.docker.shell: /bin/bash
+
 networks:
   pvr:
     external: true

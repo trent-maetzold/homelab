@@ -11,7 +11,11 @@ Docker Compose stacks for a home server running on Unraid.
 
 ### Compose files
 - Always named `compose.yaml` (not `docker-compose.yml`)
+- First line: `# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json`
+- Blank line after the yaml-language-server comment
 - Top-level key order: `services` → `volumes` → `networks`
+- Blank line between each service definition
+- Blank line before each top-level key (`volumes:`, `networks:`)
 - Every service must have `restart: unless-stopped`
 
 ### Service key ordering
@@ -35,9 +39,10 @@ Keys within each service definition must follow this order:
 Omit keys that don't apply. Don't reorder.
 
 ### Naming
-- Service names: kebab-case (`immich-server`, `home-assistant`)
-- Container names: match the service name, or use a scoped prefix for
-  support services (`immich-db`, `immich-cache`, `authelia-redis`)
+- Service names: kebab-case (`immich-server`, `home-assistant`) — used as DNS hostnames
+- Container names: snake_case, match the service name or use a scoped prefix
+  for support services (`immich_db`, `immich_cache`, `authelia_redis`)
+- Volume and network names: snake_case
 
 ### Environment variables
 - Always quote numeric values: `PUID: "99"`, `PGID: "100"`
@@ -46,10 +51,12 @@ Omit keys that don't apply. Don't reorder.
   requires many variables
 
 ### Volumes
-- Config storage: `/mnt/user/appdata/<service>/`
+- Config/appdata storage: `/mnt/user/appdata/<service>/`
+- Database data storage: `/mnt/user/appdata-db/<service>/`
 - Shared data: `/mnt/user/data/`
 - Use `:ro` for read-only mounts
-- Named volumes only when shared between services in the same stack
+- Named volumes (snake_case) for persistent data that doesn't need a host path
+- Bind mounts for everything else
 
 ### Networks
 - External networks declared with `external: true`
@@ -62,7 +69,7 @@ Omit keys that don't apply. Don't reorder.
     first, but curl to verify it returns 200. If not found on `main`,
     search the repo tree (`png/` dir via GitHub API) for the correct
     filename. If no icon exists for the service, omit the label.
-  - `net.unraid.docker.webui`: the web UI URL (empty string if none)
+  - `net.unraid.docker.webui`: the web UI URL — omit the label entirely if the service has no web UI
   - `net.unraid.docker.shell`: `/bin/bash` if available, `/bin/sh`
     otherwise — test with `podman run --rm --entrypoint /bin/bash <image> -c "echo ok"`
     to verify before using `/bin/bash`

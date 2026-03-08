@@ -1,7 +1,8 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
 services:
   gitlab-runner:
-    container_name: gitlab-runner
+    container_name: gitlab_runner
     image: gitlab/gitlab-runner:latest
     restart: unless-stopped
     volumes:
@@ -9,6 +10,8 @@ services:
       - /mnt/user/appdata/gitlab-runner/config:/etc/gitlab-runner
       - /mnt/user/appdata/gitlab-runner/builds:/builds
       - /mnt/user/appdata/gitlab-runner/cache:/cache
+    environment:
+      TZ: America/Chicago
     labels:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/gitlab.png
       net.unraid.docker.shell: /bin/bash
