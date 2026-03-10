@@ -22,10 +22,10 @@ services:
     command: ["--config", "/app/config.yaml"]
     labels:
       traefik.enable: true
-      traefik.http.routers.litellm.rule: Host(`litellm.trkm.io`)
+      traefik.http.routers.litellm.rule: Host(`llm.trkm.io`)
       traefik.http.services.litellm.loadBalancer.server.port: 4000
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/litellm.png
-      net.unraid.docker.webui: https://litellm.trkm.io
+      net.unraid.docker.icon: https://raw.githubusercontent.com/BerriAI/litellm/refs/heads/main/ui/litellm-dashboard/src/app/favicon.ico
+      net.unraid.docker.webui: https://llm.trkm.io
       net.unraid.docker.shell: /bin/sh
 
 networks:
