@@ -32,10 +32,10 @@ services:
       - proxy
     environment:
       TZ: America/Chicago
+    command: redis-server --appendonly yes
     labels:
       net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/redis.png
       net.unraid.docker.shell: /bin/sh
-    command: redis-server --appendonly yes
 
 networks:
   proxy:
