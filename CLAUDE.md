@@ -23,18 +23,19 @@ Docker Compose stacks for a home server running on Unraid.
 Keys within each service definition must follow this order:
 
 1. `container_name`
-2. `image`
-3. `restart`
-4. `ports`
+2. `hostname`
+3. `image`
+4. `restart`
 5. `cap_add`
-6. `volumes`
-7. `network_mode` or `networks`
-8. `environment`
-9. `env_file`
-10. `depends_on`
-11. `healthcheck`
-12. `command`
-13. `labels`
+6. `ports`
+7. `volumes`
+8. `network_mode` or `networks`
+9. `environment`
+10. `env_file`
+11. `depends_on`
+12. `healthcheck`
+13. `command`
+14. `labels`
 
 Omit keys that don't apply. Don't reorder.
 

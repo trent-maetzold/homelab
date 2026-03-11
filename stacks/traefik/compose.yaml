@@ -3,6 +3,7 @@
 services:
   traefik:
     container_name: traefik
+    hostname: proxy
     image: traefik:v3.6
     restart: unless-stopped
     ports:
@@ -67,10 +68,12 @@ services:
     network_mode: service:traefik
     environment:
       TZ: America/Chicago
+      TS_ACCEPT_DNS: true
+      TS_AUTH_ONCE: true
       TS_AUTHKEY: ${TS_AUTHKEY}
-      TS_HOSTNAME: proxy
-      TS_STATE_DIR: /var/lib/tailscale
       TS_EXTRA_ARGS: --login-server=https://hs.trkm.io
+      TS_STATE_DIR: /var/lib/tailscale
+      TS_USERSPACE: false
     depends_on:
       - traefik
     labels:

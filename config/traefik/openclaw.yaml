@@ -1,0 +1,12 @@
+http:
+  routers:
+    openclaw:
+      service: openclaw
+      rule: "Host(`claw.trkm.io`)"
+      entryPoints:
+        - websecure
+  services:
+    openclaw:
+      loadBalancer:
+        servers:
+          - url: "http://openclaw.ts.trkm.io:18789"

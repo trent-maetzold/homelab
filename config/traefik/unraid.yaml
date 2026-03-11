@@ -1,0 +1,12 @@
+http:
+  routers:
+    unraid:
+      service: unraid
+      rule: "Host(`unraid.trkm.io`)"
+      entryPoints:
+        - websecure
+  services:
+    unraid:
+      loadBalancer:
+        servers:
+          - url: "http://unraid.ts.trkm.io:80"
