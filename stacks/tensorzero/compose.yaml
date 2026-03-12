@@ -49,8 +49,6 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.tensorzero-ui.rule: Host(`llm.trkm.io`) && PathPrefix(`/ui`)
-      traefik.http.middlewares.tensorzero-ui-strip.stripPrefix.prefixes: /ui
-      traefik.http.routers.tensorzero-ui.middlewares: tensorzero-ui-strip
       traefik.http.services.tensorzero-ui.loadBalancer.server.port: 4000
       net.unraid.docker.icon: https://avatars.githubusercontent.com/u/148420822
       net.unraid.docker.webui: https://llm.trkm.io/ui
