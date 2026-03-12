@@ -1,26 +1,26 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
 
 services:
-  tensorzero:
+  gateway:
     container_name: tensorzero
     image: tensorzero/gateway
     restart: unless-stopped
     volumes:
-      - ../../config/tensorzero:/app/config:ro
+      - /mnt/user/appdata/tensorzero/config:/app/config:ro
     networks:
       - clickhouse
       - postgres
       - proxy
     environment:
       TZ: America/Chicago
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      ANTHROPIC_OAUTH_TOKEN: ${ANTHROPIC_OAUTH_TOKEN}
       GITHUB_COPILOT_API_KEY: ${GITHUB_COPILOT_API_KEY}
-      TENSORZERO_CLICKHOUSE_URL: http://clickhouse:8123/tensorzero
-      TENSORZERO_POSTGRES_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/tensorzero
-    command: ["--config-file", "config/tensorzero.toml"]
+      TENSORZERO_CLICKHOUSE_URL: http://${CLICKHOUSE_USER}:${CLICKHOUSE_PASSWORD}@clickhouse:8123/tensorzero
+      TENSORZERO_POSTGRES_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/tensorzero
     depends_on:
-      clickhouse:
+      health:
         condition: service_healthy
+    command: ["--config-file", "config/tensorzero.toml"]
     labels:
       traefik.enable: true
       traefik.http.routers.tensorzero.rule: Host(`llm.trkm.io`)
@@ -29,12 +29,12 @@ services:
       net.unraid.docker.webui: https://llm.trkm.io
       net.unraid.docker.shell: /bin/sh
 
-  tensorzero-ui:
-    container_name: tensorzero-ui
+  ui:
+    container_name: tensorzero_ui
     image: tensorzero/ui
     restart: unless-stopped
     volumes:
-      - ../../config/tensorzero:/app/config:ro
+      - /mnt/user/appdata/tensorzero/config:/app/config:ro
     networks:
       - clickhouse
       - postgres
@@ -42,10 +42,10 @@ services:
     environment:
       TZ: America/Chicago
       TENSORZERO_GATEWAY_URL: http://tensorzero:3000
-      TENSORZERO_CLICKHOUSE_URL: http://clickhouse:8123/tensorzero
-      TENSORZERO_POSTGRES_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/tensorzero
+      TENSORZERO_CLICKHOUSE_URL: http://${CLICKHOUSE_USER}:${CLICKHOUSE_PASSWORD}@clickhouse:8123/tensorzero
     depends_on:
-      - tensorzero
+      health:
+        condition: service_healthy
     labels:
       traefik.enable: true
       traefik.http.routers.tensorzero-ui.rule: Host(`llm.trkm.io`) && PathPrefix(`/ui`)
@@ -54,32 +54,26 @@ services:
       net.unraid.docker.webui: https://llm.trkm.io/ui
       net.unraid.docker.shell: /bin/sh
 
-  clickhouse:
-    container_name: clickhouse
-    image: clickhouse/clickhouse-server:lts
+  health:
+    container_name: tensorzero_health
+    image: busybox
     restart: unless-stopped
-    volumes:
-      - /mnt/user/appdata-db/clickhouse/data:/var/lib/clickhouse
-      - /mnt/user/appdata-db/clickhouse/logs:/var/log/clickhouse-server
     networks:
       - clickhouse
     environment:
       TZ: America/Chicago
-      CLICKHOUSE_DB: tensorzero
-      CLICKHOUSE_USER: ${CLICKHOUSE_USER:-default}
-      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD:-}
     healthcheck:
-      test: ["CMD-SHELL", "clickhouse-client --query 'SELECT 1'"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      test: wget --spider --tries 1 http://${CLICKHOUSE_USER}:${CLICKHOUSE_PASSWORD}@clickhouse:8123/ping
+      start_period: 30s
+      start_interval: 1s
+      timeout: 1s
     labels:
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/clickhouse.png
-      net.unraid.docker.shell: /bin/bash
+      net.unraid.docker.icon: https://avatars.githubusercontent.com/u/148420822
+      net.unraid.docker.shell: /bin/sh
 
 networks:
   clickhouse:
-    name: clickhouse
+    external: true
   postgres:
     external: true
   proxy:

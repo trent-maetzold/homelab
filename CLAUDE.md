@@ -65,11 +65,16 @@ Omit keys that don't apply. Don't reorder.
 
 ### Labels
 - Unraid labels on every service:
-  - `net.unraid.docker.icon`: dashboard-icons PNG URL — try
-    `https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/<name>.png`
-    first, but curl to verify it returns 200. If not found on `main`,
-    search the repo tree (`png/` dir via GitHub API) for the correct
-    filename. If no icon exists for the service, omit the label.
+  - `net.unraid.docker.icon`: every service must have an icon. Resolution
+    order:
+    1. dashboard-icons PNG — try
+       `https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/<name>.png`
+       first, but curl to verify it returns 200. If not found on `main`,
+       search the repo tree (`png/` dir via GitHub API) for the correct filename.
+    2. Find an icon from another authoritative source (e.g. official GitHub
+       repo avatar, project website).
+    3. Generate one with an image model.
+    Never omit this label.
   - `net.unraid.docker.webui`: the web UI URL — omit the label entirely if the service has no web UI
   - `net.unraid.docker.shell`: `/bin/bash` if available, `/bin/sh`
     otherwise — test with `podman run --rm --entrypoint /bin/bash <image> -c "echo ok"`

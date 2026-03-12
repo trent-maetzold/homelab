@@ -1,0 +1,28 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+services:
+  clickhouse:
+    container_name: clickhouse
+    image: clickhouse/clickhouse-server:lts
+    restart: unless-stopped
+    volumes:
+      - /mnt/user/appdata-db/clickhouse/data:/var/lib/clickhouse
+    networks:
+      - clickhouse
+    environment:
+      TZ: America/Chicago
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+      CLICKHOUSE_USER: ${CLICKHOUSE_USER}
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+    healthcheck:
+      test: wget --spider --tries 1 http://${CLICKHOUSE_USER}:${CLICKHOUSE_PASSWORD}@clickhouse:8123/ping
+      start_period: 30s
+      start_interval: 1s
+      timeout: 1s
+    labels:
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/clickhouse.png
+      net.unraid.docker.shell: /bin/bash
+
+networks:
+  clickhouse:
+    external: true
