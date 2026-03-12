@@ -1,0 +1,81 @@
+# TensorZero Gateway Configuration
+# Docs: https://www.tensorzero.com/docs/gateway/configuration-reference
+
+[gateway]
+bind_address = "0.0.0.0:3000"
+disable_pseudonymous_usage_analytics = true
+
+# ── Anthropic ───────────────────────────────────────────────────────────────
+
+[models.claude-opus-4]
+routing = ["anthropic"]
+
+[models.claude-opus-4.providers.anthropic]
+type = "anthropic"
+model_name = "claude-opus-4-5"
+api_key_location = "env::ANTHROPIC_API_KEY"
+
+[models.claude-sonnet-4]
+routing = ["anthropic"]
+
+[models.claude-sonnet-4.providers.anthropic]
+type = "anthropic"
+model_name = "claude-sonnet-4-5-20250929"
+api_key_location = "env::ANTHROPIC_API_KEY"
+
+[models.claude-haiku-4]
+routing = ["anthropic"]
+
+[models.claude-haiku-4.providers.anthropic]
+type = "anthropic"
+model_name = "claude-haiku-4-5"
+api_key_location = "env::ANTHROPIC_API_KEY"
+
+# ── GitHub Copilot (OpenAI-compatible) ──────────────────────────────────────
+
+[models.gpt-4o]
+routing = ["github-copilot"]
+
+[models.gpt-4o.providers.github-copilot]
+type = "openai"
+model_name = "gpt-4o"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.gpt-4o-mini]
+routing = ["github-copilot"]
+
+[models.gpt-4o-mini.providers.github-copilot]
+type = "openai"
+model_name = "gpt-4o-mini"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.o3-mini]
+routing = ["github-copilot"]
+
+[models.o3-mini.providers.github-copilot]
+type = "openai"
+model_name = "o3-mini"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+# ── Perplexity Sonar (OpenAI-compatible) ────────────────────────────────────
+
+[models.sonar]
+routing = ["perplexity"]
+
+[models.sonar.providers.perplexity]
+type = "openai"
+model_name = "sonar"
+api_key_location = "env::PERPLEXITY_API_KEY"
+api_base = "https://api.perplexity.ai"
+
+[models.sonar-pro]
+routing = ["perplexity"]
+
+[models.sonar-pro.providers.perplexity]
+type = "openai"
+model_name = "sonar-pro"
+api_key_location = "env::PERPLEXITY_API_KEY"
+api_base = "https://api.perplexity.ai"
