@@ -7,26 +7,26 @@ disable_pseudonymous_usage_analytics = true
 
 # ── Anthropic ───────────────────────────────────────────────────────────────
 
-[models.claude-opus-4]
+[models.claude-opus-4-6]
 routing = ["anthropic"]
 
-[models.claude-opus-4.providers.anthropic]
+[models.claude-opus-4-6.providers.anthropic]
 type = "anthropic"
 model_name = "claude-opus-4-6"
 api_key_location = "env::ANTHROPIC_API_KEY"
 
-[models.claude-sonnet-4]
+[models.claude-sonnet-4-6]
 routing = ["anthropic"]
 
-[models.claude-sonnet-4.providers.anthropic]
+[models.claude-sonnet-4-6.providers.anthropic]
 type = "anthropic"
 model_name = "claude-sonnet-4-6"
 api_key_location = "env::ANTHROPIC_API_KEY"
 
-[models.claude-haiku-4]
+[models.claude-haiku-4-5]
 routing = ["anthropic"]
 
-[models.claude-haiku-4.providers.anthropic]
+[models.claude-haiku-4-5.providers.anthropic]
 type = "anthropic"
 model_name = "claude-haiku-4-5"
 api_key_location = "env::ANTHROPIC_API_KEY"
