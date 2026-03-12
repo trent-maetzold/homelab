@@ -1,0 +1,243 @@
+# TensorZero Gateway Configuration
+# Docs: https://www.tensorzero.com/docs/gateway/configuration-reference
+
+[gateway]
+bind_address = "0.0.0.0:3000"
+disable_pseudonymous_usage_analytics = true
+
+# ── Anthropic ───────────────────────────────────────────────────────────────
+
+[models.claude-opus-4]
+routing = ["anthropic"]
+
+[models.claude-opus-4.providers.anthropic]
+type = "anthropic"
+model_name = "claude-opus-4-6"
+api_key_location = "env::ANTHROPIC_API_KEY"
+
+[models.claude-sonnet-4]
+routing = ["anthropic"]
+
+[models.claude-sonnet-4.providers.anthropic]
+type = "anthropic"
+model_name = "claude-sonnet-4-6"
+api_key_location = "env::ANTHROPIC_API_KEY"
+
+[models.claude-haiku-4]
+routing = ["anthropic"]
+
+[models.claude-haiku-4.providers.anthropic]
+type = "anthropic"
+model_name = "claude-haiku-4-5"
+api_key_location = "env::ANTHROPIC_API_KEY"
+
+# ── GitHub Copilot (OpenAI-compatible) ──────────────────────────────────────
+# Multiplier 0 = free/unlimited on paid plan
+# Multiplier 1 = standard rate on paid plan
+
+[models.gpt-4o]
+routing = ["github-copilot"]
+
+[models.gpt-4o.providers.github-copilot]
+type = "openai"
+model_name = "gpt-4o"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.gpt-4-1]
+routing = ["github-copilot"]
+
+[models.gpt-4-1.providers.github-copilot]
+type = "openai"
+model_name = "gpt-4.1"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.gpt-5-mini]
+routing = ["github-copilot"]
+
+[models.gpt-5-mini.providers.github-copilot]
+type = "openai"
+model_name = "gpt-5 mini"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.gpt-5-1]
+routing = ["github-copilot"]
+
+[models.gpt-5-1.providers.github-copilot]
+type = "openai"
+model_name = "gpt-5.1"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.gpt-5-2]
+routing = ["github-copilot"]
+
+[models.gpt-5-2.providers.github-copilot]
+type = "openai"
+model_name = "gpt-5.2"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.gpt-5-4]
+routing = ["github-copilot"]
+
+[models.gpt-5-4.providers.github-copilot]
+type = "openai"
+model_name = "gpt-5.4"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.gpt-5-1-codex]
+routing = ["github-copilot"]
+
+[models.gpt-5-1-codex.providers.github-copilot]
+type = "openai"
+model_name = "gpt-5.1-codex"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.gpt-5-1-codex-max]
+routing = ["github-copilot"]
+
+[models.gpt-5-1-codex-max.providers.github-copilot]
+type = "openai"
+model_name = "gpt-5.1-codex-max"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.gpt-5-1-codex-mini]
+routing = ["github-copilot"]
+
+[models.gpt-5-1-codex-mini.providers.github-copilot]
+type = "openai"
+model_name = "gpt-5.1-codex-mini"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.gpt-5-2-codex]
+routing = ["github-copilot"]
+
+[models.gpt-5-2-codex.providers.github-copilot]
+type = "openai"
+model_name = "gpt-5.2-codex"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.gpt-5-3-codex]
+routing = ["github-copilot"]
+
+[models.gpt-5-3-codex.providers.github-copilot]
+type = "openai"
+model_name = "gpt-5.3-codex"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.raptor-mini]
+routing = ["github-copilot"]
+
+[models.raptor-mini.providers.github-copilot]
+type = "openai"
+model_name = "raptor-mini"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.gemini-2-5-pro]
+routing = ["github-copilot"]
+
+[models.gemini-2-5-pro.providers.github-copilot]
+type = "openai"
+model_name = "gemini-2.5-pro"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.gemini-3-flash]
+routing = ["github-copilot"]
+
+[models.gemini-3-flash.providers.github-copilot]
+type = "openai"
+model_name = "gemini-3-flash"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.gemini-3-pro]
+routing = ["github-copilot"]
+
+[models.gemini-3-pro.providers.github-copilot]
+type = "openai"
+model_name = "gemini-3-pro"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.gemini-3-1-pro]
+routing = ["github-copilot"]
+
+[models.gemini-3-1-pro.providers.github-copilot]
+type = "openai"
+model_name = "gemini-3.1-pro"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.claude-haiku-4-5-copilot]
+routing = ["github-copilot"]
+
+[models.claude-haiku-4-5-copilot.providers.github-copilot]
+type = "openai"
+model_name = "claude-haiku-4.5"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.claude-opus-4-5-copilot]
+routing = ["github-copilot"]
+
+[models.claude-opus-4-5-copilot.providers.github-copilot]
+type = "openai"
+model_name = "claude-opus-4.5"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.claude-opus-4-6-copilot]
+routing = ["github-copilot"]
+
+[models.claude-opus-4-6-copilot.providers.github-copilot]
+type = "openai"
+model_name = "claude-opus-4.6"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.claude-sonnet-4-copilot]
+routing = ["github-copilot"]
+
+[models.claude-sonnet-4-copilot.providers.github-copilot]
+type = "openai"
+model_name = "claude-sonnet-4"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.claude-sonnet-4-5-copilot]
+routing = ["github-copilot"]
+
+[models.claude-sonnet-4-5-copilot.providers.github-copilot]
+type = "openai"
+model_name = "claude-sonnet-4.5"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.claude-sonnet-4-6-copilot]
+routing = ["github-copilot"]
+
+[models.claude-sonnet-4-6-copilot.providers.github-copilot]
+type = "openai"
+model_name = "claude-sonnet-4.6"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"
+
+[models.grok-code-fast]
+routing = ["github-copilot"]
+
+[models.grok-code-fast.providers.github-copilot]
+type = "openai"
+model_name = "grok-code-fast-1"
+api_key_location = "env::GITHUB_COPILOT_API_KEY"
+api_base = "https://api.githubcopilot.com"

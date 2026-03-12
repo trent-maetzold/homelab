@@ -6,7 +6,7 @@ services:
     image: tensorzero/gateway
     restart: unless-stopped
     volumes:
-      - /mnt/user/appdata/tensorzero/config:/app/config:ro
+      - ../../config/tensorzero:/app/config:ro
     networks:
       - clickhouse
       - postgres
@@ -15,7 +15,6 @@ services:
       TZ: America/Chicago
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
       GITHUB_COPILOT_API_KEY: ${GITHUB_COPILOT_API_KEY}
-      PERPLEXITY_API_KEY: ${PERPLEXITY_API_KEY}
       TENSORZERO_CLICKHOUSE_URL: http://clickhouse:8123/tensorzero
       TENSORZERO_POSTGRES_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/tensorzero
     command: ["--config-file", "config/tensorzero.toml"]
@@ -28,13 +27,14 @@ services:
       traefik.http.services.tensorzero.loadBalancer.server.port: 3000
       net.unraid.docker.icon: https://avatars.githubusercontent.com/u/148420822
       net.unraid.docker.webui: https://llm.trkm.io
+      net.unraid.docker.shell: /bin/sh
 
   tensorzero-ui:
     container_name: tensorzero-ui
     image: tensorzero/ui
     restart: unless-stopped
     volumes:
-      - /mnt/user/appdata/tensorzero/config:/app/config:ro
+      - ../../config/tensorzero:/app/config:ro
     networks:
       - clickhouse
       - postgres
@@ -48,10 +48,13 @@ services:
       - tensorzero
     labels:
       traefik.enable: true
-      traefik.http.routers.tensorzero-ui.rule: Host(`tz.trkm.io`)
+      traefik.http.routers.tensorzero-ui.rule: Host(`llm.trkm.io`) && PathPrefix(`/ui`)
+      traefik.http.middlewares.tensorzero-ui-strip.stripPrefix.prefixes: /ui
+      traefik.http.routers.tensorzero-ui.middlewares: tensorzero-ui-strip
       traefik.http.services.tensorzero-ui.loadBalancer.server.port: 4000
       net.unraid.docker.icon: https://avatars.githubusercontent.com/u/148420822
-      net.unraid.docker.webui: https://tz.trkm.io
+      net.unraid.docker.webui: https://llm.trkm.io/ui
+      net.unraid.docker.shell: /bin/sh
 
   clickhouse:
     container_name: clickhouse
