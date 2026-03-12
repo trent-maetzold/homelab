@@ -3,7 +3,7 @@
 services:
   clickhouse:
     container_name: clickhouse
-    image: clickhouse/clickhouse-server:lts
+    image: clickhouse:lts
     restart: unless-stopped
     volumes:
       - /mnt/user/appdata-db/clickhouse/data:/var/lib/clickhouse
