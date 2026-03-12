@@ -5,6 +5,8 @@ services:
     container_name: clickhouse
     image: clickhouse:lts
     restart: unless-stopped
+    ports:
+      - "8123:8123"
     volumes:
       - /mnt/user/appdata-db/clickhouse/data:/var/lib/clickhouse
     networks:
