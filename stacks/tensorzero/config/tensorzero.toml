@@ -12,7 +12,7 @@ routing = ["anthropic"]
 
 [models.claude-opus-4.providers.anthropic]
 type = "anthropic"
-model_name = "claude-opus-4-5"
+model_name = "claude-opus-4-6"
 api_key_location = "env::ANTHROPIC_API_KEY"
 
 [models.claude-sonnet-4]
@@ -20,7 +20,7 @@ routing = ["anthropic"]
 
 [models.claude-sonnet-4.providers.anthropic]
 type = "anthropic"
-model_name = "claude-sonnet-4-5-20250929"
+model_name = "claude-sonnet-4-6"
 api_key_location = "env::ANTHROPIC_API_KEY"
 
 [models.claude-haiku-4]
