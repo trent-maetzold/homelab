@@ -3,7 +3,7 @@
 services:
   gateway:
     container_name: tensorzero
-    image: tensorzero/gateway
+    image: ghcr.io/trent-maetzold/tensorzero-gateway:oauth-test
     restart: unless-stopped
     volumes:
       - /mnt/user/appdata/tensorzero/config:/app/config:ro
@@ -13,10 +13,9 @@ services:
       - proxy
     environment:
       TZ: America/Chicago
-      ANTHROPIC_OAUTH_TOKEN: ${ANTHROPIC_OAUTH_TOKEN}
-      GITHUB_COPILOT_API_KEY: ${GITHUB_COPILOT_API_KEY}
-      TENSORZERO_CLICKHOUSE_URL: http://${CLICKHOUSE_USER}:${CLICKHOUSE_PASSWORD}@clickhouse:8123/tensorzero
-      TENSORZERO_POSTGRES_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/tensorzero
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      TENSORZERO_CLICKHOUSE_URL: http://clickhouse:${CLICKHOUSE_PASSWORD}@clickhouse:8123/tensorzero
+      TENSORZERO_POSTGRES_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/tensorzero
     depends_on:
       health:
         condition: service_healthy
@@ -41,8 +40,8 @@ services:
       - proxy
     environment:
       TZ: America/Chicago
-      TENSORZERO_GATEWAY_URL: http://tensorzero:3000
-      TENSORZERO_CLICKHOUSE_URL: http://${CLICKHOUSE_USER}:${CLICKHOUSE_PASSWORD}@clickhouse:8123/tensorzero
+      TENSORZERO_GATEWAY_URL: http://gateway:3000
+      TENSORZERO_CLICKHOUSE_URL: http://clickhouse:${CLICKHOUSE_PASSWORD}@clickhouse:8123/tensorzero
     depends_on:
       health:
         condition: service_healthy
@@ -63,7 +62,7 @@ services:
     environment:
       TZ: America/Chicago
     healthcheck:
-      test: wget --spider --tries 1 http://${CLICKHOUSE_USER}:${CLICKHOUSE_PASSWORD}@clickhouse:8123/ping
+      test: wget --spider --tries 1 http://clickhouse:${CLICKHOUSE_PASSWORD}@clickhouse:8123/ping
       start_period: 30s
       start_interval: 1s
       timeout: 1s
