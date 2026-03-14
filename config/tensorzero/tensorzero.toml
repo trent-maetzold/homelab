@@ -115,6 +115,7 @@ type = "json"
 
 [functions.structured_output.variants.cheap]
 type = "chat_completion"
+json_mode = "strict"
 model = "claude_haiku_4_5"
 max_tokens = 2048
 temperature = 0.0
@@ -122,6 +123,7 @@ reasoning_effort = "low"
 
 [functions.structured_output.variants.strong]
 type = "chat_completion"
+json_mode = "strict"
 model = "claude_sonnet_4_6"
 max_tokens = 4096
 temperature = 0.0

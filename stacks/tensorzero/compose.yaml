@@ -9,16 +9,16 @@ services:
       - /mnt/user/appdata/tensorzero/config:/app/config:ro
     networks:
       - net
-      - clickhouse
-      - postgres
       - proxy
     environment:
       TZ: America/Chicago
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
-      TENSORZERO_CLICKHOUSE_URL: http://clickhouse:${CLICKHOUSE_PASSWORD}@clickhouse:8123/tensorzero
-      TENSORZERO_POSTGRES_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/tensorzero
+      TENSORZERO_CLICKHOUSE_URL: http://tensorzero:${CLICKHOUSE_PASSWORD}@clickhouse:8123/tensorzero
+      TENSORZERO_POSTGRES_URL: postgresql://tensorzero:${POSTGRES_PASSWORD}@postgres:5432/tensorzero
     depends_on:
-      health:
+      clickhouse:
+        condition: service_healthy
+      postgres:
         condition: service_healthy
     command: ["--config-file", "config/tensorzero.toml"]
     labels:
@@ -37,16 +37,18 @@ services:
       - /mnt/user/appdata/tensorzero/config:/app/config:ro
     networks:
       - net
-      - clickhouse
-      - postgres
       - proxy
     environment:
       TZ: America/Chicago
       TENSORZERO_GATEWAY_URL: http://gateway:3000
-      TENSORZERO_CLICKHOUSE_URL: http://clickhouse:${CLICKHOUSE_PASSWORD}@clickhouse:8123/tensorzero
+      TENSORZERO_CLICKHOUSE_URL: http://tensorzero:${CLICKHOUSE_PASSWORD}@clickhouse:8123/tensorzero
     depends_on:
-      health:
+      clickhouse:
         condition: service_healthy
+      postgres:
+        condition: service_healthy
+      gateway:
+        condition: service_started
     labels:
       traefik.enable: true
       traefik.http.routers.tensorzero-ui.rule: Host(`t0.trkm.io`)
@@ -55,36 +57,65 @@ services:
       net.unraid.docker.webui: https://t0.trkm.io
       net.unraid.docker.shell: /bin/sh
 
-  health:
-    container_name: tensorzero_health
-    image: busybox
+  clickhouse:
+    container_name: tensorzero_clickhouse
+    image: clickhouse:lts
     restart: unless-stopped
+    volumes:
+      - /mnt/user/appdata-db/clickhouse/tensorzero/data:/var/lib/clickhouse
+      - /mnt/user/appdata-db/clickhouse/tensorzero/log:/var/log/clickhouse-server
     networks:
-      - clickhouse
-      - postgres
+      - net
     environment:
       TZ: America/Chicago
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: "1"
+      CLICKHOUSE_DB: tensorzero
+      CLICKHOUSE_USER: tensorzero
+      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
     healthcheck:
       test:
         [
-          "CMD-SHELL",
-          "wget --spider --tries 1 http://clickhouse:${CLICKHOUSE_PASSWORD}@clickhouse:8123/ping && nc -z postgres 5432",
+          "CMD",
+          "wget",
+          "--spider",
+          "--tries",
+          "1",
+          "http://tensorzero:${CLICKHOUSE_PASSWORD}@localhost:8123/ping",
         ]
       interval: 5s
+      timeout: 2s
       retries: 12
       start_period: 30s
       start_interval: 1s
-      timeout: 2s
-    command: ["sh", "-c", "while true; do sleep 3600; done"]
     labels:
-      net.unraid.docker.icon: https://avatars.githubusercontent.com/u/148420822
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/clickhouse.png
+      net.unraid.docker.shell: /bin/bash
+
+  postgres:
+    container_name: tensorzero_postgres
+    image: tensorzero/postgres:14
+    restart: unless-stopped
+    volumes:
+      - /mnt/user/appdata-db/postgres/tensorzero/data:/var/lib/postgresql/data
+    networks:
+      - net
+    environment:
+      TZ: America/Chicago
+      POSTGRES_DB: tensorzero
+      POSTGRES_USER: tensorzero
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "tensorzero", "-d", "tensorzero"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+      start_interval: 1s
+    labels:
+      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/postgresql.png
       net.unraid.docker.shell: /bin/sh
 
 networks:
   net:
-  clickhouse:
-    external: true
-  postgres:
-    external: true
   proxy:
     external: true
