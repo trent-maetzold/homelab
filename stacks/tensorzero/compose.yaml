@@ -59,13 +59,21 @@ services:
     restart: unless-stopped
     networks:
       - clickhouse
+      - postgres
     environment:
       TZ: America/Chicago
     healthcheck:
-      test: wget --spider --tries 1 http://clickhouse:${CLICKHOUSE_PASSWORD}@clickhouse:8123/ping
+      test:
+        [
+          "CMD-SHELL",
+          "wget --spider --tries 1 http://clickhouse:${CLICKHOUSE_PASSWORD}@clickhouse:8123/ping && nc -z postgres 5432",
+        ]
+      interval: 5s
+      retries: 12
       start_period: 30s
       start_interval: 1s
-      timeout: 1s
+      timeout: 2s
+    command: ["sh", "-c", "while true; do sleep 3600; done"]
     labels:
       net.unraid.docker.icon: https://avatars.githubusercontent.com/u/148420822
       net.unraid.docker.shell: /bin/sh

@@ -11,6 +11,8 @@ Docker Compose stacks for a home server running on Unraid.
 
 ### Compose files
 - Always named `compose.yaml` (not `docker-compose.yml`)
+- Prefer exec-form Compose `command:` and `healthcheck.test:` entries with one argument per list item
+- Use `CMD-SHELL` only as a special case when shell operators like `&&`, `||`, pipes, or similar shell syntax are genuinely needed
 - First line: `# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json`
 - Blank line after the yaml-language-server comment
 - Top-level key order: `services` → `volumes` → `networks`

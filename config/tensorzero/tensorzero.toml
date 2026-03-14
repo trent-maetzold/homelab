@@ -1,162 +1,128 @@
 # TensorZero Gateway Configuration
 # Docs: https://www.tensorzero.com/docs/gateway/configuration-reference
 
+# =============================================================================
+# Gateway
+# =============================================================================
+
 [gateway]
 bind_address = "0.0.0.0:3000"
+auth.enabled = true
 disable_pseudonymous_usage_analytics = true
+observability.enabled = true
 
-# ── Anthropic ───────────────────────────────────────────────────────────────
+# =============================================================================
+# Provider defaults
+# =============================================================================
 
-[models.claude-opus-4-6]
-routing = ["anthropic"]
-
-[models.claude-opus-4-6.providers.anthropic]
-type = "anthropic"
-model_name = "claude-opus-4-6"
+[provider_types.anthropic.defaults]
 api_key_location = "env::ANTHROPIC_API_KEY"
 
-[models.claude-sonnet-4-6]
+# =============================================================================
+# Anthropic models
+# =============================================================================
+
+[models.claude_haiku_4_5]
 routing = ["anthropic"]
 
-[models.claude-sonnet-4-6.providers.anthropic]
-type = "anthropic"
-model_name = "claude-sonnet-4-6"
-api_key_location = "env::ANTHROPIC_API_KEY"
-
-[models.claude-haiku-4-5]
-routing = ["anthropic"]
-
-[models.claude-haiku-4-5.providers.anthropic]
+[models.claude_haiku_4_5.providers.anthropic]
 type = "anthropic"
 model_name = "claude-haiku-4-5"
-api_key_location = "env::ANTHROPIC_API_KEY"
 
-# ── GitHub Copilot (OpenAI-compatible) ──────────────────────────────────────
-# Multiplier 0 = free/unlimited on paid plan
-# Multiplier 1 = standard rate on paid plan
+[models.claude_sonnet_4_6]
+routing = ["anthropic"]
 
-[models.gpt-4o]
-routing = ["github-copilot"]
+[models.claude_sonnet_4_6.providers.anthropic]
+type = "anthropic"
+model_name = "claude-sonnet-4-6"
 
-[models.gpt-4o.providers.github-copilot]
-type = "openai"
-model_name = "gpt-4o"
-api_key_location = "env::GITHUB_COPILOT_API_KEY"
-api_base = "https://api.githubcopilot.com"
+[models.claude_opus_4_6]
+routing = ["anthropic"]
 
-[models.gpt-4-1]
-routing = ["github-copilot"]
+[models.claude_opus_4_6.providers.anthropic]
+type = "anthropic"
+model_name = "claude-opus-4-6"
 
-[models.gpt-4-1.providers.github-copilot]
-type = "openai"
-model_name = "gpt-4.1"
-api_key_location = "env::GITHUB_COPILOT_API_KEY"
-api_base = "https://api.githubcopilot.com"
+# =============================================================================
+# Assistant
+# =============================================================================
 
-[models.gpt-5-mini]
-routing = ["github-copilot"]
+[functions.assistant]
+type = "chat"
 
-[models.gpt-5-mini.providers.github-copilot]
-type = "openai"
-model_name = "gpt-5 mini"
-api_key_location = "env::GITHUB_COPILOT_API_KEY"
-api_base = "https://api.githubcopilot.com"
+[functions.assistant.variants.fast]
+type = "chat_completion"
+model = "claude_haiku_4_5"
+max_tokens = 2048
+temperature = 0.2
+reasoning_effort = "low"
 
-[models.gpt-5-4]
-routing = ["github-copilot"]
+[functions.assistant.variants.deep]
+type = "chat_completion"
+model = "claude_opus_4_6"
+max_tokens = 4096
+temperature = 0.2
+thinking_budget_tokens = 12000
 
-[models.gpt-5-4.providers.github-copilot]
-type = "openai"
-model_name = "gpt-5.4"
-api_key_location = "env::GITHUB_COPILOT_API_KEY"
-api_base = "https://api.githubcopilot.com"
+# =============================================================================
+# Coding
+# =============================================================================
 
-[models.gpt-5-1-codex-max]
-routing = ["github-copilot"]
+[functions.coding]
+type = "chat"
 
-[models.gpt-5-1-codex-max.providers.github-copilot]
-type = "openai"
-model_name = "gpt-5.1-codex-max"
-api_key_location = "env::GITHUB_COPILOT_API_KEY"
-api_base = "https://api.githubcopilot.com"
+[functions.coding.variants.fast]
+type = "chat_completion"
+model = "claude_sonnet_4_6"
+max_tokens = 4096
+temperature = 0.1
+reasoning_effort = "low"
 
-[models.gpt-5-1-codex-mini]
-routing = ["github-copilot"]
+[functions.coding.variants.careful]
+type = "chat_completion"
+model = "claude_opus_4_6"
+max_tokens = 8192
+temperature = 0.1
+thinking_budget_tokens = 16000
 
-[models.gpt-5-1-codex-mini.providers.github-copilot]
-type = "openai"
-model_name = "gpt-5.1-codex-mini"
-api_key_location = "env::GITHUB_COPILOT_API_KEY"
-api_base = "https://api.githubcopilot.com"
+# =============================================================================
+# Orchestration
+# =============================================================================
 
-[models.gpt-5-3-codex]
-routing = ["github-copilot"]
+[functions.orchestration]
+type = "chat"
 
-[models.gpt-5-3-codex.providers.github-copilot]
-type = "openai"
-model_name = "gpt-5.3-codex"
-api_key_location = "env::GITHUB_COPILOT_API_KEY"
-api_base = "https://api.githubcopilot.com"
+[functions.orchestration.variants.planner]
+type = "chat_completion"
+model = "claude_sonnet_4_6"
+max_tokens = 4096
+temperature = 0.2
+reasoning_effort = "medium"
 
-[models.raptor-mini]
-routing = ["github-copilot"]
+[functions.orchestration.variants.executor]
+type = "chat_completion"
+model = "claude_sonnet_4_6"
+max_tokens = 3072
+temperature = 0.1
+reasoning_effort = "low"
 
-[models.raptor-mini.providers.github-copilot]
-type = "openai"
-model_name = "raptor-mini"
-api_key_location = "env::GITHUB_COPILOT_API_KEY"
-api_base = "https://api.githubcopilot.com"
+# =============================================================================
+# Structured output
+# =============================================================================
 
-[models.gemini-3-flash]
-routing = ["github-copilot"]
+[functions.structured_output]
+type = "json"
 
-[models.gemini-3-flash.providers.github-copilot]
-type = "openai"
-model_name = "gemini-3-flash"
-api_key_location = "env::GITHUB_COPILOT_API_KEY"
-api_base = "https://api.githubcopilot.com"
+[functions.structured_output.variants.cheap]
+type = "chat_completion"
+model = "claude_haiku_4_5"
+max_tokens = 2048
+temperature = 0.0
+reasoning_effort = "low"
 
-[models.gemini-3-1-pro]
-routing = ["github-copilot"]
-
-[models.gemini-3-1-pro.providers.github-copilot]
-type = "openai"
-model_name = "gemini-3.1-pro"
-api_key_location = "env::GITHUB_COPILOT_API_KEY"
-api_base = "https://api.githubcopilot.com"
-
-[models.claude-haiku-4-5-copilot]
-routing = ["github-copilot"]
-
-[models.claude-haiku-4-5-copilot.providers.github-copilot]
-type = "openai"
-model_name = "claude-haiku-4.5"
-api_key_location = "env::GITHUB_COPILOT_API_KEY"
-api_base = "https://api.githubcopilot.com"
-
-[models.claude-opus-4-6-copilot]
-routing = ["github-copilot"]
-
-[models.claude-opus-4-6-copilot.providers.github-copilot]
-type = "openai"
-model_name = "claude-opus-4.6"
-api_key_location = "env::GITHUB_COPILOT_API_KEY"
-api_base = "https://api.githubcopilot.com"
-
-[models.claude-sonnet-4-6-copilot]
-routing = ["github-copilot"]
-
-[models.claude-sonnet-4-6-copilot.providers.github-copilot]
-type = "openai"
-model_name = "claude-sonnet-4.6"
-api_key_location = "env::GITHUB_COPILOT_API_KEY"
-api_base = "https://api.githubcopilot.com"
-
-[models.grok-code-fast]
-routing = ["github-copilot"]
-
-[models.grok-code-fast.providers.github-copilot]
-type = "openai"
-model_name = "grok-code-fast-1"
-api_key_location = "env::GITHUB_COPILOT_API_KEY"
-api_base = "https://api.githubcopilot.com"
+[functions.structured_output.variants.strong]
+type = "chat_completion"
+model = "claude_sonnet_4_6"
+max_tokens = 4096
+temperature = 0.0
+reasoning_effort = "medium"
