@@ -17,7 +17,7 @@ services:
       CLICKHOUSE_USER: clickhouse
       CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
     healthcheck:
-      test: wget --spider --tries 1 http://${CLICKHOUSE_USER}:${CLICKHOUSE_PASSWORD}@clickhouse:8123/ping
+      test: wget --spider --tries 1 http://clickhouse:${CLICKHOUSE_PASSWORD}@clickhouse:8123/ping
       start_period: 30s
       start_interval: 1s
       timeout: 1s
