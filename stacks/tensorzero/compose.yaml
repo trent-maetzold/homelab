@@ -47,10 +47,10 @@ services:
         condition: service_healthy
     labels:
       traefik.enable: true
-      traefik.http.routers.tensorzero-ui.rule: Host(`llm.trkm.io`) && PathPrefix(`/ui`)
+      traefik.http.routers.tensorzero-ui.rule: Host(`t0.trkm.io`)
       traefik.http.services.tensorzero-ui.loadBalancer.server.port: 4000
       net.unraid.docker.icon: https://avatars.githubusercontent.com/u/148420822
-      net.unraid.docker.webui: https://llm.trkm.io/ui
+      net.unraid.docker.webui: https://t0.trkm.io
       net.unraid.docker.shell: /bin/sh
 
   health:
