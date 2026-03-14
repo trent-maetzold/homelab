@@ -93,7 +93,7 @@ services:
 
   postgres:
     container_name: tensorzero_postgres
-    image: tensorzero/postgres:14
+    image: tensorzero/postgres:18
     restart: unless-stopped
     volumes:
       - /mnt/user/appdata-db/postgres/tensorzero/data:/var/lib/postgresql/data
