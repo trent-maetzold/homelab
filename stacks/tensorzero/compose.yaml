@@ -96,7 +96,7 @@ services:
     image: tensorzero/postgres:18
     restart: unless-stopped
     volumes:
-      - /mnt/user/appdata-db/postgres/tensorzero/data:/var/lib/postgresql/data
+      - /mnt/user/appdata-db/postgres/tensorzero/data:/var/lib/postgresql
     networks:
       - net
     environment:
