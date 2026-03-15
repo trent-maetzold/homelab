@@ -53,14 +53,12 @@ type = "chat"
 [functions.assistant.variants.fast]
 type = "chat_completion"
 model = "claude_haiku_4_5"
-max_tokens = 2048
 reasoning_effort = "low"
 
 [functions.assistant.variants.deep]
 type = "chat_completion"
 model = "claude_opus_4_6"
-max_tokens = 4096
-thinking_budget_tokens = 12000
+reasoning_effort = "medium"
 
 # =============================================================================
 # Coding
@@ -72,14 +70,12 @@ type = "chat"
 [functions.coding.variants.fast]
 type = "chat_completion"
 model = "claude_sonnet_4_6"
-max_tokens = 4096
 reasoning_effort = "low"
 
 [functions.coding.variants.careful]
 type = "chat_completion"
 model = "claude_opus_4_6"
-max_tokens = 8192
-thinking_budget_tokens = 16000
+reasoning_effort = "high"
 
 # =============================================================================
 # Orchestration
@@ -91,13 +87,11 @@ type = "chat"
 [functions.orchestration.variants.planner]
 type = "chat_completion"
 model = "claude_sonnet_4_6"
-max_tokens = 4096
 reasoning_effort = "medium"
 
 [functions.orchestration.variants.executor]
 type = "chat_completion"
 model = "claude_sonnet_4_6"
-max_tokens = 3072
 reasoning_effort = "low"
 
 # =============================================================================
@@ -111,12 +105,10 @@ type = "json"
 type = "chat_completion"
 json_mode = "strict"
 model = "claude_haiku_4_5"
-max_tokens = 2048
 reasoning_effort = "low"
 
 [functions.structured_output.variants.strong]
 type = "chat_completion"
 json_mode = "strict"
 model = "claude_sonnet_4_6"
-max_tokens = 4096
 reasoning_effort = "medium"
