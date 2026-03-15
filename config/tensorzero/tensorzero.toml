@@ -6,8 +6,8 @@
 # =============================================================================
 
 [gateway]
-bind_address = "0.0.0.0:3000"
 auth.enabled = true
+bind_address = "0.0.0.0:3000"
 disable_pseudonymous_usage_analytics = true
 observability.enabled = true
 
@@ -54,14 +54,12 @@ type = "chat"
 type = "chat_completion"
 model = "claude_haiku_4_5"
 max_tokens = 2048
-temperature = 0.2
 reasoning_effort = "low"
 
 [functions.assistant.variants.deep]
 type = "chat_completion"
 model = "claude_opus_4_6"
 max_tokens = 4096
-temperature = 0.2
 thinking_budget_tokens = 12000
 
 # =============================================================================
@@ -75,14 +73,12 @@ type = "chat"
 type = "chat_completion"
 model = "claude_sonnet_4_6"
 max_tokens = 4096
-temperature = 0.1
 reasoning_effort = "low"
 
 [functions.coding.variants.careful]
 type = "chat_completion"
 model = "claude_opus_4_6"
 max_tokens = 8192
-temperature = 0.1
 thinking_budget_tokens = 16000
 
 # =============================================================================
@@ -96,14 +92,12 @@ type = "chat"
 type = "chat_completion"
 model = "claude_sonnet_4_6"
 max_tokens = 4096
-temperature = 0.2
 reasoning_effort = "medium"
 
 [functions.orchestration.variants.executor]
 type = "chat_completion"
 model = "claude_sonnet_4_6"
 max_tokens = 3072
-temperature = 0.1
 reasoning_effort = "low"
 
 # =============================================================================
@@ -118,7 +112,6 @@ type = "chat_completion"
 json_mode = "strict"
 model = "claude_haiku_4_5"
 max_tokens = 2048
-temperature = 0.0
 reasoning_effort = "low"
 
 [functions.structured_output.variants.strong]
@@ -126,5 +119,4 @@ type = "chat_completion"
 json_mode = "strict"
 model = "claude_sonnet_4_6"
 max_tokens = 4096
-temperature = 0.0
 reasoning_effort = "medium"

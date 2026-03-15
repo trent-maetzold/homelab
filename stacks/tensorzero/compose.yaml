@@ -41,7 +41,7 @@ services:
     environment:
       TZ: America/Chicago
       TENSORZERO_GATEWAY_URL: http://gateway:3000
-      TENSORZERO_CLICKHOUSE_URL: http://tensorzero:${CLICKHOUSE_PASSWORD}@clickhouse:8123/tensorzero
+      TENSORZERO_POSTGRES_URL: postgresql://tensorzero:${POSTGRES_PASSWORD}@postgres:5432/tensorzero
     depends_on:
       clickhouse:
         condition: service_healthy
