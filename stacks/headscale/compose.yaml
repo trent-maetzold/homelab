@@ -37,7 +37,6 @@ services:
       - proxy
     environment:
       TZ: "America/Chicago"
-      HEADPLANE_LOAD_ENV_OVERRIDES: "true"
       HEADPLANE_SERVER__COOKIE_SECRET: "${HEADPLANE_SERVER__COOKIE_SECRET}"
     depends_on:
       - headscale
