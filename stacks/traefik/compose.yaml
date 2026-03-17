@@ -4,7 +4,7 @@ services:
   traefik:
     container_name: traefik
     hostname: proxy
-    image: traefik:v3.6
+    image: traefik:v3
     restart: unless-stopped
     ports:
       - "80:80"
@@ -13,6 +13,8 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /mnt/user/appdata/traefik/dynamic:/etc/traefik/dynamic
+      - ./config/openclaw.yaml:/etc/traefik/dynamic/openclaw.yaml
+      - ./config/unraid.yaml:/etc/traefik/dynamic/unraid.yaml
       - /mnt/user/appdata/traefik/letsencrypt:/letsencrypt
       - /mnt/user/appdata/traefik/log:/var/log
     networks:
@@ -20,40 +22,40 @@ services:
         ipv4_address: 10.10.20.10
       proxy:
     environment:
-      TZ: America/Chicago
-      CF_API_EMAIL: tkm89@proton.me
-      CF_DNS_API_TOKEN: ${CF_DNS_API_TOKEN}
-      CF_ZONE_API_TOKEN: ${CF_ZONE_API_TOKEN}
+      TZ: "America/Chicago"
+      CF_API_EMAIL: "tkm89@proton.me"
+      CF_DNS_API_TOKEN: "${CF_DNS_API_TOKEN}"
+      CF_ZONE_API_TOKEN: "${CF_ZONE_API_TOKEN}"
     command:
-      - --api.dashboard=true
-      - --api.insecure=true
-      - --log.level=INFO
-      - --log.filepath=/var/log/traefik.log
-      - --accesslog=true
-      - --accesslog.filepath=/var/log/traefik-access.log
-      - --providers.file.directory=/etc/traefik/dynamic
-      - --providers.file.watch=true
-      - --providers.docker.exposedByDefault=false
-      - --providers.docker.network=proxy
-      - --providers.docker.watch=true
-      - --entryPoints.web.address=:80
-      - --entryPoints.web.http.redirections.entryPoint.to=websecure
-      - --entryPoints.web.http.redirections.entryPoint.scheme=https
-      - --entryPoints.websecure.address=:443
-      - --entryPoints.websecure.asDefault=true
-      - --entryPoints.websecure.http.tls.certResolver=cloudflare
-      - --certificatesResolvers.cloudflare.acme.email=tkm89@proton.me
-      - --certificatesResolvers.cloudflare.acme.storage=/letsencrypt/acme.json
-      - --certificatesResolvers.cloudflare.acme.dnsChallenge=true
-      - --certificatesResolvers.cloudflare.acme.dnsChallenge.provider=cloudflare
-      - --serversTransport.insecureSkipVerify=true
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+      - "--log.level=INFO"
+      - "--log.filepath=/var/log/traefik.log"
+      - "--accesslog=true"
+      - "--accesslog.filepath=/var/log/traefik-access.log"
+      - "--providers.file.directory=/etc/traefik/dynamic"
+      - "--providers.file.watch=true"
+      - "--providers.docker.exposedByDefault=false"
+      - "--providers.docker.network=proxy"
+      - "--providers.docker.watch=true"
+      - "--entryPoints.web.address=:80"
+      - "--entryPoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entryPoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entryPoints.websecure.address=:443"
+      - "--entryPoints.websecure.asDefault=true"
+      - "--entryPoints.websecure.http.tls.certResolver=cloudflare"
+      - "--certificatesResolvers.cloudflare.acme.email=tkm89@proton.me"
+      - "--certificatesResolvers.cloudflare.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesResolvers.cloudflare.acme.dnsChallenge=true"
+      - "--certificatesResolvers.cloudflare.acme.dnsChallenge.provider=cloudflare"
+      - "--serversTransport.insecureSkipVerify=true"
     labels:
-      traefik.enable: true
-      traefik.http.routers.traefik.rule: Host(`traefik.trkm.io`)
-      traefik.http.services.traefik.loadBalancer.server.port: 8080
-      net.unraid.docker.icon: https://raw.githubusercontent.com/ibracorp/unraid-templates/master/traefik/traefik.png
-      net.unraid.docker.webui: https://traefik.trkm.io
-      net.unraid.docker.shell: bash
+      traefik.enable: "true"
+      traefik.http.routers.traefik.rule: "Host(`traefik.trkm.io`)"
+      traefik.http.services.traefik.loadBalancer.server.port: "8080"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/ibracorp/unraid-templates/master/traefik/traefik.png"
+      net.unraid.docker.webui: "https://traefik.trkm.io"
+      net.unraid.docker.shell: "/bin/bash"
 
   tailscale:
     container_name: traefik_tailscale
@@ -67,18 +69,18 @@ services:
       - /dev/net/tun:/dev/net/tun
     network_mode: service:traefik
     environment:
-      TZ: America/Chicago
-      TS_ACCEPT_DNS: true
-      TS_AUTH_ONCE: true
-      TS_AUTHKEY: ${TS_AUTHKEY}
-      TS_EXTRA_ARGS: --login-server=https://hs.trkm.io
-      TS_STATE_DIR: /var/lib/tailscale
-      TS_USERSPACE: false
+      TZ: "America/Chicago"
+      TS_ACCEPT_DNS: "true"
+      TS_AUTH_ONCE: "true"
+      TS_AUTHKEY: "${TS_AUTHKEY}"
+      TS_EXTRA_ARGS: "--login-server=https://hs.trkm.io"
+      TS_STATE_DIR: "/var/lib/tailscale"
+      TS_USERSPACE: "false"
     depends_on:
       - traefik
     labels:
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/tailscale.png
-      net.unraid.docker.shell: /bin/sh
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/tailscale.png"
+      net.unraid.docker.shell: "/bin/sh"
 
 networks:
   br0:

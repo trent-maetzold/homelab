@@ -5,78 +5,78 @@ libraries:
         configured: false
         managed: true
       mass_content_rating_update:
-      - mdb_commonsense0
-      - mdb_age_rating0
+        - mdb_commonsense0
+        - mdb_age_rating0
     template_variables:
       collection_mode: hide_items
       collection_filtering: user
     collection_files:
-    - default: basic
-    - default: imdb
-      template_variables:
-        use_lowest: false
-        radarr_add_missing_top: true
-    - default: tmdb
-    - default: genre
-    - default: franchise
-    - default: universe
-    - default: decade
-    - default: seasonal
-      template_variables:
-        use_lgbtq: false
-        use_latinx: false
-        schedule_christmas: range(11/01-01/05)
-        radarr_add_missing_christmas: true
-    - default: collectionless
+      - default: basic
+      - default: imdb
+        template_variables:
+          use_lowest: false
+          radarr_add_missing_top: true
+      - default: tmdb
+      - default: genre
+      - default: franchise
+      - default: universe
+      - default: decade
+      - default: seasonal
+        template_variables:
+          use_lgbtq: false
+          use_latinx: false
+          schedule_christmas: range(11/01-01/05)
+          radarr_add_missing_christmas: true
+      - default: collectionless
     remove_overlays: false
     overlay_files:
-    - default: ribbon
-    - default: resolution
-    - default: audio_codec
-    - default: versions
-    - default: mediastinger
+      - default: ribbon
+      - default: resolution
+      - default: audio_codec
+      - default: versions
+      - default: mediastinger
   TV Shows:
     operations:
       delete_collections:
         configured: false
         managed: true
       mass_content_rating_update:
-      - mdb_commonsense0
-      - mdb_age_rating0
+        - mdb_commonsense0
+        - mdb_age_rating0
     template_variables:
       collection_mode: hide_items
       collection_filtering: user
     collection_files:
-    - default: basic
-    - default: imdb
-      template_variables:
-        use_lowest: false
-        sonarr_add_missing_top: true
-    - default: tmdb
-    - default: genre
-    - default: franchise
-    - default: universe
-    - default: decade
-    - default: collectionless
+      - default: basic
+      - default: imdb
+        template_variables:
+          use_lowest: false
+          sonarr_add_missing_top: true
+      - default: tmdb
+      - default: genre
+      - default: franchise
+      - default: universe
+      - default: decade
+      - default: collectionless
     remove_overlays: false
     overlay_files:
-    - default: ribbon
-    - default: resolution
-    - default: audio_codec
-    - default: versions
-    - default: status
+      - default: ribbon
+      - default: resolution
+      - default: audio_codec
+      - default: versions
+      - default: status
 playlist_files:
-- default: playlist
-  template_variables:
-    libraries: Movies, TV Shows
+  - default: playlist
+    template_variables:
+      libraries: Movies, TV Shows
 
 settings:
   verify_ssl: true
   run_order:
-  - operations
-  - metadata
-  - collections
-  - overlays
+    - operations
+    - metadata
+    - collections
+    - overlays
   cache: true
   cache_expiration: 60
   asset_directory: config/assets

@@ -12,18 +12,18 @@ services:
     networks:
       - clickhouse
     environment:
-      TZ: America/Chicago
-      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
-      CLICKHOUSE_USER: clickhouse
-      CLICKHOUSE_PASSWORD: ${CLICKHOUSE_PASSWORD}
+      TZ: "America/Chicago"
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: "1"
+      CLICKHOUSE_USER: "clickhouse"
+      CLICKHOUSE_PASSWORD: "${CLICKHOUSE_PASSWORD}"
     healthcheck:
       test: wget --spider --tries 1 http://clickhouse:${CLICKHOUSE_PASSWORD}@clickhouse:8123/ping
       start_period: 30s
       start_interval: 1s
       timeout: 1s
     labels:
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/clickhouse.png
-      net.unraid.docker.shell: /bin/bash
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/clickhouse.png"
+      net.unraid.docker.shell: "/bin/bash"
 
 networks:
   clickhouse:

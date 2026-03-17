@@ -1,0 +1,21 @@
+# =============================================================================
+# Structured output
+# =============================================================================
+
+[functions.structured_output_cheap]
+type = "json"
+
+[functions.structured_output_cheap.variants.structured_output_cheap]
+type = "chat_completion"
+json_mode = "strict"
+model = "claude_haiku_4_5"
+reasoning_effort = "low"
+
+[functions.structured_output_strong]
+type = "json"
+
+[functions.structured_output_strong.variants.structured_output_strong]
+type = "chat_completion"
+json_mode = "strict"
+model = "claude_sonnet_4_6"
+reasoning_effort = "medium"

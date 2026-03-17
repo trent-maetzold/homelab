@@ -7,22 +7,23 @@ services:
     restart: unless-stopped
     volumes:
       - /mnt/user/appdata/kometa/config:/config
+      - ./config/config.yml:/config/config.yml
     networks:
       - pvr
     environment:
-      TZ: America/Chicago
-      KOMETA_TIMES: ${KOMETA_TIMES}
-      KOMETA_PLEXURL: ${PLEX_URL}
-      KOMETA_PLEXTOKEN: ${PLEX_TOKEN}
-      KOMETA_TMDBKEY: ${TMDB_APIKEY}
-      KOMETA_MDBKEY: ${MDB_APIKEY}
-      KOMETA_RADARRURL: ${RADARR_URL}
-      KOMETA_RADARRAPIKEY: ${RADARR_APIKEY}
-      KOMETA_SONARRURL: ${SONARR_URL}
-      KOMETA_SONARRAPIKEY: ${SONARR_APIKEY}
+      TZ: "America/Chicago"
+      KOMETA_TIMES: "${KOMETA_TIMES}"
+      KOMETA_PLEXURL: "${PLEX_URL}"
+      KOMETA_PLEXTOKEN: "${PLEX_TOKEN}"
+      KOMETA_TMDBKEY: "${TMDB_APIKEY}"
+      KOMETA_MDBKEY: "${MDB_APIKEY}"
+      KOMETA_RADARRURL: "${RADARR_URL}"
+      KOMETA_RADARRAPIKEY: "${RADARR_APIKEY}"
+      KOMETA_SONARRURL: "${SONARR_URL}"
+      KOMETA_SONARRAPIKEY: "${SONARR_APIKEY}"
     labels:
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/kometa.png
-      net.unraid.docker.shell: /bin/bash
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/kometa.png"
+      net.unraid.docker.shell: "/bin/bash"
 
 networks:
   pvr:

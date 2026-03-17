@@ -9,14 +9,14 @@ services:
       br0:
         ipv4_address: 10.10.20.254
     environment:
-      TZ: America/Chicago
-      CLOUDFLARE_API_TOKEN: ${CLOUDFLARE_API_TOKEN}
-      DOMAINS: trkm.io
-      IP6_PROVIDER: none
+      TZ: "America/Chicago"
+      CLOUDFLARE_API_TOKEN: "${CLOUDFLARE_API_TOKEN}"
+      DOMAINS: "trkm.io"
+      IP6_PROVIDER: "none"
       PROXIED: "true"
     labels:
-      net.unraid.docker.icon: https://hotio.dev/webhook-avatars/cloudflareddns.png
-      net.unraid.docker.shell: /bin/bash
+      net.unraid.docker.icon: "https://hotio.dev/webhook-avatars/cloudflareddns.png"
+      net.unraid.docker.shell: "/bin/bash"
 
 networks:
   br0:

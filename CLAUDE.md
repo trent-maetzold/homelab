@@ -11,7 +11,7 @@ Docker Compose stacks for a home server running on Unraid.
 
 ### Compose files
 - Always named `compose.yaml` (not `docker-compose.yml`)
-- Prefer exec-form Compose `command:` and `healthcheck.test:` entries with one argument per list item
+- Prefer exec-form Compose `command:` and `healthcheck.test:` entries with one argument per list item, each double-quoted: `- "--quiet"`
 - Use `CMD-SHELL` only as a special case when shell operators like `&&`, `||`, pipes, or similar shell syntax are genuinely needed
 - First line: `# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json`
 - Blank line after the yaml-language-server comment
@@ -43,13 +43,12 @@ Omit keys that don't apply. Don't reorder.
 
 ### Naming
 - Service names: kebab-case (`immich-server`, `home-assistant`) — used as DNS hostnames
-- Container names: snake_case, match the service name or use a scoped prefix
-  for support services (`immich_db`, `immich_cache`, `authelia_redis`)
-- Volume and network names: snake_case
+- Everything else snake_case: stack directory names, container names, volume names, network names
+  - Container names match the service name or use a scoped prefix for support services (`immich_db`, `immich_cache`, `authelia_redis`)
 
 ### Environment variables
-- Always quote numeric values: `PUID: "99"`, `PGID: "100"`
-- `TZ: America/Chicago` on every service
+- Always quote all values: `PUID: "99"`, `TZ: "America/Chicago"`, `KOMODO_LOCAL_AUTH: "true"`
+- `TZ: "America/Chicago"` on every service
 - Prefer inline `environment:` over `env_file:` unless the service
   requires many variables
 
@@ -81,6 +80,7 @@ Omit keys that don't apply. Don't reorder.
   - `net.unraid.docker.shell`: `/bin/bash` if available, `/bin/sh`
     otherwise — test with `podman run --rm --entrypoint /bin/bash <image> -c "echo ok"`
     to verify before using `/bin/bash`
+- Always quote all label values: `traefik.enable: "true"`, `net.unraid.docker.shell: "/bin/bash"`
 - Traefik labels follow the standard router/service pattern
 
 ### Consistency

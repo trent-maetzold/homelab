@@ -7,34 +7,39 @@ services:
     restart: unless-stopped
     volumes:
       - /mnt/user/appdata/headscale/config:/etc/headscale
+      - ./config/headscale/acl.json:/etc/headscale/acl.json
+      - ./config/headscale/config.yaml:/etc/headscale/config.yaml
       - /mnt/user/appdata/headscale/data:/var/lib/headscale
     networks:
       - proxy
     environment:
-      TZ: America/Chicago
-    command: serve
+      TZ: "America/Chicago"
+    command: "serve"
     labels:
-      me.tale.headplane.target: headscale
-      traefik.enable: true
-      traefik.http.routers.headscale.rule: Host(`hs.trkm.io`)
-      traefik.http.services.headscale.loadBalancer.server.port: 8080
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/headscale.png
-      net.unraid.docker.webui: https://hs.trkm.io/admin
-      net.unraid.docker.shell: /bin/sh
+      me.tale.headplane.target: "headscale"
+      traefik.enable: "true"
+      traefik.http.routers.headscale.rule: "Host(`hs.trkm.io`)"
+      traefik.http.services.headscale.loadBalancer.server.port: "8080"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/headscale.png"
+      net.unraid.docker.webui: "https://hs.trkm.io/admin"
+      net.unraid.docker.shell: "/bin/sh"
 
   headplane:
     container_name: headplane
-    image: ghcr.io/tale/headplane:0.6.2-beta.5
+    image: ghcr.io/tale/headplane:latest
     restart: unless-stopped
     volumes:
       - /mnt/user/appdata/headplane/config:/etc/headplane
-      - /mnt/user/appdata/headplane/data:/var/lib/headplane
+      - ./config/headplane/config.yaml:/etc/headplane/config.yaml
       - /mnt/user/appdata/headscale/config:/etc/headscale
+      - ./config/headscale/acl.json:/etc/headscale/acl.json
+      - ./config/headscale/config.yaml:/etc/headscale/config.yaml
+      - /mnt/user/appdata/headplane/data:/var/lib/headplane
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - proxy
     environment:
-      TZ: America/Chicago
+      TZ: "America/Chicago"
     depends_on:
       - headscale
     healthcheck:
@@ -44,12 +49,12 @@ services:
       start_period: 5s
       retries: 3
     labels:
-      traefik.enable: true
-      traefik.http.routers.headplane.rule: Host(`hs.trkm.io`) && PathPrefix(`/admin`)
-      traefik.http.services.headplane.loadBalancer.server.port: 3000
-      net.unraid.docker.icon: https://raw.githubusercontent.com/tale/headplane/refs/heads/main/public/favicon.ico
-      net.unraid.docker.webui: https://hs.trkm.io/admin
-      net.unraid.docker.shell: /bin/sh
+      traefik.enable: "true"
+      traefik.http.routers.headplane.rule: "Host(`hs.trkm.io`) && PathPrefix(`/admin`)"
+      traefik.http.services.headplane.loadBalancer.server.port: "3000"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/tale/headplane/refs/heads/main/public/favicon.ico"
+      net.unraid.docker.webui: "https://hs.trkm.io/admin"
+      net.unraid.docker.shell: "/bin/sh"
 
 networks:
   proxy:

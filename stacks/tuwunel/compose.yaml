@@ -10,14 +10,14 @@ services:
     networks:
       - proxy
     environment:
-      TZ: America/Chicago
-      TUWUNEL_SERVER_NAME: matrix.trkm.io
-      TUWUNEL_DATABASE_PATH: /var/lib/tuwunel
+      TZ: "America/Chicago"
+      TUWUNEL_SERVER_NAME: "matrix.trkm.io"
+      TUWUNEL_DATABASE_PATH: "/var/lib/tuwunel"
       TUWUNEL_PORT: "6167"
-      TUWUNEL_ADDRESS: 0.0.0.0
+      TUWUNEL_ADDRESS: "0.0.0.0"
       TUWUNEL_MAX_REQUEST_SIZE: "20000000"
       TUWUNEL_ALLOW_REGISTRATION: "true"
-      TUWUNEL_REGISTRATION_TOKEN: ${TUWUNEL_REGISTRATION_TOKEN}
+      TUWUNEL_REGISTRATION_TOKEN: "${TUWUNEL_REGISTRATION_TOKEN}"
       TUWUNEL_ALLOW_FEDERATION: "true"
       TUWUNEL_TRUSTED_SERVERS: '["matrix.org"]'
       TUWUNEL_WELL_KNOWN: |
@@ -25,17 +25,17 @@ services:
         client=https://matrix.trkm.io,
         server=matrix.trkm.io:443
         }
-    labels:
-      traefik.enable: true
-      traefik.http.routers.tuwunel.rule: Host(`matrix.trkm.io`)
-      traefik.http.services.tuwunel.loadBalancer.server.port: 6167
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/matrix.png
-      net.unraid.docker.webui: https://matrix.trkm.io
-      net.unraid.docker.shell: /bin/sh
     ulimits:
       nofile:
         soft: 1048567
         hard: 1048567
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.tuwunel.rule: "Host(`matrix.trkm.io`)"
+      traefik.http.services.tuwunel.loadBalancer.server.port: "6167"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/matrix.png"
+      net.unraid.docker.webui: "https://matrix.trkm.io"
+      net.unraid.docker.shell: "/bin/sh"
 
 networks:
   proxy:

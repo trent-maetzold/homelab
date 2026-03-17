@@ -6,7 +6,7 @@ services:
     image: lscr.io/linuxserver/radarr:latest
     restart: unless-stopped
     ports:
-      - 7878:7878
+      - "7878:7878"
     volumes:
       - /mnt/user/appdata/radarr/hd/config:/config
       - /mnt/user/data:/data
@@ -17,21 +17,21 @@ services:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
-      TZ: America/Chicago
+      TZ: "America/Chicago"
     labels:
-      traefik.enable: true
-      traefik.http.routers.radarr.rule: Host(`radarr.trkm.io`)
-      traefik.http.services.radarr.loadBalancer.server.port: 7878
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/radarr.png
-      net.unraid.docker.webui: https://radarr.trkm.io
-      net.unraid.docker.shell: /bin/bash
+      traefik.enable: "true"
+      traefik.http.routers.radarr.rule: "Host(`radarr.trkm.io`)"
+      traefik.http.services.radarr.loadBalancer.server.port: "7878"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/radarr.png"
+      net.unraid.docker.webui: "https://radarr.trkm.io"
+      net.unraid.docker.shell: "/bin/bash"
 
   radarr-4k:
     container_name: radarr_4k
     image: lscr.io/linuxserver/radarr:latest
     restart: unless-stopped
     ports:
-      - 7879:7878
+      - "7879:7878"
     volumes:
       - /mnt/user/appdata/radarr/4k/config:/config
       - /mnt/user/data:/data
@@ -42,21 +42,21 @@ services:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
-      TZ: America/Chicago
+      TZ: "America/Chicago"
     labels:
-      traefik.enable: true
-      traefik.http.routers.radarr_4k.rule: Host(`radarr.trkm.io`) && PathPrefix(`/4k`)
-      traefik.http.services.radarr_4k.loadBalancer.server.port: 7878
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/radarr-4k.png
-      net.unraid.docker.webui: https://radarr.trkm.io/4k
-      net.unraid.docker.shell: /bin/bash
+      traefik.enable: "true"
+      traefik.http.routers.radarr_4k.rule: "Host(`radarr.trkm.io`) && PathPrefix(`/4k`)"
+      traefik.http.services.radarr_4k.loadBalancer.server.port: "7878"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/radarr-4k.png"
+      net.unraid.docker.webui: "https://radarr.trkm.io/4k"
+      net.unraid.docker.shell: "/bin/bash"
 
   radarr-anime:
     container_name: radarr_anime
     image: lscr.io/linuxserver/radarr:latest
     restart: unless-stopped
     ports:
-      - 7880:7878
+      - "7880:7878"
     volumes:
       - /mnt/user/appdata/radarr/anime/config:/config
       - /mnt/user/data:/data
@@ -67,14 +67,14 @@ services:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
-      TZ: America/Chicago
+      TZ: "America/Chicago"
     labels:
-      traefik.enable: true
-      traefik.http.routers.radarr_anime.rule: Host(`radarr.trkm.io`) && PathPrefix(`/anime`)
-      traefik.http.services.radarr_anime.loadBalancer.server.port: 7878
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/radarr.png
-      net.unraid.docker.webui: https://radarr.trkm.io/anime
-      net.unraid.docker.shell: /bin/bash
+      traefik.enable: "true"
+      traefik.http.routers.radarr_anime.rule: "Host(`radarr.trkm.io`) && PathPrefix(`/anime`)"
+      traefik.http.services.radarr_anime.loadBalancer.server.port: "7878"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/radarr.png"
+      net.unraid.docker.webui: "https://radarr.trkm.io/anime"
+      net.unraid.docker.shell: "/bin/bash"
 
 networks:
   pvr:

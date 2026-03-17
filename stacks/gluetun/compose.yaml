@@ -8,10 +8,10 @@ services:
     cap_add:
       - NET_ADMIN
     ports:
-      - 8080:8080
-      - 8081:8081
-      - 6881:6881
-      - 6881:6881/udp
+      - "8080:8080"
+      - "8081:8081"
+      - "6881:6881"
+      - "6881:6881/udp"
     devices:
       - /dev/net/tun:/dev/net/tun
     volumes:
@@ -20,14 +20,14 @@ services:
       - pvr
       - proxy
     environment:
-      TZ: America/Chicago
-      VPN_SERVICE_PROVIDER: protonvpn
-      VPN_TYPE: wireguard
-      WIREGUARD_PRIVATE_KEY: ${WIREGUARD_PRIVATE_KEY}
-      SERVER_CITIES: Chicago
+      TZ: "America/Chicago"
+      VPN_SERVICE_PROVIDER: "protonvpn"
+      VPN_TYPE: "wireguard"
+      WIREGUARD_PRIVATE_KEY: "${WIREGUARD_PRIVATE_KEY}"
+      SERVER_CITIES: "Chicago"
     labels:
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/gluetun.png
-      net.unraid.docker.shell: /bin/sh
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/gluetun.png"
+      net.unraid.docker.shell: "/bin/sh"
 
 networks:
   pvr:

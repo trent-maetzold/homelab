@@ -1,0 +1,19 @@
+# =============================================================================
+# Assistant
+# =============================================================================
+
+[functions.assistant_fast]
+type = "chat"
+
+[functions.assistant_fast.variants.assistant_fast]
+type = "chat_completion"
+model = "claude_haiku_4_5"
+reasoning_effort = "low"
+
+[functions.assistant_deep]
+type = "chat"
+
+[functions.assistant_deep.variants.assistant_deep]
+type = "chat_completion"
+model = "claude_opus_4_6"
+reasoning_effort = "medium"

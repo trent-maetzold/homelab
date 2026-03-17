@@ -13,13 +13,13 @@ services:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
-      TZ: America/Chicago
+      TZ: "America/Chicago"
       WEBUI_PORT: "8081"
       TORRENTING_PORT: "6881"
     labels:
-      traefik.enable: true
-      traefik.http.routers.qbittorrent.rule: Host(`qbittorrent.trkm.io`)
-      traefik.http.services.qbittorrent.loadBalancer.server.port: 8081
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/qbittorrent.png
-      net.unraid.docker.webui: https://qbittorrent.trkm.io
-      net.unraid.docker.shell: /bin/bash
+      traefik.enable: "true"
+      traefik.http.routers.qbittorrent.rule: "Host(`qbittorrent.trkm.io`)"
+      traefik.http.services.qbittorrent.loadBalancer.server.port: "8081"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/qbittorrent.png"
+      net.unraid.docker.webui: "https://qbittorrent.trkm.io"
+      net.unraid.docker.shell: "/bin/bash"

@@ -4,19 +4,21 @@ services:
   recyclarr:
     container_name: recyclarr
     image: ghcr.io/recyclarr/recyclarr:latest
-    user: 99:100
     restart: unless-stopped
+    user: 99:100
     volumes:
       - /mnt/user/appdata/recyclarr/config:/config
+      - ./config/recyclarr.yml:/config/recyclarr.yml
+      - ./config/settings.yml:/config/settings.yml
     networks:
       - pvr
     environment:
       CRON_SCHEDULE: "@daily"
       RECYCLARR_CREATE_CONFIG: "false"
-      TZ: America/Chicago
+      TZ: "America/Chicago"
     labels:
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/recyclarr.png
-      net.unraid.docker.shell: /bin/bash
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/recyclarr.png"
+      net.unraid.docker.shell: "/bin/bash"
 
 networks:
   pvr:

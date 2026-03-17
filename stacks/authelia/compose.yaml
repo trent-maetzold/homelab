@@ -10,17 +10,20 @@ services:
     networks:
       - proxy
     environment:
-      TZ: America/Chicago
-      AUTHELIA_JWT_SECRET_FILE: /config/secrets/jwt
-      AUTHELIA_SESSION_SECRET_FILE: /config/secrets/session
-      AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE: /config/secrets/storage
+      TZ: "America/Chicago"
+      AUTHELIA_JWT_SECRET_FILE: "/config/secrets/jwt"
+      AUTHELIA_SESSION_SECRET_FILE: "/config/secrets/session"
+      AUTHELIA_STORAGE_ENCRYPTION_KEY_FILE: "/config/secrets/storage"
     labels:
-      traefik.enable: true
-      traefik.http.routers.authelia.rule: Host(`auth.trkm.io`)
-      traefik.http.services.authelia.loadBalancer.server.port: 9091
-      traefik.http.middlewares.authelia.forwardAuth.address: http://authelia:9091/api/authz/forward-auth
-      traefik.http.middlewares.authelia.forwardAuth.trustForwardHeader: true
-      traefik.http.middlewares.authelia.forwardAuth.authResponseHeaders: Remote-User,Remote-Groups,Remote-Email,Remote-Name
+      traefik.enable: "true"
+      traefik.http.routers.authelia.rule: "Host(`auth.trkm.io`)"
+      traefik.http.services.authelia.loadBalancer.server.port: "9091"
+      traefik.http.middlewares.authelia.forwardAuth.address: "http://authelia:9091/api/authz/forward-auth"
+      traefik.http.middlewares.authelia.forwardAuth.trustForwardHeader: "true"
+      traefik.http.middlewares.authelia.forwardAuth.authResponseHeaders: "Remote-User,Remote-Groups,Remote-Email,Remote-Name"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/authelia.png"
+      net.unraid.docker.webui: "https://auth.trkm.io"
+      net.unraid.docker.shell: "/bin/bash"
 
   authelia-redis:
     container_name: authelia_redis
@@ -31,11 +34,14 @@ services:
     networks:
       - proxy
     environment:
-      TZ: America/Chicago
-    command: redis-server --appendonly yes
+      TZ: "America/Chicago"
+    command:
+      - "redis-server"
+      - "--appendonly"
+      - "yes"
     labels:
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/redis.png
-      net.unraid.docker.shell: /bin/sh
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/redis.png"
+      net.unraid.docker.shell: "/bin/sh"
 
 networks:
   proxy:

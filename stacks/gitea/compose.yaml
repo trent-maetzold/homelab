@@ -6,7 +6,7 @@ services:
     image: gitea/gitea:latest
     restart: unless-stopped
     ports:
-      - 3000:3000
+      - "3000:3000"
       - "2222:22"
     volumes:
       - /mnt/user/appdata/gitea/data:/data
@@ -15,34 +15,34 @@ services:
       - proxy
       - net
     environment:
-      TZ: America/Chicago
-      USER_UID: 1000
-      USER_GID: 1000
-      GITEA__server__ROOT_URL: https://git.trkm.io
-      GITEA__server__SSH_DOMAIN: git.trkm.io
-      GITEA__server__SSH_PORT: 2222
-      GITEA__server__SSH_LISTEN_PORT: 22
-      GITEA__database__DB_TYPE: postgres
-      GITEA__database__HOST: gitea-db:5432
-      GITEA__database__NAME: gitea
-      GITEA__database__USER: gitea
-      GITEA__database__PASSWD: ${GITEA_DB_PASSWORD}
+      TZ: "America/Chicago"
+      USER_UID: "1000"
+      USER_GID: "1000"
+      GITEA__server__ROOT_URL: "https://git.trkm.io"
+      GITEA__server__SSH_DOMAIN: "git.trkm.io"
+      GITEA__server__SSH_PORT: "2222"
+      GITEA__server__SSH_LISTEN_PORT: "22"
+      GITEA__database__DB_TYPE: "postgres"
+      GITEA__database__HOST: "gitea-db:5432"
+      GITEA__database__NAME: "gitea"
+      GITEA__database__USER: "gitea"
+      GITEA__database__PASSWD: "${GITEA_DB_PASSWORD}"
       GITEA__mailer__ENABLED: "true"
-      GITEA__mailer__FROM: ${GITEA_SMTP_FROM}
-      GITEA__mailer__PROTOCOL: smtp+starttls
-      GITEA__mailer__SMTP_ADDR: smtp.protonmail.ch
+      GITEA__mailer__FROM: "${GITEA_SMTP_FROM}"
+      GITEA__mailer__PROTOCOL: "smtp+starttls"
+      GITEA__mailer__SMTP_ADDR: "smtp.protonmail.ch"
       GITEA__mailer__SMTP_PORT: "587"
-      GITEA__mailer__USER: ${GITEA_SMTP_USER}
-      GITEA__mailer__PASSWD: ${GITEA_SMTP_TOKEN}
+      GITEA__mailer__USER: "${GITEA_SMTP_USER}"
+      GITEA__mailer__PASSWD: "${GITEA_SMTP_TOKEN}"
     depends_on:
       - gitea-db
     labels:
-      traefik.enable: true
-      traefik.http.routers.gitea.rule: Host(`git.trkm.io`)
-      traefik.http.services.gitea.loadBalancer.server.port: 3000
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/gitea.png
-      net.unraid.docker.webui: https://git.trkm.io
-      net.unraid.docker.shell: /bin/bash
+      traefik.enable: "true"
+      traefik.http.routers.gitea.rule: "Host(`git.trkm.io`)"
+      traefik.http.services.gitea.loadBalancer.server.port: "3000"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/gitea.png"
+      net.unraid.docker.webui: "https://git.trkm.io"
+      net.unraid.docker.shell: "/bin/bash"
 
   gitea-db:
     container_name: gitea_db
@@ -53,10 +53,13 @@ services:
     networks:
       - net
     environment:
-      TZ: America/Chicago
-      POSTGRES_DB: gitea
-      POSTGRES_USER: gitea
-      POSTGRES_PASSWORD: ${GITEA_DB_PASSWORD}
+      TZ: "America/Chicago"
+      POSTGRES_DB: "gitea"
+      POSTGRES_USER: "gitea"
+      POSTGRES_PASSWORD: "${GITEA_DB_PASSWORD}"
+    labels:
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/postgres.png"
+      net.unraid.docker.shell: "/bin/sh"
 
 networks:
   proxy:

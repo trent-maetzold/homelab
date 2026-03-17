@@ -13,11 +13,11 @@ services:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
-      TZ: America/Chicago
+      TZ: "America/Chicago"
     labels:
-      traefik.enable: true
-      traefik.http.routers.sabnzbd.rule: Host(`sabnzbd.trkm.io`)
-      traefik.http.services.sabnzbd.loadBalancer.server.port: 8080
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sabnzbd.png
-      net.unraid.docker.webui: https://sabnzbd.trkm.io
-      net.unraid.docker.shell: /bin/bash
+      traefik.enable: "true"
+      traefik.http.routers.sabnzbd.rule: "Host(`sabnzbd.trkm.io`)"
+      traefik.http.services.sabnzbd.loadBalancer.server.port: "8080"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sabnzbd.png"
+      net.unraid.docker.webui: "https://sabnzbd.trkm.io"
+      net.unraid.docker.shell: "/bin/bash"

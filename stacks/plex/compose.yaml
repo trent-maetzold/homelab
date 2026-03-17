@@ -14,9 +14,9 @@ services:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
-      TZ: America/Chicago
+      TZ: "America/Chicago"
       PLEX_PASS: "yes"
     labels:
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/plex.png
-      net.unraid.docker.webui: https://app.plex.tv
-      net.unraid.docker.shell: /bin/bash
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/plex.png"
+      net.unraid.docker.webui: "https://app.plex.tv"
+      net.unraid.docker.shell: "/bin/bash"

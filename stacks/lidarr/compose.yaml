@@ -6,7 +6,7 @@ services:
     image: lscr.io/linuxserver/lidarr:latest
     restart: unless-stopped
     ports:
-      - 8686:8686
+      - "8686:8686"
     volumes:
       - /mnt/user/appdata/lidarr/config:/config
       - /mnt/user/data:/data
@@ -17,14 +17,14 @@ services:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
-      TZ: America/Chicago
+      TZ: "America/Chicago"
     labels:
-      traefik.enable: true
-      traefik.http.routers.lidarr.rule: Host(`lidarr.trkm.io`)
-      traefik.http.services.lidarr.loadBalancer.server.port: 8686
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/lidarr.png
-      net.unraid.docker.webui: https://lidarr.trkm.io
-      net.unraid.docker.shell: /bin/bash
+      traefik.enable: "true"
+      traefik.http.routers.lidarr.rule: "Host(`lidarr.trkm.io`)"
+      traefik.http.services.lidarr.loadBalancer.server.port: "8686"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/lidarr.png"
+      net.unraid.docker.webui: "https://lidarr.trkm.io"
+      net.unraid.docker.shell: "/bin/bash"
 
 networks:
   pvr:

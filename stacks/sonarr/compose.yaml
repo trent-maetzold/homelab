@@ -6,7 +6,7 @@ services:
     image: lscr.io/linuxserver/sonarr:latest
     restart: unless-stopped
     ports:
-      - 8989:8989
+      - "8989:8989"
     volumes:
       - /mnt/user/appdata/sonarr/hd/config:/config
       - /mnt/user/data:/data
@@ -17,21 +17,21 @@ services:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
-      TZ: America/Chicago
+      TZ: "America/Chicago"
     labels:
-      traefik.enable: true
-      traefik.http.routers.sonarr.rule: Host(`sonarr.trkm.io`)
-      traefik.http.services.sonarr.loadBalancer.server.port: 8989
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr.png
-      net.unraid.docker.webui: https://sonarr.trkm.io
-      net.unraid.docker.shell: /bin/bash
+      traefik.enable: "true"
+      traefik.http.routers.sonarr.rule: "Host(`sonarr.trkm.io`)"
+      traefik.http.services.sonarr.loadBalancer.server.port: "8989"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr.png"
+      net.unraid.docker.webui: "https://sonarr.trkm.io"
+      net.unraid.docker.shell: "/bin/bash"
 
   sonarr-4k:
     container_name: sonarr_4k
     image: lscr.io/linuxserver/sonarr:latest
     restart: unless-stopped
     ports:
-      - 8990:8989
+      - "8990:8989"
     volumes:
       - /mnt/user/appdata/sonarr/4k/config:/config
       - /mnt/user/data:/data
@@ -42,21 +42,21 @@ services:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
-      TZ: America/Chicago
+      TZ: "America/Chicago"
     labels:
-      traefik.enable: true
-      traefik.http.routers.sonarr_4k.rule: Host(`sonarr.trkm.io`) && PathPrefix(`/4k`)
-      traefik.http.services.sonarr_4k.loadBalancer.server.port: 8989
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr-4k.png
-      net.unraid.docker.webui: https://sonarr.trkm.io/4k
-      net.unraid.docker.shell: /bin/bash
+      traefik.enable: "true"
+      traefik.http.routers.sonarr_4k.rule: "Host(`sonarr.trkm.io`) && PathPrefix(`/4k`)"
+      traefik.http.services.sonarr_4k.loadBalancer.server.port: "8989"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr-4k.png"
+      net.unraid.docker.webui: "https://sonarr.trkm.io/4k"
+      net.unraid.docker.shell: "/bin/bash"
 
   sonarr-anime:
     container_name: sonarr_anime
     image: lscr.io/linuxserver/sonarr:latest
     restart: unless-stopped
     ports:
-      - 8991:8989
+      - "8991:8989"
     volumes:
       - /mnt/user/appdata/sonarr/anime/config:/config
       - /mnt/user/data:/data
@@ -67,14 +67,14 @@ services:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
-      TZ: America/Chicago
+      TZ: "America/Chicago"
     labels:
-      traefik.enable: true
-      traefik.http.routers.sonarr_anime.rule: Host(`sonarr.trkm.io`) && PathPrefix(`/anime`)
-      traefik.http.services.sonarr_anime.loadBalancer.server.port: 8989
-      net.unraid.docker.icon: https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr.png
-      net.unraid.docker.webui: https://sonarr.trkm.io/anime
-      net.unraid.docker.shell: /bin/bash
+      traefik.enable: "true"
+      traefik.http.routers.sonarr_anime.rule: "Host(`sonarr.trkm.io`) && PathPrefix(`/anime`)"
+      traefik.http.services.sonarr_anime.loadBalancer.server.port: "8989"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr.png"
+      net.unraid.docker.webui: "https://sonarr.trkm.io/anime"
+      net.unraid.docker.shell: "/bin/bash"
 
 networks:
   pvr:
