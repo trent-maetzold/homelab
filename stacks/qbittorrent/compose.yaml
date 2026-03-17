@@ -8,18 +8,52 @@ services:
     volumes:
       - /mnt/user/appdata/qbittorrent/config:/config
       - /mnt/user/data/torrents:/data/torrents
-    network_mode: container:gluetun
+    network_mode: "service:vpn"
     environment:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
       TZ: "America/Chicago"
-      WEBUI_PORT: "8081"
+      WEBUI_PORT: "8080"
       TORRENTING_PORT: "6881"
+    depends_on:
+      - vpn
+    labels:
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/qbittorrent.png"
+      net.unraid.docker.webui: "https://bt.trkm.io"
+      net.unraid.docker.shell: "/bin/bash"
+
+  vpn:
+    container_name: qbittorrent_vpn
+    image: qmcgaw/gluetun:latest
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "6881:6881"
+      - "6881:6881/udp"
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    volumes:
+      - /mnt/user/appdata/qbittorrent/vpn:/gluetun
+    networks:
+      - pvr
+      - proxy
+    environment:
+      TZ: "America/Chicago"
+      VPN_SERVICE_PROVIDER: "protonvpn"
+      VPN_TYPE: "wireguard"
+      WIREGUARD_PRIVATE_KEY: "${WIREGUARD_PRIVATE_KEY}"
+      SERVER_CITIES: "Chicago"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.qbittorrent.rule: "Host(`qbittorrent.trkm.io`)"
-      traefik.http.services.qbittorrent.loadBalancer.server.port: "8081"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/qbittorrent.png"
-      net.unraid.docker.webui: "https://qbittorrent.trkm.io"
-      net.unraid.docker.shell: "/bin/bash"
+      traefik.http.routers.qbittorrent.rule: "Host(`bt.trkm.io`)"
+      traefik.http.services.qbittorrent.loadBalancer.server.port: "8080"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/gluetun.png"
+      net.unraid.docker.shell: "/bin/sh"
+
+networks:
+  pvr:
+    external: true
+  proxy:
+    external: true
