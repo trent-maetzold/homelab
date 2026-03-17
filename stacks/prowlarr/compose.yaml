@@ -5,8 +5,6 @@ services:
     container_name: prowlarr
     image: lscr.io/linuxserver/prowlarr:latest
     restart: unless-stopped
-    ports:
-      - "9696:9696"
     volumes:
       - /mnt/user/appdata/prowlarr/config:/config
     networks:

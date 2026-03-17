@@ -5,8 +5,6 @@ services:
     container_name: baikal
     image: ckulka/baikal:nginx
     restart: unless-stopped
-    ports:
-      - "8079:80"
     volumes:
       - /mnt/user/appdata/baikal/config:/var/www/baikal/config
       - /mnt/user/appdata/baikal/Specific:/var/www/baikal/Specific

@@ -5,8 +5,6 @@ services:
     container_name: overseerr
     image: lscr.io/linuxserver/overseerr:latest
     restart: unless-stopped
-    ports:
-      - "5055:5055"
     volumes:
       - /mnt/user/appdata/overseerr/config:/config
     networks:

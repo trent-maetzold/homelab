@@ -5,8 +5,6 @@ services:
     container_name: lidarr
     image: lscr.io/linuxserver/lidarr:latest
     restart: unless-stopped
-    ports:
-      - "8686:8686"
     volumes:
       - /mnt/user/appdata/lidarr/config:/config
       - /mnt/user/data:/data

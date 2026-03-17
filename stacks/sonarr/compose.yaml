@@ -5,8 +5,6 @@ services:
     container_name: sonarr
     image: lscr.io/linuxserver/sonarr:latest
     restart: unless-stopped
-    ports:
-      - "8989:8989"
     volumes:
       - /mnt/user/appdata/sonarr/hd/config:/config
       - /mnt/user/data:/data
@@ -30,8 +28,6 @@ services:
     container_name: sonarr_4k
     image: lscr.io/linuxserver/sonarr:latest
     restart: unless-stopped
-    ports:
-      - "8990:8989"
     volumes:
       - /mnt/user/appdata/sonarr/4k/config:/config
       - /mnt/user/data:/data
@@ -55,8 +51,6 @@ services:
     container_name: sonarr_anime
     image: lscr.io/linuxserver/sonarr:latest
     restart: unless-stopped
-    ports:
-      - "8991:8989"
     volumes:
       - /mnt/user/appdata/sonarr/anime/config:/config
       - /mnt/user/data:/data
