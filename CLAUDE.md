@@ -42,9 +42,9 @@ Keys within each service definition must follow this order:
 Omit keys that don't apply. Don't reorder.
 
 ### Naming
-- Service names: kebab-case (`immich-server`, `home-assistant`) — used as DNS hostnames
+- Service names: kebab-case, and should be generic to their role rather than named after the software — `server`, `worker`, `db`, `cache`, `vpn`, `app`, etc. The stack directory already provides the identity.
 - Everything else snake_case: stack directory names, container names, volume names, network names
-  - Container names match the service name or use a scoped prefix for support services (`immich_db`, `immich_cache`, `authelia_redis`)
+  - Container names use a scoped prefix: `authentik_server`, `authentik_db`, `immich_cache`
 
 ### Environment variables
 - Always quote all values: `PUID: "99"`, `TZ: "America/Chicago"`, `KOMODO_LOCAL_AUTH: "true"`
@@ -53,8 +53,11 @@ Omit keys that don't apply. Don't reorder.
   requires many variables
 
 ### Volumes
-- Config/appdata storage: `/mnt/user/appdata/<service>/`
-- Database data storage: `/mnt/user/appdata-db/<service>/`
+- App storage: `/mnt/user/appdata/<stack_name>/<service_name>/<mount_name>` — mount name is the semantic role (`config`, `data`, `logs`, etc.)
+  - Use `shared` as the service name for mounts shared across multiple services: `/mnt/user/appdata/<stack_name>/shared/<mount_name>`
+  - e.g. `/mnt/user/appdata/authentik/shared/data:/data`, `/mnt/user/appdata/authentik/worker/certs:/certs`
+- Database storage: `/mnt/user/appdata-db/<db_type>/<stack_name>/<mount_name>` where db_type is the engine (`postgres`, `mariadb`, `clickhouse`, etc.)
+  - e.g. `/mnt/user/appdata-db/postgres/authentik/data:/var/lib/postgresql`
 - Shared data: `/mnt/user/data/`
 - Use `:ro` for read-only mounts
 - Named volumes (snake_case) for persistent data that doesn't need a host path
