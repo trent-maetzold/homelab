@@ -81,7 +81,7 @@ Omit keys that don't apply. Don't reorder.
   - `net.unraid.docker.shell`: `/bin/bash` if available, `/bin/sh`
     otherwise — test with `podman run --rm --entrypoint /bin/bash <image> -c "echo ok"`
     to verify before using `/bin/bash`
-- Always quote all label values: `traefik.enable: "true"`, `net.unraid.docker.shell: "/bin/bash"` — valueless labels (e.g. `komodo.skip:`) are acceptable when the consuming tool requires it
+- Always quote label values when present — they are strings and should be explicit: `net.unraid.docker.shell: "/bin/bash"`, `traefik.http.routers.foo.rule: "Host(\`foo.trkm.io\`)"`
 - Traefik labels follow the standard router/service pattern
 
 ### Consistency
