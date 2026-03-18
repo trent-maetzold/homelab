@@ -20,12 +20,11 @@ services:
       proxy:
     environment:
       TZ: "America/Chicago"
-      CF_API_EMAIL: "${CF_API_EMAIL}"
+      CF_API_EMAIL: "tkm89@proton.me"
       CF_DNS_API_TOKEN: "${CF_DNS_API_TOKEN}"
       CF_ZONE_API_TOKEN: "${CF_ZONE_API_TOKEN}"
     command:
       - "--api.dashboard=true"
-      - "--api.insecure=true"
       - "--log.level=INFO"
       - "--log.filepath=/var/log/traefik.log"
       - "--accesslog=true"
@@ -41,18 +40,18 @@ services:
       - "--entryPoints.websecure.address=:443"
       - "--entryPoints.websecure.asDefault=true"
       - "--entryPoints.websecure.http.tls.certResolver=cloudflare"
-      - "--certificatesResolvers.cloudflare.acme.email=${CF_API_EMAIL}"
+      - "--certificatesResolvers.cloudflare.acme.email=tkm89@proton.me"
       - "--certificatesResolvers.cloudflare.acme.storage=/letsencrypt/acme.json"
       - "--certificatesResolvers.cloudflare.acme.dnsChallenge=true"
       - "--certificatesResolvers.cloudflare.acme.dnsChallenge.provider=cloudflare"
       - "--serversTransport.insecureSkipVerify=true"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.traefik.rule: "Host(`traefik.trkm.io`)"
-      traefik.http.services.traefik.loadBalancer.server.port: "8080"
+      traefik.http.routers.traefik.rule: "Host(`traefik.trkm.io`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
+      traefik.http.routers.traefik.service: "api@internal"
       net.unraid.docker.icon: "https://raw.githubusercontent.com/ibracorp/unraid-templates/master/traefik/traefik.png"
       net.unraid.docker.webui: "https://traefik.trkm.io"
-      net.unraid.docker.shell: "/bin/bash"
+      net.unraid.docker.shell: "/bin/sh"
 
   tailscale:
     container_name: traefik_tailscale

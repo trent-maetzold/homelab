@@ -42,9 +42,9 @@ services:
     image: ghcr.io/moghtech/komodo-periphery:latest
     restart: unless-stopped
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /proc:/proc
       - /etc/komodo:/etc/komodo
+      - /proc:/proc
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - net
     environment:

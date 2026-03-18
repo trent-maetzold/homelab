@@ -13,7 +13,7 @@ services:
       - proxy
     environment:
       TZ: "America/Chicago"
-    command: "serve"
+    command: ["serve"]
     labels:
       me.tale.headplane.target: "headscale"
       traefik.enable: "true"

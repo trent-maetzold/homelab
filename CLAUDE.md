@@ -59,6 +59,7 @@ Omit keys that don't apply. Don't reorder.
 - Use `:ro` for read-only mounts
 - Named volumes (snake_case) for persistent data that doesn't need a host path
 - Bind mounts for everything else
+- Volume ordering within a service: this service's config (`./config/`) → this service's appdata → other service's config → other service's appdata → device mounts → `/var/run/docker.sock`
 
 ### Networks
 - External networks declared with `external: true`
