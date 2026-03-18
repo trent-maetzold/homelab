@@ -9,21 +9,18 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /mnt/user/appdata/traefik/dynamic:/etc/traefik/dynamic
-      - ./config/openclaw.yaml:/etc/traefik/dynamic/openclaw.yaml
-      - ./config/unraid.yaml:/etc/traefik/dynamic/unraid.yaml
+      - ./config/dynamic:/etc/traefik/dynamic
       - /mnt/user/appdata/traefik/letsencrypt:/letsencrypt
       - /mnt/user/appdata/traefik/log:/var/log
+      - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       br0:
         ipv4_address: 10.10.20.10
       proxy:
     environment:
       TZ: "America/Chicago"
-      CF_API_EMAIL: "tkm89@proton.me"
+      CF_API_EMAIL: "${CF_API_EMAIL}"
       CF_DNS_API_TOKEN: "${CF_DNS_API_TOKEN}"
       CF_ZONE_API_TOKEN: "${CF_ZONE_API_TOKEN}"
     command:
@@ -44,7 +41,7 @@ services:
       - "--entryPoints.websecure.address=:443"
       - "--entryPoints.websecure.asDefault=true"
       - "--entryPoints.websecure.http.tls.certResolver=cloudflare"
-      - "--certificatesResolvers.cloudflare.acme.email=tkm89@proton.me"
+      - "--certificatesResolvers.cloudflare.acme.email=${CF_API_EMAIL}"
       - "--certificatesResolvers.cloudflare.acme.storage=/letsencrypt/acme.json"
       - "--certificatesResolvers.cloudflare.acme.dnsChallenge=true"
       - "--certificatesResolvers.cloudflare.acme.dnsChallenge.provider=cloudflare"
@@ -65,17 +62,17 @@ services:
       - NET_ADMIN
       - SYS_MODULE
     volumes:
-      - /mnt/user/appdata/tailscale-proxy/state:/var/lib/tailscale
+      - /mnt/user/appdata/traefik/tailscale/state:/var/lib/tailscale
       - /dev/net/tun:/dev/net/tun
     network_mode: service:traefik
     environment:
       TZ: "America/Chicago"
-      TS_ACCEPT_DNS: "true"
       TS_AUTH_ONCE: "true"
       TS_AUTHKEY: "${TS_AUTHKEY}"
-      TS_EXTRA_ARGS: "--login-server=https://hs.trkm.io"
-      TS_STATE_DIR: "/var/lib/tailscale"
       TS_USERSPACE: "false"
+      TS_ACCEPT_DNS: "true"
+      TS_STATE_DIR: "/var/lib/tailscale"
+      TS_EXTRA_ARGS: "--login-server=https://hs.trkm.io"
     depends_on:
       - traefik
     labels:
