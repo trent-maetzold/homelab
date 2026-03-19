@@ -2,8 +2,8 @@
 
 radarr:
   radarr_hd:
-    base_url: !secret radarr_hd_url
-    api_key: !secret radarr_hd_api_key
+    base_url: !env_var RADARR_HD_URL
+    api_key: !env_var RADARR_HD_API_KEY
     media_naming:
       folder: plex
       movie:
@@ -131,8 +131,8 @@ radarr:
             score: 1600
 
   radarr_4k:
-    base_url: !secret radarr_4k_url
-    api_key: !secret radarr_4k_api_key
+    base_url: !env_var RADARR_4K_URL
+    api_key: !env_var RADARR_4K_API_KEY
     media_naming:
       folder: plex
       movie:
@@ -260,8 +260,8 @@ radarr:
             score: 0
 
   radarr_anime:
-    base_url: !secret radarr_anime_url
-    api_key: !secret radarr_anime_api_key
+    base_url: !env_var RADARR_ANIME_URL
+    api_key: !env_var RADARR_ANIME_API_KEY
     media_naming:
       folder: plex
       movie:
@@ -387,8 +387,8 @@ radarr:
 
 sonarr:
   sonarr_hd:
-    base_url: !secret sonarr_hd_url
-    api_key: !secret sonarr_hd_api_key
+    base_url: !env_var SONARR_HD_URL
+    api_key: !env_var SONARR_HD_API_KEY
     media_naming:
       series: plex
       season: default
@@ -481,8 +481,8 @@ sonarr:
           - name: Any
 
   sonarr_4k:
-    base_url: !secret sonarr_4k_url
-    api_key: !secret sonarr_4k_api_key
+    base_url: !env_var SONARR_4K_URL
+    api_key: !env_var SONARR_4K_API_KEY
     media_naming:
       series: plex
       season: default
@@ -611,8 +611,8 @@ sonarr:
             score: 0
 
   sonarr_anime:
-    base_url: !secret sonarr_anime_url
-    api_key: !secret sonarr_anime_api_key
+    base_url: !env_var SONARR_ANIME_URL
+    api_key: !env_var SONARR_ANIME_API_KEY
     media_naming:
       series: plex
       season: default
