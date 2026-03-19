@@ -130,9 +130,9 @@ radarr:
           - name: Any
             score: 1600
 
-  radarr_4k:
-    base_url: !env_var RADARR_4K_URL
-    api_key: !env_var RADARR_4K_API_KEY
+  radarr_uhd:
+    base_url: !env_var RADARR_UHD_URL
+    api_key: !env_var RADARR_UHD_API_KEY
     media_naming:
       folder: plex
       movie:
@@ -480,9 +480,9 @@ sonarr:
         quality_profiles:
           - name: Any
 
-  sonarr_4k:
-    base_url: !env_var SONARR_4K_URL
-    api_key: !env_var SONARR_4K_API_KEY
+  sonarr_uhd:
+    base_url: !env_var SONARR_UHD_URL
+    api_key: !env_var SONARR_UHD_API_KEY
     media_naming:
       series: plex
       season: default

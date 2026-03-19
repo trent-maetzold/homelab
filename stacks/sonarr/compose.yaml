@@ -1,8 +1,8 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
 
 services:
-  sonarr:
-    container_name: sonarr
+  hd:
+    container_name: sonarr_hd
     image: lscr.io/linuxserver/sonarr:latest
     restart: unless-stopped
     volumes:
@@ -18,18 +18,18 @@ services:
       TZ: "America/Chicago"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.sonarr.rule: "Host(`sonarr.trkm.io`)"
-      traefik.http.services.sonarr.loadBalancer.server.port: "8989"
+      traefik.http.routers.sonarr_hd.rule: "Host(`sonarr.trkm.io`)"
+      traefik.http.services.sonarr_hd.loadBalancer.server.port: "8989"
       net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr.png"
       net.unraid.docker.webui: "https://sonarr.trkm.io"
       net.unraid.docker.shell: "/bin/bash"
 
-  sonarr-4k:
-    container_name: sonarr_4k
+  uhd:
+    container_name: sonarr_uhd
     image: lscr.io/linuxserver/sonarr:latest
     restart: unless-stopped
     volumes:
-      - /mnt/user/appdata/sonarr/4k/config:/config
+      - /mnt/user/appdata/sonarr/uhd/config:/config
       - /mnt/user/data:/data
     networks:
       - pvr
@@ -41,13 +41,13 @@ services:
       TZ: "America/Chicago"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.sonarr_4k.rule: "Host(`sonarr.trkm.io`) && PathPrefix(`/4k`)"
-      traefik.http.services.sonarr_4k.loadBalancer.server.port: "8989"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr-4k.png"
-      net.unraid.docker.webui: "https://sonarr.trkm.io/4k"
+      traefik.http.routers.sonarr_uhd.rule: "Host(`sonarr.trkm.io`) && PathPrefix(`/uhd`)"
+      traefik.http.services.sonarr_uhd.loadBalancer.server.port: "8989"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr.png"
+      net.unraid.docker.webui: "https://sonarr.trkm.io/uhd"
       net.unraid.docker.shell: "/bin/bash"
 
-  sonarr-anime:
+  anime:
     container_name: sonarr_anime
     image: lscr.io/linuxserver/sonarr:latest
     restart: unless-stopped

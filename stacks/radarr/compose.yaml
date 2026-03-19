@@ -1,8 +1,8 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
 
 services:
-  radarr:
-    container_name: radarr
+  hd:
+    container_name: radarr_hd
     image: lscr.io/linuxserver/radarr:latest
     restart: unless-stopped
     volumes:
@@ -18,18 +18,18 @@ services:
       TZ: "America/Chicago"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.radarr.rule: "Host(`radarr.trkm.io`)"
-      traefik.http.services.radarr.loadBalancer.server.port: "7878"
+      traefik.http.routers.radarr_hd.rule: "Host(`radarr.trkm.io`)"
+      traefik.http.services.radarr_hd.loadBalancer.server.port: "7878"
       net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/radarr.png"
       net.unraid.docker.webui: "https://radarr.trkm.io"
       net.unraid.docker.shell: "/bin/bash"
 
-  radarr-4k:
-    container_name: radarr_4k
+  uhd:
+    container_name: radarr_uhd
     image: lscr.io/linuxserver/radarr:latest
     restart: unless-stopped
     volumes:
-      - /mnt/user/appdata/radarr/4k/config:/config
+      - /mnt/user/appdata/radarr/uhd/config:/config
       - /mnt/user/data:/data
     networks:
       - pvr
@@ -41,13 +41,13 @@ services:
       TZ: "America/Chicago"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.radarr_4k.rule: "Host(`radarr.trkm.io`) && PathPrefix(`/4k`)"
-      traefik.http.services.radarr_4k.loadBalancer.server.port: "7878"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/radarr-4k.png"
-      net.unraid.docker.webui: "https://radarr.trkm.io/4k"
+      traefik.http.routers.radarr_uhd.rule: "Host(`radarr.trkm.io`) && PathPrefix(`/uhd`)"
+      traefik.http.services.radarr_uhd.loadBalancer.server.port: "7878"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/radarr.png"
+      net.unraid.docker.webui: "https://radarr.trkm.io/uhd"
       net.unraid.docker.shell: "/bin/bash"
 
-  radarr-anime:
+  anime:
     container_name: radarr_anime
     image: lscr.io/linuxserver/radarr:latest
     restart: unless-stopped
