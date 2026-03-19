@@ -9,6 +9,7 @@ services:
     volumes:
       - ./config/recyclarr.yml:/config/recyclarr.yml
       - ./config/settings.yml:/config/settings.yml
+      - ./config/includes:/config/includes
       - /mnt/user/appdata/recyclarr/logs:/config/logs
       - /mnt/user/appdata/recyclarr/cache:/config/cache
     networks:
