@@ -2,33 +2,28 @@
 
 services:
   server:
-    container_name: authentik_server
+    container_name: authentik
     image: ghcr.io/goauthentik/server:${AUTHENTIK_VERSION}
     restart: unless-stopped
     volumes:
-      - /mnt/user/appdata/authentik/shared/data:/data
-      - /mnt/user/appdata/authentik/shared/templates:/templates
+      - /mnt/cache/appdata/authentik/shared/data:/data
+      - /mnt/cache/appdata/authentik/shared/templates:/templates
     networks:
       - net
       - proxy
+      - postgres
     environment:
       TZ: "America/Chicago"
-      AUTHENTIK_POSTGRESQL__HOST: "db"
+      AUTHENTIK_POSTGRESQL__HOST: "postgres"
       AUTHENTIK_POSTGRESQL__NAME: "authentik"
       AUTHENTIK_POSTGRESQL__USER: "authentik"
       AUTHENTIK_POSTGRESQL__PASSWORD: "${POSTGRES_PASSWORD}"
       AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY}"
-    depends_on:
-      db:
-        condition: service_healthy
     command: ["server"]
     labels:
       traefik.enable: "true"
       traefik.http.routers.authentik.rule: "Host(`auth.trkm.io`)"
       traefik.http.services.authentik.loadBalancer.server.port: "9000"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/authentik.png"
-      net.unraid.docker.webui: "https://auth.trkm.io"
-      net.unraid.docker.shell: "/bin/bash"
 
   worker:
     container_name: authentik_worker
@@ -36,51 +31,25 @@ services:
     restart: unless-stopped
     user: "root"
     volumes:
-      - /mnt/user/appdata/authentik/shared/data:/data
-      - /mnt/user/appdata/authentik/shared/templates:/templates
-      - /mnt/user/appdata/authentik/worker/certs:/certs
+      - /mnt/cache/appdata/authentik/shared/data:/data
+      - /mnt/cache/appdata/authentik/shared/templates:/templates
+      - /mnt/cache/appdata/authentik/worker/certs:/certs
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - net
+      - postgres
     environment:
       TZ: "America/Chicago"
-      AUTHENTIK_POSTGRESQL__HOST: "db"
+      AUTHENTIK_POSTGRESQL__HOST: "postgres"
       AUTHENTIK_POSTGRESQL__NAME: "authentik"
       AUTHENTIK_POSTGRESQL__USER: "authentik"
       AUTHENTIK_POSTGRESQL__PASSWORD: "${POSTGRES_PASSWORD}"
       AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY}"
-    depends_on:
-      db:
-        condition: service_healthy
     command: ["worker"]
-    labels:
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/authentik.png"
-      net.unraid.docker.shell: "/bin/bash"
-
-  db:
-    container_name: authentik_db
-    image: docker.io/library/postgres:18-alpine
-    restart: unless-stopped
-    volumes:
-      - /mnt/user/appdata-db/postgres/authentik/data:/var/lib/postgresql
-    networks:
-      - net
-    environment:
-      TZ: "America/Chicago"
-      POSTGRES_DB: "authentik"
-      POSTGRES_USER: "authentik"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
-      interval: 30s
-      timeout: 5s
-      retries: 5
-      start_period: 20s
-    labels:
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/postgres.png"
-      net.unraid.docker.shell: "/bin/sh"
 
 networks:
   net:
   proxy:
+    external: true
+  postgres:
     external: true

@@ -6,72 +6,83 @@ services:
     image: lscr.io/linuxserver/sonarr:latest
     restart: unless-stopped
     volumes:
-      - /mnt/user/appdata/sonarr/hd/config:/config
+      - /mnt/cache/appdata/sonarr/hd/config:/config
       - /mnt/user/data:/data
     networks:
       - pvr
       - proxy
+      - postgres
     environment:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
       TZ: "America/Chicago"
+      SONARR__POSTGRES__HOST: "postgres"
+      SONARR__POSTGRES__USER: "sonarr"
+      SONARR__POSTGRES__PASSWORD: "${POSTGRES_PASSWORD}"
+      SONARR__POSTGRES__MAINDB: "sonarr_hd"
+      SONARR__POSTGRES__LOGDB: "sonarr_hd_log"
     labels:
       traefik.enable: "true"
       traefik.http.routers.sonarr_hd.rule: "Host(`sonarr.trkm.io`)"
       traefik.http.services.sonarr_hd.loadBalancer.server.port: "8989"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr.png"
-      net.unraid.docker.webui: "https://sonarr.trkm.io"
-      net.unraid.docker.shell: "/bin/bash"
 
   uhd:
     container_name: sonarr_uhd
     image: lscr.io/linuxserver/sonarr:latest
     restart: unless-stopped
     volumes:
-      - /mnt/user/appdata/sonarr/uhd/config:/config
+      - /mnt/cache/appdata/sonarr/uhd/config:/config
       - /mnt/user/data:/data
     networks:
       - pvr
       - proxy
+      - postgres
     environment:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
       TZ: "America/Chicago"
+      SONARR__POSTGRES__HOST: "postgres"
+      SONARR__POSTGRES__USER: "sonarr"
+      SONARR__POSTGRES__PASSWORD: "${POSTGRES_PASSWORD}"
+      SONARR__POSTGRES__MAINDB: "sonarr_uhd"
+      SONARR__POSTGRES__LOGDB: "sonarr_uhd_log"
     labels:
       traefik.enable: "true"
       traefik.http.routers.sonarr_uhd.rule: "Host(`sonarr.trkm.io`) && PathPrefix(`/uhd`)"
       traefik.http.services.sonarr_uhd.loadBalancer.server.port: "8989"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr.png"
-      net.unraid.docker.webui: "https://sonarr.trkm.io/uhd"
-      net.unraid.docker.shell: "/bin/bash"
 
   anime:
     container_name: sonarr_anime
     image: lscr.io/linuxserver/sonarr:latest
     restart: unless-stopped
     volumes:
-      - /mnt/user/appdata/sonarr/anime/config:/config
+      - /mnt/cache/appdata/sonarr/anime/config:/config
       - /mnt/user/data:/data
     networks:
       - pvr
       - proxy
+      - postgres
     environment:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
       TZ: "America/Chicago"
+      SONARR__POSTGRES__HOST: "postgres"
+      SONARR__POSTGRES__USER: "sonarr"
+      SONARR__POSTGRES__PASSWORD: "${POSTGRES_PASSWORD}"
+      SONARR__POSTGRES__MAINDB: "sonarr_anime"
+      SONARR__POSTGRES__LOGDB: "sonarr_anime_log"
     labels:
       traefik.enable: "true"
       traefik.http.routers.sonarr_anime.rule: "Host(`sonarr.trkm.io`) && PathPrefix(`/anime`)"
       traefik.http.services.sonarr_anime.loadBalancer.server.port: "8989"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr.png"
-      net.unraid.docker.webui: "https://sonarr.trkm.io/anime"
-      net.unraid.docker.shell: "/bin/bash"
 
 networks:
   pvr:
     external: true
   proxy:
+    external: true
+  postgres:
     external: true

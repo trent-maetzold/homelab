@@ -1,12 +1,12 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
 
 services:
-  qbittorrent:
+  app:
     container_name: qbittorrent
     image: lscr.io/linuxserver/qbittorrent:latest
     restart: unless-stopped
     volumes:
-      - /mnt/user/appdata/qbittorrent/config:/config
+      - /mnt/cache/appdata/qbittorrent/app/config:/config
       - /mnt/user/data/torrents:/data/torrents
     network_mode: "service:vpn"
     environment:
@@ -18,10 +18,6 @@ services:
       TORRENTING_PORT: "6881"
     depends_on:
       - vpn
-    labels:
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/qbittorrent.png"
-      net.unraid.docker.webui: "https://bt.trkm.io"
-      net.unraid.docker.shell: "/bin/bash"
 
   vpn:
     container_name: qbittorrent_vpn
@@ -35,7 +31,7 @@ services:
     devices:
       - /dev/net/tun:/dev/net/tun
     volumes:
-      - /mnt/user/appdata/qbittorrent/vpn:/gluetun
+      - /mnt/cache/appdata/qbittorrent/vpn/config:/gluetun
     networks:
       - pvr
       - proxy
@@ -49,8 +45,6 @@ services:
       traefik.enable: "true"
       traefik.http.routers.qbittorrent.rule: "Host(`bt.trkm.io`)"
       traefik.http.services.qbittorrent.loadBalancer.server.port: "8080"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/gluetun.png"
-      net.unraid.docker.shell: "/bin/sh"
 
 networks:
   pvr:

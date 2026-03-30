@@ -1,0 +1,21 @@
+services:
+  hd:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/radarr.png"
+      net.unraid.docker.webui: "https://radarr.trkm.io"
+      net.unraid.docker.shell: "/bin/bash"
+
+  uhd:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/radarr.png"
+      net.unraid.docker.webui: "https://radarr.trkm.io/uhd"
+      net.unraid.docker.shell: "/bin/bash"
+
+  anime:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/radarr.png"
+      net.unraid.docker.webui: "https://radarr.trkm.io/anime"
+      net.unraid.docker.shell: "/bin/bash"

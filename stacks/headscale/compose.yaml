@@ -1,14 +1,14 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
 
 services:
-  headscale:
+  app:
     container_name: headscale
     image: headscale/headscale:latest
     restart: unless-stopped
     volumes:
       - ./config/headscale/acl.json:/etc/headscale/acl.json
       - ./config/headscale/config.yaml:/etc/headscale/config.yaml
-      - /mnt/user/appdata/headscale/data:/var/lib/headscale
+      - /mnt/cache/appdata/headscale/app/data:/var/lib/headscale
     networks:
       - proxy
     environment:
@@ -19,11 +19,8 @@ services:
       traefik.enable: "true"
       traefik.http.routers.headscale.rule: "Host(`hs.trkm.io`)"
       traefik.http.services.headscale.loadBalancer.server.port: "8080"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/headscale.png"
-      net.unraid.docker.webui: "https://hs.trkm.io/admin"
-      net.unraid.docker.shell: "/bin/sh"
 
-  headplane:
+  ui:
     container_name: headplane
     image: ghcr.io/tale/headplane:latest
     restart: unless-stopped
@@ -31,7 +28,7 @@ services:
       - ./config/headplane/config.yaml:/etc/headplane/config.yaml
       - ./config/headscale/acl.json:/etc/headscale/acl.json
       - ./config/headscale/config.yaml:/etc/headscale/config.yaml
-      - /mnt/user/appdata/headplane/data:/var/lib/headplane
+      - /mnt/cache/appdata/headscale/ui/data:/var/lib/headplane
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       - proxy
@@ -39,7 +36,7 @@ services:
       TZ: "America/Chicago"
       HEADPLANE_SERVER__COOKIE_SECRET: "${HEADPLANE_SERVER__COOKIE_SECRET}"
     depends_on:
-      - headscale
+      - app
     healthcheck:
       test: ["CMD", "/bin/hp_healthcheck"]
       interval: 30s
@@ -50,9 +47,6 @@ services:
       traefik.enable: "true"
       traefik.http.routers.headplane.rule: "Host(`hs.trkm.io`) && PathPrefix(`/admin`)"
       traefik.http.services.headplane.loadBalancer.server.port: "3000"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/tale/headplane/refs/heads/main/public/favicon.ico"
-      net.unraid.docker.webui: "https://hs.trkm.io/admin"
-      net.unraid.docker.shell: "/bin/sh"
 
 networks:
   proxy:

@@ -1,12 +1,12 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
 
 services:
-  tuwunel:
+  app:
     container_name: tuwunel
     image: jevolk/tuwunel:latest
     restart: unless-stopped
     volumes:
-      - /mnt/user/appdata/tuwunel/config:/var/lib/tuwunel
+      - /mnt/cache/appdata/tuwunel/app/config:/var/lib/tuwunel
     networks:
       - proxy
     environment:
@@ -33,9 +33,6 @@ services:
       traefik.enable: "true"
       traefik.http.routers.tuwunel.rule: "Host(`matrix.trkm.io`)"
       traefik.http.services.tuwunel.loadBalancer.server.port: "6167"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/matrix.png"
-      net.unraid.docker.webui: "https://matrix.trkm.io"
-      net.unraid.docker.shell: "/bin/sh"
 
 networks:
   proxy:

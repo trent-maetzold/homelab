@@ -1,0 +1,5 @@
+-- TensorZero ClickHouse initialization
+-- The tensorzero database and user are created automatically from
+-- CLICKHOUSE_DB / CLICKHOUSE_USER / CLICKHOUSE_PASSWORD env vars.
+-- TensorZero gateway creates its own schema on first start.
+-- Add any additional grants or configuration here if needed.

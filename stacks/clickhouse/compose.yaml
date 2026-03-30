@@ -1,0 +1,36 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+services:
+  db:
+    container_name: clickhouse
+    image: clickhouse:lts
+    restart: unless-stopped
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d:ro
+      - /mnt/cache/dbdata/clickhouse/db/data:/var/lib/clickhouse
+      - /mnt/cache/dbdata/clickhouse/db/log:/var/log/clickhouse-server
+    networks:
+      - clickhouse
+    environment:
+      TZ: "America/Chicago"
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: "1"
+      CLICKHOUSE_DB: "tensorzero"
+      CLICKHOUSE_USER: "tensorzero"
+      CLICKHOUSE_PASSWORD: "${CLICKHOUSE_PASSWORD}"
+    healthcheck:
+      test:
+        - "CMD"
+        - "wget"
+        - "--spider"
+        - "--tries"
+        - "1"
+        - "http://tensorzero:${CLICKHOUSE_PASSWORD}@localhost:8123/ping"
+      interval: 5s
+      timeout: 2s
+      retries: 12
+      start_period: 30s
+      start_interval: 1s
+
+networks:
+  clickhouse:
+    name: clickhouse

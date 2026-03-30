@@ -1,0 +1,14 @@
+services:
+  server:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/authentik.png"
+      net.unraid.docker.webui: "https://auth.trkm.io"
+      net.unraid.docker.shell: "/bin/bash"
+
+  worker:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/authentik.png"
+      net.unraid.docker.webui: ""
+      net.unraid.docker.shell: "/bin/bash"

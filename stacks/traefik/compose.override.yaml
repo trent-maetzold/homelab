@@ -1,0 +1,14 @@
+services:
+  proxy:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/ibracorp/unraid-templates/master/traefik/traefik.png"
+      net.unraid.docker.webui: "https://traefik.trkm.io"
+      net.unraid.docker.shell: "/bin/sh"
+
+  vpn:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/tailscale.png"
+      net.unraid.docker.webui: ""
+      net.unraid.docker.shell: "/bin/sh"

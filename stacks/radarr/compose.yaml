@@ -6,72 +6,83 @@ services:
     image: lscr.io/linuxserver/radarr:latest
     restart: unless-stopped
     volumes:
-      - /mnt/user/appdata/radarr/hd/config:/config
+      - /mnt/cache/appdata/radarr/hd/config:/config
       - /mnt/user/data:/data
     networks:
       - pvr
       - proxy
+      - postgres
     environment:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
       TZ: "America/Chicago"
+      RADARR__POSTGRES__HOST: "postgres"
+      RADARR__POSTGRES__USER: "radarr"
+      RADARR__POSTGRES__PASSWORD: "${POSTGRES_PASSWORD}"
+      RADARR__POSTGRES__MAINDB: "radarr_hd"
+      RADARR__POSTGRES__LOGDB: "radarr_hd_log"
     labels:
       traefik.enable: "true"
       traefik.http.routers.radarr_hd.rule: "Host(`radarr.trkm.io`)"
       traefik.http.services.radarr_hd.loadBalancer.server.port: "7878"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/radarr.png"
-      net.unraid.docker.webui: "https://radarr.trkm.io"
-      net.unraid.docker.shell: "/bin/bash"
 
   uhd:
     container_name: radarr_uhd
     image: lscr.io/linuxserver/radarr:latest
     restart: unless-stopped
     volumes:
-      - /mnt/user/appdata/radarr/uhd/config:/config
+      - /mnt/cache/appdata/radarr/uhd/config:/config
       - /mnt/user/data:/data
     networks:
       - pvr
       - proxy
+      - postgres
     environment:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
       TZ: "America/Chicago"
+      RADARR__POSTGRES__HOST: "postgres"
+      RADARR__POSTGRES__USER: "radarr"
+      RADARR__POSTGRES__PASSWORD: "${POSTGRES_PASSWORD}"
+      RADARR__POSTGRES__MAINDB: "radarr_uhd"
+      RADARR__POSTGRES__LOGDB: "radarr_uhd_log"
     labels:
       traefik.enable: "true"
       traefik.http.routers.radarr_uhd.rule: "Host(`radarr.trkm.io`) && PathPrefix(`/uhd`)"
       traefik.http.services.radarr_uhd.loadBalancer.server.port: "7878"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/radarr.png"
-      net.unraid.docker.webui: "https://radarr.trkm.io/uhd"
-      net.unraid.docker.shell: "/bin/bash"
 
   anime:
     container_name: radarr_anime
     image: lscr.io/linuxserver/radarr:latest
     restart: unless-stopped
     volumes:
-      - /mnt/user/appdata/radarr/anime/config:/config
+      - /mnt/cache/appdata/radarr/anime/config:/config
       - /mnt/user/data:/data
     networks:
       - pvr
       - proxy
+      - postgres
     environment:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
       TZ: "America/Chicago"
+      RADARR__POSTGRES__HOST: "postgres"
+      RADARR__POSTGRES__USER: "radarr"
+      RADARR__POSTGRES__PASSWORD: "${POSTGRES_PASSWORD}"
+      RADARR__POSTGRES__MAINDB: "radarr_anime"
+      RADARR__POSTGRES__LOGDB: "radarr_anime_log"
     labels:
       traefik.enable: "true"
       traefik.http.routers.radarr_anime.rule: "Host(`radarr.trkm.io`) && PathPrefix(`/anime`)"
       traefik.http.services.radarr_anime.loadBalancer.server.port: "7878"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/radarr.png"
-      net.unraid.docker.webui: "https://radarr.trkm.io/anime"
-      net.unraid.docker.shell: "/bin/bash"
 
 networks:
   pvr:
     external: true
   proxy:
+    external: true
+  postgres:
     external: true

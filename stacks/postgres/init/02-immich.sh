@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
+    CREATE USER immich WITH PASSWORD '$IMMICH_POSTGRES_PASSWORD';
+    CREATE DATABASE immich OWNER immich;
+EOSQL
+
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "immich" <<-EOSQL
+    CREATE EXTENSION IF NOT EXISTS vchord CASCADE;
+    CREATE EXTENSION IF NOT EXISTS earthdistance CASCADE;
+EOSQL

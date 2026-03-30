@@ -6,7 +6,7 @@ services:
     image: ghcr.io/spacedriveapp/spacebot:latest
     restart: unless-stopped
     volumes:
-      - /mnt/user/appdata/spacebot/app/data:/data
+      - /mnt/cache/appdata/spacebot/app/data:/data
     networks:
       - proxy
     environment:
@@ -21,9 +21,6 @@ services:
       traefik.enable: "true"
       traefik.http.routers.spacebot.rule: "Host(`bot.trkm.io`)"
       traefik.http.services.spacebot.loadBalancer.server.port: "19898"
-      net.unraid.docker.icon: "https://avatars.githubusercontent.com/u/101227423?v=4"
-      net.unraid.docker.webui: "https://bot.trkm.io"
-      net.unraid.docker.shell: "/bin/bash"
 
 networks:
   proxy:

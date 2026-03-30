@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
 
 services:
-  traefik:
+  proxy:
     container_name: traefik
     hostname: proxy
     image: traefik:v3
@@ -11,8 +11,8 @@ services:
       - "443:443"
     volumes:
       - ./config/dynamic:/etc/traefik/dynamic
-      - /mnt/user/appdata/traefik/letsencrypt:/letsencrypt
-      - /mnt/user/appdata/traefik/log:/var/log
+      - /mnt/cache/appdata/traefik/proxy/letsencrypt:/letsencrypt
+      - /mnt/cache/appdata/traefik/proxy/log:/var/log
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
       br0:
@@ -49,11 +49,8 @@ services:
       traefik.enable: "true"
       traefik.http.routers.traefik.rule: "Host(`traefik.trkm.io`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
       traefik.http.routers.traefik.service: "api@internal"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/ibracorp/unraid-templates/master/traefik/traefik.png"
-      net.unraid.docker.webui: "https://traefik.trkm.io"
-      net.unraid.docker.shell: "/bin/sh"
 
-  tailscale:
+  vpn:
     container_name: traefik_tailscale
     image: ghcr.io/tailscale/tailscale:latest
     restart: unless-stopped
@@ -61,9 +58,9 @@ services:
       - NET_ADMIN
       - SYS_MODULE
     volumes:
-      - /mnt/user/appdata/traefik/tailscale/state:/var/lib/tailscale
+      - /mnt/cache/appdata/traefik/vpn/state:/var/lib/tailscale
       - /dev/net/tun:/dev/net/tun
-    network_mode: service:traefik
+    network_mode: service:proxy
     environment:
       TZ: "America/Chicago"
       TS_AUTH_ONCE: "true"
@@ -73,10 +70,7 @@ services:
       TS_STATE_DIR: "/var/lib/tailscale"
       TS_EXTRA_ARGS: "--login-server=https://hs.trkm.io"
     depends_on:
-      - traefik
-    labels:
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/tailscale.png"
-      net.unraid.docker.shell: "/bin/sh"
+      - proxy
 
 networks:
   br0:

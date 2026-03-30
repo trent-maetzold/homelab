@@ -1,0 +1,7 @@
+services:
+  db:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/postgres.png"
+      net.unraid.docker.webui: ""
+      net.unraid.docker.shell: "/bin/bash"

@@ -1,0 +1,21 @@
+services:
+  gateway:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://avatars.githubusercontent.com/u/148420822"
+      net.unraid.docker.webui: "https://llm.trkm.io"
+      net.unraid.docker.shell: "/bin/sh"
+
+  ui:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://avatars.githubusercontent.com/u/148420822"
+      net.unraid.docker.webui: "https://t0.trkm.io"
+      net.unraid.docker.shell: "/bin/sh"
+
+  db:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/postgresql.png"
+      net.unraid.docker.webui: ""
+      net.unraid.docker.shell: "/bin/sh"

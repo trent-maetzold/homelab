@@ -1,12 +1,12 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
 
 services:
-  kometa:
+  app:
     container_name: kometa
     image: kometateam/kometa:latest
     restart: unless-stopped
     volumes:
-      - /mnt/user/appdata/kometa/config:/config
+      - /mnt/cache/appdata/kometa/app/config:/config
       - ./config/config.yml:/config/config.yml
     networks:
       - pvr
@@ -21,9 +21,6 @@ services:
       KOMETA_RADARRAPIKEY: "${RADARR_APIKEY}"
       KOMETA_SONARRURL: "${SONARR_URL}"
       KOMETA_SONARRAPIKEY: "${SONARR_APIKEY}"
-    labels:
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/kometa.png"
-      net.unraid.docker.shell: "/bin/bash"
 
 networks:
   pvr:

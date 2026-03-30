@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
 
 services:
-  flaresolverr:
+  app:
     container_name: flaresolverr
     image: ghcr.io/flaresolverr/flaresolverr:latest
     restart: unless-stopped
@@ -10,9 +10,6 @@ services:
     environment:
       TZ: "America/Chicago"
       LOG_LEVEL: "info"
-    labels:
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/flaresolverr.png"
-      net.unraid.docker.shell: "/bin/bash"
 
 networks:
   pvr:

@@ -1,31 +1,36 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
 
 services:
-  lidarr:
+  app:
     container_name: lidarr
     image: lscr.io/linuxserver/lidarr:latest
     restart: unless-stopped
     volumes:
-      - /mnt/user/appdata/lidarr/config:/config
+      - /mnt/cache/appdata/lidarr/app/config:/config
       - /mnt/user/data:/data
     networks:
       - pvr
       - proxy
+      - postgres
     environment:
       PUID: "99"
       PGID: "100"
       UMASK: "022"
       TZ: "America/Chicago"
+      LIDARR__POSTGRES__HOST: "postgres"
+      LIDARR__POSTGRES__USER: "lidarr"
+      LIDARR__POSTGRES__PASSWORD: "${POSTGRES_PASSWORD}"
+      LIDARR__POSTGRES__MAINDB: "lidarr"
+      LIDARR__POSTGRES__LOGDB: "lidarr_log"
     labels:
       traefik.enable: "true"
       traefik.http.routers.lidarr.rule: "Host(`lidarr.trkm.io`)"
       traefik.http.services.lidarr.loadBalancer.server.port: "8686"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/lidarr.png"
-      net.unraid.docker.webui: "https://lidarr.trkm.io"
-      net.unraid.docker.shell: "/bin/bash"
 
 networks:
   pvr:
     external: true
   proxy:
+    external: true
+  postgres:
     external: true

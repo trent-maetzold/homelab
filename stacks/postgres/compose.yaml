@@ -1,0 +1,46 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+services:
+  db:
+    container_name: postgres
+    image: ghcr.io/immich-app/postgres:18-vectorchord0.5.3-pgvector0.8.1
+    restart: unless-stopped
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d:ro
+      - /mnt/cache/dbdata/postgres/db/data:/var/lib/postgresql
+    networks:
+      - postgres
+    environment:
+      TZ: "America/Chicago"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      AUTHENTIK_POSTGRES_PASSWORD: "${AUTHENTIK_POSTGRES_PASSWORD}"
+      BAIKAL_POSTGRES_PASSWORD: "${BAIKAL_POSTGRES_PASSWORD}"
+      IMMICH_POSTGRES_PASSWORD: "${IMMICH_POSTGRES_PASSWORD}"
+      LIDARR_POSTGRES_PASSWORD: "${LIDARR_POSTGRES_PASSWORD}"
+      PROWLARR_POSTGRES_PASSWORD: "${PROWLARR_POSTGRES_PASSWORD}"
+      RADARR_POSTGRES_PASSWORD: "${RADARR_POSTGRES_PASSWORD}"
+      SEERR_POSTGRES_PASSWORD: "${SEERR_POSTGRES_PASSWORD}"
+      SONARR_POSTGRES_PASSWORD: "${SONARR_POSTGRES_PASSWORD}"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_preload_libraries=vchord.so"
+      - "-c"
+      - "logging_collector=on"
+      - "-c"
+      - "max_wal_size=2GB"
+      - "-c"
+      - "shared_buffers=512MB"
+      - "-c"
+      - "wal_compression=on"
+
+networks:
+  postgres:
+    name: postgres

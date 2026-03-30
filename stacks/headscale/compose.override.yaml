@@ -1,0 +1,14 @@
+services:
+  app:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/headscale.png"
+      net.unraid.docker.webui: "https://hs.trkm.io/admin"
+      net.unraid.docker.shell: "/bin/sh"
+
+  ui:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/tale/headplane/refs/heads/main/public/favicon.ico"
+      net.unraid.docker.webui: "https://hs.trkm.io/admin"
+      net.unraid.docker.shell: "/bin/sh"
