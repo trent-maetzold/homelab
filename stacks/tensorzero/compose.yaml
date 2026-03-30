@@ -3,7 +3,7 @@
 services:
   gateway:
     container_name: tensorzero
-    image: ghcr.io/trent-maetzold/tensorzero-gateway:oauth-test
+    image: tensorzero/gateway
     restart: unless-stopped
     volumes:
       - /mnt/cache/appdata/tensorzero/shared/config:/app/config:ro
@@ -23,7 +23,19 @@ services:
         condition: service_healthy
       clickhouse:
         condition: service_started
-    command: ["--config-file", "config/**/*.toml"]
+    healthcheck:
+      test:
+        - "CMD"
+        - "wget"
+        - "--spider"
+        - "--tries"
+        - "1"
+        - "http://localhost:3000/status"
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    command: ["--config-file", "/app/config/tensorzero.toml"]
     labels:
       traefik.enable: "true"
       traefik.http.routers.tensorzero.rule: "Host(`llm.trkm.io`)"
