@@ -51,7 +51,7 @@ services:
       traefik.http.routers.traefik.service: "api@internal"
 
   vpn:
-    container_name: traefik_tailscale
+    container_name: traefik_ts
     image: ghcr.io/tailscale/tailscale:latest
     restart: unless-stopped
     cap_add:
