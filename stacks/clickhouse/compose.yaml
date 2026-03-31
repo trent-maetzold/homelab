@@ -34,3 +34,4 @@ services:
 networks:
   clickhouse:
     name: clickhouse
+    external: true
