@@ -19,7 +19,7 @@ services:
       TZ: "America/Chicago"
       LIDARR__APP__INSTANCENAME: "Lidarr"
       LIDARR__APP__URLBASE: ""
-      LIDARR__AUTH__ENABLED: "false"
+      LIDARR__AUTH__METHOD: "External"
       LIDARR__AUTH__APIKEY: "${ARR_API_KEY}"
       LIDARR__UPDATE__MECHANISM: "Docker"
       LIDARR__POSTGRES__HOST: "postgres"

@@ -18,7 +18,7 @@ services:
       TZ: "America/Chicago"
       PROWLARR__APP__INSTANCENAME: "Prowlarr"
       PROWLARR__APP__URLBASE: ""
-      PROWLARR__AUTH__ENABLED: "false"
+      PROWLARR__AUTH__METHOD: "External"
       PROWLARR__AUTH__APIKEY: "${ARR_API_KEY}"
       PROWLARR__UPDATE__MECHANISM: "Docker"
       PROWLARR__POSTGRES__HOST: "postgres"
