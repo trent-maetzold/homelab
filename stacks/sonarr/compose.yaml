@@ -18,7 +18,7 @@ services:
       UMASK: "022"
       TZ: "America/Chicago"
       SONARR__APP__INSTANCENAME: "Sonarr HD"
-      SONARR__APP__URLBASE: ""
+      SONARR__APP__URLBASE: "/hd"
       SONARR__AUTH__METHOD: "External"
       SONARR__AUTH__APIKEY: "${ARR_API_KEY}"
       SONARR__UPDATE__MECHANISM: "Docker"
@@ -29,7 +29,7 @@ services:
       SONARR__POSTGRES__LOGDB: "sonarr_hd_log"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.sonarr_hd.rule: "Host(`sonarr.trkm.io`)"
+      traefik.http.routers.sonarr_hd.rule: "Host(`sonarr.trkm.io`) && PathPrefix(`/hd`)"
       traefik.http.services.sonarr_hd.loadBalancer.server.port: "8989"
 
   uhd:

@@ -18,7 +18,7 @@ services:
       UMASK: "022"
       TZ: "America/Chicago"
       RADARR__APP__INSTANCENAME: "Radarr HD"
-      RADARR__APP__URLBASE: ""
+      RADARR__APP__URLBASE: "/hd"
       RADARR__AUTH__METHOD: "External"
       RADARR__AUTH__APIKEY: "${ARR_API_KEY}"
       RADARR__UPDATE__MECHANISM: "Docker"
@@ -29,7 +29,7 @@ services:
       RADARR__POSTGRES__LOGDB: "radarr_hd_log"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.radarr_hd.rule: "Host(`radarr.trkm.io`)"
+      traefik.http.routers.radarr_hd.rule: "Host(`radarr.trkm.io`) && PathPrefix(`/hd`)"
       traefik.http.services.radarr_hd.loadBalancer.server.port: "7878"
 
   uhd:
