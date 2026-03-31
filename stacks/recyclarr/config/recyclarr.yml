@@ -3,7 +3,7 @@
 radarr:
   radarr_hd:
     base_url: !env_var RADARR_HD_URL
-    api_key: !env_var RADARR_HD_API_KEY
+    api_key: !env_var ARR_API_KEY
     media_naming:
       folder: plex
       movie:
@@ -16,7 +16,7 @@ radarr:
 
   radarr_uhd:
     base_url: !env_var RADARR_UHD_URL
-    api_key: !env_var RADARR_UHD_API_KEY
+    api_key: !env_var ARR_API_KEY
     media_naming:
       folder: plex
       movie:
@@ -29,7 +29,7 @@ radarr:
 
   radarr_anime:
     base_url: !env_var RADARR_ANIME_URL
-    api_key: !env_var RADARR_ANIME_API_KEY
+    api_key: !env_var ARR_API_KEY
     media_naming:
       folder: plex
       movie:
@@ -43,7 +43,7 @@ radarr:
 sonarr:
   sonarr_hd:
     base_url: !env_var SONARR_HD_URL
-    api_key: !env_var SONARR_HD_API_KEY
+    api_key: !env_var ARR_API_KEY
     media_naming:
       series: plex
       season: default
@@ -59,7 +59,7 @@ sonarr:
 
   sonarr_uhd:
     base_url: !env_var SONARR_UHD_URL
-    api_key: !env_var SONARR_UHD_API_KEY
+    api_key: !env_var ARR_API_KEY
     media_naming:
       series: plex
       season: default
@@ -75,7 +75,7 @@ sonarr:
 
   sonarr_anime:
     base_url: !env_var SONARR_ANIME_URL
-    api_key: !env_var SONARR_ANIME_API_KEY
+    api_key: !env_var ARR_API_KEY
     media_naming:
       series: plex
       season: default
