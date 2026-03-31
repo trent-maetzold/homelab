@@ -7,3 +7,10 @@
 *~
 .DS_Store
 tools.yaml
+
+# Unraid composeman runtime files
+autostart
+.compose.lock
+last_cmd.log
+last_result.json
+started_at
