@@ -5,3 +5,10 @@ services:
       net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/prowlarr.png"
       net.unraid.docker.webui: "https://prowlarr.trkm.io"
       net.unraid.docker.shell: "/bin/bash"
+
+  vpn:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/gluetun.png"
+      net.unraid.docker.webui: ""
+      net.unraid.docker.shell: "/bin/sh"

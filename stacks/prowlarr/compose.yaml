@@ -7,10 +7,7 @@ services:
     restart: unless-stopped
     volumes:
       - /mnt/cache/appdata/prowlarr/app/config:/config
-    networks:
-      - pvr
-      - proxy
-      - postgres
+    network_mode: "service:vpn"
     environment:
       PUID: "99"
       PGID: "100"
@@ -26,6 +23,27 @@ services:
       PROWLARR__POSTGRES__PASSWORD: "${POSTGRES_PASSWORD}"
       PROWLARR__POSTGRES__MAINDB: "prowlarr"
       PROWLARR__POSTGRES__LOGDB: "prowlarr_log"
+    depends_on:
+      - vpn
+
+  vpn:
+    container_name: prowlarr_vpn
+    image: qmcgaw/gluetun:latest
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    networks:
+      - pvr
+      - proxy
+      - postgres
+    environment:
+      TZ: "America/Chicago"
+      VPN_SERVICE_PROVIDER: "protonvpn"
+      VPN_TYPE: "wireguard"
+      WIREGUARD_PRIVATE_KEY: "${WIREGUARD_PRIVATE_KEY}"
+      SERVER_CITIES: "Chicago"
     labels:
       traefik.enable: "true"
       traefik.http.routers.prowlarr.rule: "Host(`prowlarr.trkm.io`)"
