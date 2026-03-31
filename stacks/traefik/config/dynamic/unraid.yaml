@@ -9,4 +9,4 @@ http:
     unraid:
       loadBalancer:
         servers:
-          - url: "http://unraid.ts.trkm.io:80"
+          - url: "http://ymir.ts.trkm.io:80"
