@@ -25,6 +25,7 @@ services:
       CF_ZONE_API_TOKEN: "${CF_ZONE_API_TOKEN}"
     command:
       - "--api.dashboard=true"
+      - "--api.insecure=true"
       - "--log.level=INFO"
       - "--log.filepath=/var/log/traefik.log"
       - "--accesslog=true"
@@ -37,6 +38,7 @@ services:
       - "--entryPoints.web.address=:80"
       - "--entryPoints.web.http.redirections.entryPoint.to=websecure"
       - "--entryPoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entryPoints.web.http.redirections.entryPoint.permanent=true"
       - "--entryPoints.websecure.address=:443"
       - "--entryPoints.websecure.asDefault=true"
       - "--entryPoints.websecure.http.tls.certResolver=cloudflare"
@@ -49,6 +51,7 @@ services:
       traefik.enable: "true"
       traefik.http.routers.traefik.rule: "Host(`traefik.trkm.io`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
       traefik.http.routers.traefik.service: "api@internal"
+      traefik.http.services.traefik.loadBalancer.server.port: "80"
 
   vpn:
     container_name: traefik_ts
