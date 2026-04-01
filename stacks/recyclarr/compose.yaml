@@ -17,12 +17,12 @@ services:
       CRON_SCHEDULE: "@daily"
       RECYCLARR_CREATE_CONFIG: "false"
       TZ: "America/Chicago"
-      RADARR_HD_URL: "http://radarr_hd:7878"
-      RADARR_UHD_URL: "http://radarr_uhd:7878"
-      RADARR_ANIME_URL: "http://radarr_anime:7878"
-      SONARR_HD_URL: "http://sonarr_hd:8989"
-      SONARR_UHD_URL: "http://sonarr_uhd:8989"
-      SONARR_ANIME_URL: "http://sonarr_anime:8989"
+      RADARR_HD_URL: "http://radarr_hd:7878/hd"
+      RADARR_UHD_URL: "http://radarr_uhd:7878/uhd"
+      RADARR_ANIME_URL: "http://radarr_anime:7878/anime"
+      SONARR_HD_URL: "http://sonarr_hd:8989/hd"
+      SONARR_UHD_URL: "http://sonarr_uhd:8989/uhd"
+      SONARR_ANIME_URL: "http://sonarr_anime:8989/anime"
       ARR_API_KEY: "${ARR_API_KEY}"
 
 networks:
