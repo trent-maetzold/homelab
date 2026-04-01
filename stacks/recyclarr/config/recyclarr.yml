@@ -26,8 +26,6 @@ radarr:
     include:
       - config: radarr/uhd/bluray-web.yml
       - config: radarr/uhd/remux-web.yml
-      - config: radarr/uhd/remux-web-alt.yml
-      - config: radarr/uhd/remux-web-comb.yml
 
   radarr_anime:
     base_url: !env_var RADARR_ANIME_URL
@@ -56,7 +54,6 @@ sonarr:
     delete_old_custom_formats: true
     include:
       - config: sonarr/hd/web.yml
-      - config: sonarr/hd/web-alt.yml
 
   sonarr_uhd:
     base_url: !env_var SONARR_UHD_URL
@@ -72,8 +69,6 @@ sonarr:
     delete_old_custom_formats: true
     include:
       - config: sonarr/uhd/web.yml
-      - config: sonarr/uhd/web-alt.yml
-      - config: sonarr/uhd/web-comb.yml
 
   sonarr_anime:
     base_url: !env_var SONARR_ANIME_URL
