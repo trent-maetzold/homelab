@@ -12,7 +12,7 @@ radarr:
     delete_old_custom_formats: true
     replace_existing_custom_formats: true
     include:
-      - config: includes/radarr-hd.yml
+      - config: radarr-hd.yml
 
   radarr_uhd:
     base_url: !env_var RADARR_UHD_URL
@@ -25,7 +25,7 @@ radarr:
     delete_old_custom_formats: true
     replace_existing_custom_formats: true
     include:
-      - config: includes/radarr-uhd.yml
+      - config: radarr-uhd.yml
 
   radarr_anime:
     base_url: !env_var RADARR_ANIME_URL
@@ -38,7 +38,7 @@ radarr:
     delete_old_custom_formats: true
     replace_existing_custom_formats: true
     include:
-      - config: includes/radarr-anime.yml
+      - config: radarr-anime.yml
 
 sonarr:
   sonarr_hd:
@@ -55,7 +55,7 @@ sonarr:
     delete_old_custom_formats: true
     replace_existing_custom_formats: true
     include:
-      - config: includes/sonarr-hd.yml
+      - config: sonarr-hd.yml
 
   sonarr_uhd:
     base_url: !env_var SONARR_UHD_URL
@@ -71,7 +71,7 @@ sonarr:
     delete_old_custom_formats: true
     replace_existing_custom_formats: true
     include:
-      - config: includes/sonarr-uhd.yml
+      - config: sonarr-uhd.yml
 
   sonarr_anime:
     base_url: !env_var SONARR_ANIME_URL
@@ -87,4 +87,4 @@ sonarr:
     delete_old_custom_formats: true
     replace_existing_custom_formats: true
     include:
-      - config: includes/sonarr-anime.yml
+      - config: sonarr-anime.yml
