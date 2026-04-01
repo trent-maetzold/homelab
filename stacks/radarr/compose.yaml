@@ -31,6 +31,12 @@ services:
       traefik.enable: "true"
       traefik.http.routers.radarr-hd.rule: "Host(`radarr.trkm.io`) && PathPrefix(`/hd`)"
       traefik.http.services.radarr-hd.loadBalancer.server.port: "7878"
+      traefik.http.middlewares.radarr-root-redirect.redirectRegex.regex: "^https://radarr.trkm.io/$"
+      traefik.http.middlewares.radarr-root-redirect.redirectRegex.replacement: "https://radarr.trkm.io/hd/"
+      traefik.http.middlewares.radarr-root-redirect.redirectRegex.permanent: "true"
+      traefik.http.routers.radarr-root.rule: "Host(`radarr.trkm.io`) && Path(`/`)"
+      traefik.http.routers.radarr-root.middlewares: "radarr-root-redirect"
+      traefik.http.routers.radarr-root.service: "radarr-hd"
 
   uhd:
     container_name: radarr_uhd

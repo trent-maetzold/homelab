@@ -31,6 +31,12 @@ services:
       traefik.enable: "true"
       traefik.http.routers.sonarr-hd.rule: "Host(`sonarr.trkm.io`) && PathPrefix(`/hd`)"
       traefik.http.services.sonarr-hd.loadBalancer.server.port: "8989"
+      traefik.http.middlewares.sonarr-root-redirect.redirectRegex.regex: "^https://sonarr.trkm.io/$"
+      traefik.http.middlewares.sonarr-root-redirect.redirectRegex.replacement: "https://sonarr.trkm.io/hd/"
+      traefik.http.middlewares.sonarr-root-redirect.redirectRegex.permanent: "true"
+      traefik.http.routers.sonarr-root.rule: "Host(`sonarr.trkm.io`) && Path(`/`)"
+      traefik.http.routers.sonarr-root.middlewares: "sonarr-root-redirect"
+      traefik.http.routers.sonarr-root.service: "sonarr-hd"
 
   uhd:
     container_name: sonarr_uhd
