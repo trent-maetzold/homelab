@@ -18,8 +18,8 @@ services:
       TZ: "America/Chicago"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.home_assistant.rule: "Host(`ha.trkm.io`)"
-      traefik.http.services.home_assistant.loadBalancer.server.port: "8123"
+      traefik.http.routers.homeassistant.rule: "Host(`ha.trkm.io`)"
+      traefik.http.services.homeassistant.loadBalancer.server.port: "8123"
 
 networks:
   br0:

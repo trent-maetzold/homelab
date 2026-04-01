@@ -29,8 +29,10 @@ services:
       RADARR__POSTGRES__LOGDB: "radarr_hd_log"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.radarr_hd.rule: "Host(`radarr.trkm.io`) && PathPrefix(`/hd`)"
-      traefik.http.services.radarr_hd.loadBalancer.server.port: "7878"
+      traefik.http.middlewares.radarr-hd-strip.stripPrefix.prefixes: "/hd"
+      traefik.http.routers.radarr-hd.middlewares: "radarr-hd-strip"
+      traefik.http.routers.radarr-hd.rule: "Host(`radarr.trkm.io`) && PathPrefix(`/hd`)"
+      traefik.http.services.radarr-hd.loadBalancer.server.port: "7878"
 
   uhd:
     container_name: radarr_uhd
@@ -60,8 +62,10 @@ services:
       RADARR__POSTGRES__LOGDB: "radarr_uhd_log"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.radarr_uhd.rule: "Host(`radarr.trkm.io`) && PathPrefix(`/uhd`)"
-      traefik.http.services.radarr_uhd.loadBalancer.server.port: "7878"
+      traefik.http.middlewares.radarr-uhd-strip.stripPrefix.prefixes: "/uhd"
+      traefik.http.routers.radarr-uhd.middlewares: "radarr-uhd-strip"
+      traefik.http.routers.radarr-uhd.rule: "Host(`radarr.trkm.io`) && PathPrefix(`/uhd`)"
+      traefik.http.services.radarr-uhd.loadBalancer.server.port: "7878"
 
   anime:
     container_name: radarr_anime
@@ -91,8 +95,10 @@ services:
       RADARR__POSTGRES__LOGDB: "radarr_anime_log"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.radarr_anime.rule: "Host(`radarr.trkm.io`) && PathPrefix(`/anime`)"
-      traefik.http.services.radarr_anime.loadBalancer.server.port: "7878"
+      traefik.http.middlewares.radarr-anime-strip.stripPrefix.prefixes: "/anime"
+      traefik.http.routers.radarr-anime.middlewares: "radarr-anime-strip"
+      traefik.http.routers.radarr-anime.rule: "Host(`radarr.trkm.io`) && PathPrefix(`/anime`)"
+      traefik.http.services.radarr-anime.loadBalancer.server.port: "7878"
 
 networks:
   pvr:

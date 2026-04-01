@@ -29,8 +29,10 @@ services:
       SONARR__POSTGRES__LOGDB: "sonarr_hd_log"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.sonarr_hd.rule: "Host(`sonarr.trkm.io`) && PathPrefix(`/hd`)"
-      traefik.http.services.sonarr_hd.loadBalancer.server.port: "8989"
+      traefik.http.middlewares.sonarr-hd-strip.stripPrefix.prefixes: "/hd"
+      traefik.http.routers.sonarr-hd.middlewares: "sonarr-hd-strip"
+      traefik.http.routers.sonarr-hd.rule: "Host(`sonarr.trkm.io`) && PathPrefix(`/hd`)"
+      traefik.http.services.sonarr-hd.loadBalancer.server.port: "8989"
 
   uhd:
     container_name: sonarr_uhd
@@ -60,8 +62,10 @@ services:
       SONARR__POSTGRES__LOGDB: "sonarr_uhd_log"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.sonarr_uhd.rule: "Host(`sonarr.trkm.io`) && PathPrefix(`/uhd`)"
-      traefik.http.services.sonarr_uhd.loadBalancer.server.port: "8989"
+      traefik.http.middlewares.sonarr-uhd-strip.stripPrefix.prefixes: "/uhd"
+      traefik.http.routers.sonarr-uhd.middlewares: "sonarr-uhd-strip"
+      traefik.http.routers.sonarr-uhd.rule: "Host(`sonarr.trkm.io`) && PathPrefix(`/uhd`)"
+      traefik.http.services.sonarr-uhd.loadBalancer.server.port: "8989"
 
   anime:
     container_name: sonarr_anime
@@ -91,8 +95,10 @@ services:
       SONARR__POSTGRES__LOGDB: "sonarr_anime_log"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.sonarr_anime.rule: "Host(`sonarr.trkm.io`) && PathPrefix(`/anime`)"
-      traefik.http.services.sonarr_anime.loadBalancer.server.port: "8989"
+      traefik.http.middlewares.sonarr-anime-strip.stripPrefix.prefixes: "/anime"
+      traefik.http.routers.sonarr-anime.middlewares: "sonarr-anime-strip"
+      traefik.http.routers.sonarr-anime.rule: "Host(`sonarr.trkm.io`) && PathPrefix(`/anime`)"
+      traefik.http.services.sonarr-anime.loadBalancer.server.port: "8989"
 
 networks:
   pvr:
