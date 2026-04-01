@@ -5,10 +5,10 @@ radarr:
     base_url: !env_var RADARR_HD_URL
     api_key: !env_var ARR_API_KEY
     media_naming:
-      folder: plex
+      folder: plex-tmdb
       movie:
         rename: true
-        standard: default
+        standard: plex-tmdb
     delete_old_custom_formats: true
     include:
       - config: radarr/hd/bluray-web.yml
@@ -18,10 +18,10 @@ radarr:
     base_url: !env_var RADARR_UHD_URL
     api_key: !env_var ARR_API_KEY
     media_naming:
-      folder: plex
+      folder: plex-tmdb
       movie:
         rename: true
-        standard: default
+        standard: plex-tmdb
     delete_old_custom_formats: true
     include:
       - config: radarr/uhd/bluray-web.yml
@@ -31,10 +31,10 @@ radarr:
     base_url: !env_var RADARR_ANIME_URL
     api_key: !env_var ARR_API_KEY
     media_naming:
-      folder: plex
+      folder: plex-tmdb
       movie:
         rename: true
-        standard: default
+        standard: plex-anime-tmdb
     delete_old_custom_formats: true
     include:
       - config: radarr/anime/remux.yml
@@ -44,7 +44,7 @@ sonarr:
     base_url: !env_var SONARR_HD_URL
     api_key: !env_var ARR_API_KEY
     media_naming:
-      series: plex
+      series: plex-tvdb
       season: default
       episodes:
         rename: true
@@ -59,7 +59,7 @@ sonarr:
     base_url: !env_var SONARR_UHD_URL
     api_key: !env_var ARR_API_KEY
     media_naming:
-      series: plex
+      series: plex-tvdb
       season: default
       episodes:
         rename: true
@@ -74,7 +74,7 @@ sonarr:
     base_url: !env_var SONARR_ANIME_URL
     api_key: !env_var ARR_API_KEY
     media_naming:
-      series: plex
+      series: plex-tvdb
       season: default
       episodes:
         rename: true
