@@ -10,9 +10,9 @@ radarr:
         rename: true
         standard: default
     delete_old_custom_formats: true
-    replace_existing_custom_formats: true
     include:
-      - config: radarr-hd.yml
+      - config: radarr/hd/bluray-web.yml
+      - config: radarr/hd/remux-web.yml
 
   radarr_uhd:
     base_url: !env_var RADARR_UHD_URL
@@ -23,9 +23,11 @@ radarr:
         rename: true
         standard: default
     delete_old_custom_formats: true
-    replace_existing_custom_formats: true
     include:
-      - config: radarr-uhd.yml
+      - config: radarr/uhd/bluray-web.yml
+      - config: radarr/uhd/remux-web.yml
+      - config: radarr/uhd/remux-web-alt.yml
+      - config: radarr/uhd/remux-web-comb.yml
 
   radarr_anime:
     base_url: !env_var RADARR_ANIME_URL
@@ -36,9 +38,8 @@ radarr:
         rename: true
         standard: default
     delete_old_custom_formats: true
-    replace_existing_custom_formats: true
     include:
-      - config: radarr-anime.yml
+      - config: radarr/anime/remux.yml
 
 sonarr:
   sonarr_hd:
@@ -53,9 +54,9 @@ sonarr:
         daily: default
         anime: default
     delete_old_custom_formats: true
-    replace_existing_custom_formats: true
     include:
-      - config: sonarr-hd.yml
+      - config: sonarr/hd/web.yml
+      - config: sonarr/hd/web-alt.yml
 
   sonarr_uhd:
     base_url: !env_var SONARR_UHD_URL
@@ -69,9 +70,10 @@ sonarr:
         daily: default
         anime: default
     delete_old_custom_formats: true
-    replace_existing_custom_formats: true
     include:
-      - config: sonarr-uhd.yml
+      - config: sonarr/uhd/web.yml
+      - config: sonarr/uhd/web-alt.yml
+      - config: sonarr/uhd/web-comb.yml
 
   sonarr_anime:
     base_url: !env_var SONARR_ANIME_URL
@@ -85,6 +87,5 @@ sonarr:
         daily: default
         anime: default
     delete_old_custom_formats: true
-    replace_existing_custom_formats: true
     include:
-      - config: sonarr-anime.yml
+      - config: sonarr/anime/remux.yml
