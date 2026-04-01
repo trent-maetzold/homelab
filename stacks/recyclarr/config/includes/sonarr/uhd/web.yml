@@ -24,9 +24,9 @@ custom_format_groups:
   ################################################################################
   add:
     - trash_id: e3f37512790f00d0e89e54fe5e790d1c # [Required] Golden Rule UHD
-      select:
-        # - 47435ece6b99a0b477caf360e79ba0bb  # x265 (HD)
-        - 9b64dff695c2115facf1b6ea59c9bd07 # x265 (no HDR/DV)
+      # select:
+      #   - 47435ece6b99a0b477caf360e79ba0bb # x265 (HD)
+      #   - 9b64dff695c2115facf1b6ea59c9bd07 # x265 (no HDR/DV)
     # - trash_id: d776a1ea912a117d66d83b880ff2055d  # [HDR Formats] DV (w/o HDR fallback)
     - trash_id: e0b2774083df4265f25c9e5bc6c80940 # [HDR Formats] DV Boost
     - trash_id: 7d366c213e5c23a052b157356fac1921 # [HDR Formats] HDR10+ Boost
