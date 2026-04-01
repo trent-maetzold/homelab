@@ -7,11 +7,10 @@ services:
     restart: unless-stopped
     user: 99:100
     volumes:
+      - /mnt/cache/appdata/recyclarr/app/config:/config
       - ./config/recyclarr.yml:/config/recyclarr.yml
       - ./config/settings.yml:/config/settings.yml
       - ./config/includes:/config/includes
-      - /mnt/cache/appdata/recyclarr/app/logs:/config/logs
-      - /mnt/cache/appdata/recyclarr/app/cache:/config/cache
     networks:
       - pvr
     environment:
