@@ -6,7 +6,7 @@ services:
     image: ghcr.io/seerr-team/seerr:latest
     restart: unless-stopped
     volumes:
-      - /mnt/cache/appdata/seerr/app/config:/config
+      - /mnt/cache/appdata/seerr/app/config:/app/config
     networks:
       - proxy
       - postgres
