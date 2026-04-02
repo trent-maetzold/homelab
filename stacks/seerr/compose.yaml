@@ -20,7 +20,7 @@ services:
       DB_PASS: "${POSTGRES_PASSWORD}"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.seerr.rule: "Host(`requests.trkm.io`)"
+      traefik.http.routers.seerr.rule: "Host(`seerr.trkm.io`)"
       traefik.http.services.seerr.loadBalancer.server.port: "5055"
 
 networks:
