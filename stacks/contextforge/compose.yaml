@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+services:
+  contextforge:
+    container_name: contextforge
+    image: ghcr.io/ibm/mcp-context-forge:latest
+    restart: unless-stopped
+    ports:
+      - "8910:8910"
+    volumes:
+      - /mnt/user/appdata/contextforge:/app/data
+    networks:
+      - proxy
+    environment:
+      TZ: America/Chicago
+      DATABASE_URL: "sqlite+aiosqlite:////app/data/contextforge.db"
+      ADMIN_USERNAME: "admin"
+      ADMIN_PASSWORD: "changeme"
+      LOG_LEVEL: "INFO"
+    labels:
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/ibm.png"
+      net.unraid.docker.webui: "http://[IP]:[PORT:8910]"
+      net.unraid.docker.shell: "/bin/bash"
+
+networks:
+  proxy:
+    external: true
