@@ -37,10 +37,12 @@ services:
       - proxy
     environment:
       TZ: "America/Chicago"
-      VPN_SERVICE_PROVIDER: "protonvpn"
-      VPN_TYPE: "wireguard"
-      WIREGUARD_PRIVATE_KEY: "${WIREGUARD_PRIVATE_KEY}"
       SERVER_CITIES: "Chicago"
+      PORT_FORWARD_ONLY: "on"
+      VPN_TYPE: "wireguard"
+      VPN_SERVICE_PROVIDER: "protonvpn"
+      VPN_PORT_FORWARDING: "on"
+      WIREGUARD_PRIVATE_KEY: "${WIREGUARD_PRIVATE_KEY}"
     labels:
       traefik.enable: "true"
       traefik.http.routers.qbittorrent.rule: "Host(`bt.trkm.io`)"
