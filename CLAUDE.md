@@ -4,8 +4,11 @@ Docker Compose stacks for a home server running on Unraid.
 
 ## Structure
 
-    stacks/<service>/compose.yaml   — Service definitions
-    config/<service>/               — Service configuration files
+    stacks/<service>/compose.yaml           — Service definitions
+    stacks/<service>/compose.override.yaml  — Unraid composeman labels (icon, webui, shell per service)
+    stacks/<service>/name                   — Display name for the stack in the Unraid UI
+    stacks/<service>/icon_url               — Icon URL for the stack in the Unraid UI
+    config/<service>/                       — Service configuration files
 
 ## Conventions
 
@@ -69,23 +72,18 @@ Omit keys that don't apply. Don't reorder.
 - Internal stack networks defined at the bottom of the file
 
 ### Labels
-- Unraid labels on every service:
-  - `net.unraid.docker.icon`: every service must have an icon. Resolution
-    order:
-    1. dashboard-icons PNG — try
-       `https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/<name>.png`
-       first, but curl to verify it returns 200. If not found on `main`,
-       search the repo tree (`png/` dir via GitHub API) for the correct filename.
-    2. Find an icon from another authoritative source (e.g. official GitHub
-       repo avatar, project website).
-    3. Generate one with an image model.
-    Never omit this label.
-  - `net.unraid.docker.webui`: the web UI URL — omit the label entirely if the service has no web UI
-  - `net.unraid.docker.shell`: `/bin/bash` if available, `/bin/sh`
-    otherwise — test with `podman run --rm --entrypoint /bin/bash <image> -c "echo ok"`
-    to verify before using `/bin/bash`
-- Always quote label values when present — they are strings and should be explicit: `net.unraid.docker.shell: "/bin/bash"`, `traefik.http.routers.foo.rule: "Host(\`foo.trkm.io\`)"`
-- Traefik labels follow the standard router/service pattern
+- Traefik labels go in `compose.yaml`, following the standard router/service pattern
+- Always quote label values: `traefik.http.routers.foo.rule: "Host(\`foo.trkm.io\`)"`, `traefik.enable: "true"`
+- Unraid composeman labels go in `compose.override.yaml`, never in `compose.yaml`:
+  - `net.unraid.docker.managed: "composeman"` — required on every service
+  - `net.unraid.docker.icon`: icon URL. Resolution order:
+    1. dashboard-icons webp (pinned commit) — `https://raw.githubusercontent.com/homarr-labs/dashboard-icons/<sha>/webp/<name>.webp`
+    2. Project's own hosted asset (GitHub repo avatar, official logo URL)
+    3. Never omit.
+  - `net.unraid.docker.webui`: the web UI URL — set to `""` if no web UI
+  - `net.unraid.docker.shell`: `/bin/bash` if available, `/bin/sh` otherwise
+- `name` file: plain text display name for the stack (e.g. `TensorZero`, `Baïkal`)
+- `icon_url` file: same icon URL as used in `compose.override.yaml`
 
 ### Consistency
 - All stacks must follow the same patterns. When adding or modifying a
