@@ -1,0 +1,12 @@
+services:
+  playwright:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://avatars.githubusercontent.com/u/14985020"
+      net.unraid.docker.shell: "/bin/sh"
+
+  context7:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://avatars.githubusercontent.com/u/105033779"
+      net.unraid.docker.shell: "/bin/sh"
