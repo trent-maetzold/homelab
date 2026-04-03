@@ -53,12 +53,12 @@ Omit keys that don't apply. Don't reorder.
   requires many variables
 
 ### Volumes
-- App storage: `/mnt/user/appdata/<stack_name>/<service_name>/<mount_name>` — mount name is the semantic role (`config`, `data`, `logs`, etc.)
-  - Use `shared` as the service name for mounts shared across multiple services: `/mnt/user/appdata/<stack_name>/shared/<mount_name>`
-  - e.g. `/mnt/user/appdata/authentik/shared/data:/data`, `/mnt/user/appdata/authentik/worker/certs:/certs`
-- Database storage: `/mnt/user/appdata-db/<db_type>/<stack_name>/<mount_name>` where db_type is the engine (`postgres`, `mariadb`, `clickhouse`, etc.)
-  - e.g. `/mnt/user/appdata-db/postgres/authentik/data:/var/lib/postgresql`
-- Shared data: `/mnt/user/data/`
+- App storage: `/mnt/cache/appdata/<stack_name>/<service_name>/<mount_name>` — mount name is the semantic role (`config`, `data`, `logs`, etc.)
+  - Use `shared` as the service name for mounts shared across multiple services: `/mnt/cache/appdata/<stack_name>/shared/<mount_name>`
+  - e.g. `/mnt/cache/appdata/authentik/shared/data:/data`, `/mnt/cache/appdata/authentik/worker/certs:/certs`
+- Database storage: `/mnt/cache/appdata-db/<db_type>/<stack_name>/<mount_name>` where db_type is the engine (`postgres`, `mariadb`, `clickhouse`, etc.)
+  - e.g. `/mnt/cache/appdata-db/postgres/authentik/data:/var/lib/postgresql`
+- Shared data: `/mnt/cache/data/`
 - Use `:ro` for read-only mounts
 - Named volumes (snake_case) for persistent data that doesn't need a host path
 - Bind mounts for everything else

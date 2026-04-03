@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+services:
+  example:
+    container_name: example
+    image: example/image:latest
+    restart: unless-stopped
+    volumes:
+      - /mnt/cache/appdata/example/config:/config
+    networks:
+      - proxy
+    environment:
+      TZ: "America/Chicago"
+    labels:
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/example.png"
+      net.unraid.docker.shell: "/bin/bash"
+
+networks:
+  proxy:
+    external: true

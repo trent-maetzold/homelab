@@ -5,23 +5,26 @@ services:
     container_name: contextforge
     image: ghcr.io/ibm/mcp-context-forge:latest
     restart: unless-stopped
-    ports:
-      - "8910:8910"
     volumes:
-      - /mnt/user/appdata/contextforge:/app/data
+      - /mnt/cache/appdata/contextforge/data:/data
     networks:
+      - mcp
       - proxy
     environment:
-      TZ: America/Chicago
-      DATABASE_URL: "sqlite+aiosqlite:////app/data/contextforge.db"
-      ADMIN_USERNAME: "admin"
-      ADMIN_PASSWORD: "changeme"
+      TZ: "America/Chicago"
+      DATABASE_URL: "sqlite+aiosqlite:////data/contextforge.db"
       LOG_LEVEL: "INFO"
+      TRANSPORT_TYPE: "all"
+      AUTH_REQUIRED: "False"
     labels:
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/ibm.png"
-      net.unraid.docker.webui: "http://[IP]:[PORT:8910]"
-      net.unraid.docker.shell: "/bin/bash"
+      traefik.enable: "true"
+      traefik.http.routers.contextforge.rule: "Host(`api.trkm.io`)"
+      traefik.http.services.contextforge.loadBalancer.server.port: "4444"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/IBM/mcp-context-forge/main/docs/docs/images/contextforge-logo_horizontal_black.png"
+      net.unraid.docker.shell: "/bin/sh"
 
 networks:
+  mcp:
+    external: true
   proxy:
     external: true
