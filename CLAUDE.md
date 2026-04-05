@@ -16,7 +16,7 @@ Docker Compose stacks for a home server running on Unraid.
 
 - Always named `compose.yaml` (not `docker-compose.yml`)
 - Prefer inline JSON array form for `command:` and `healthcheck.test:`: `["cmd", "--flag", "value"]`
-- Multi-line list form is also acceptable when there are many arguments
+- Use multi-line list form when the array is too long to fit on one line (prettier will reformat inline arrays to a multi-line JSON block — convert those to YAML list form instead: `- "cmd"`):
 - Never use a bare string for `healthcheck.test:` — it silently invokes CMD-SHELL
 - Do not prefix `healthcheck.test` arrays with `"CMD"` — it is implicit and adds noise
 - Use `CMD-SHELL` only when shell operators like `&&`, `||`, pipes, or redirects are genuinely needed

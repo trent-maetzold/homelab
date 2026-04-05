@@ -19,13 +19,11 @@ services:
       CLICKHOUSE_PASSWORD: "${CLICKHOUSE_PASSWORD:?CLICKHOUSE_PASSWORD is required}"
     healthcheck:
       test:
-        [
-          "wget",
-          "--spider",
-          "--tries",
-          "1",
-          "http://tensorzero:${CLICKHOUSE_PASSWORD}@localhost:8123/ping",
-        ]
+        - "wget"
+        - "--spider"
+        - "--tries"
+        - "1"
+        - "http://tensorzero:${CLICKHOUSE_PASSWORD}@localhost:8123/ping"
       interval: 5s
       timeout: 2s
       retries: 12
