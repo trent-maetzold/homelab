@@ -1,12 +1,12 @@
 services:
-  immich-server:
+  server:
     labels:
       net.unraid.docker.managed: "composeman"
       net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/immich.png"
       net.unraid.docker.webui: "https://immich.trkm.io"
       net.unraid.docker.shell: "/bin/bash"
 
-  immich-machine-learning:
+  ml:
     labels:
       net.unraid.docker.managed: "composeman"
       net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/immich.png"

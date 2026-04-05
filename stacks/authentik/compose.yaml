@@ -3,7 +3,7 @@
 services:
   server:
     container_name: authentik
-    image: ghcr.io/goauthentik/server:${AUTHENTIK_VERSION}
+    image: ghcr.io/goauthentik/server:${AUTHENTIK_VERSION:?AUTHENTIK_VERSION is required}
     restart: unless-stopped
     volumes:
       - /mnt/cache/appdata/authentik/shared/data:/data
@@ -17,8 +17,8 @@ services:
       AUTHENTIK_POSTGRESQL__HOST: "postgres"
       AUTHENTIK_POSTGRESQL__NAME: "authentik"
       AUTHENTIK_POSTGRESQL__USER: "authentik"
-      AUTHENTIK_POSTGRESQL__PASSWORD: "${POSTGRES_PASSWORD}"
-      AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY}"
+      AUTHENTIK_POSTGRESQL__PASSWORD: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
+      AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY:?AUTHENTIK_SECRET_KEY is required}"
     command: ["server"]
     labels:
       traefik.enable: "true"

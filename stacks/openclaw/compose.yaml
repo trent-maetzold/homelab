@@ -1,0 +1,41 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+services:
+  gateway:
+    container_name: openclaw
+    image: ghcr.io/openclaw/openclaw:latest
+    restart: unless-stopped
+    volumes:
+      - /mnt/cache/appdata/openclaw/gateway/home:/home
+      - ./config/openclaw.json:/home/node/.openclaw/openclaw.json
+    networks:
+      - proxy
+    environment:
+      TZ: "America/Chicago"
+      OPENCLAW_GATEWAY_TOKEN: "${OPENCLAW_GATEWAY_TOKEN:?OPENCLAW_GATEWAY_TOKEN is required}"
+      OPENROUTER_API_KEY: "${OPENROUTER_API_KEY:?OPENROUTER_API_KEY is required}"
+      CARGO_INSTALL_ROOT: "/home/node/.local"
+      GOBIN: "/home/node/.local/bin"
+      NPM_CONFIG_PREFIX: "/home/node/.local"
+    healthcheck:
+      test: ["wget", "--spider", "--quiet", "http://127.0.0.1:18789/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    # command:
+    #   - "node"
+    #   - "dist/index.js"
+    #   - "gateway"
+    #   - "--bind"
+    #   - "lan"
+    #   - "--port"
+    #   - "18789"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.openclaw.rule: "Host(`claw.trkm.io`)"
+      traefik.http.services.openclaw.loadBalancer.server.port: "18789"
+
+networks:
+  proxy:
+    external: true

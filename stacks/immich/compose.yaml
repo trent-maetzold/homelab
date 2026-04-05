@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
 
 services:
-  immich-server:
+  server:
     container_name: immich
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
     restart: unless-stopped
@@ -16,9 +16,10 @@ services:
       TZ: "America/Chicago"
       DB_HOSTNAME: "postgres"
       DB_USERNAME: "immich"
-      DB_PASSWORD: "${POSTGRES_PASSWORD}"
+      DB_PASSWORD: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
       DB_VECTOR_EXTENSION: "vectorchord"
       REDIS_HOSTNAME: "cache"
+      IMMICH_MACHINE_LEARNING_URL: "http://ml:3003"
     depends_on:
       - cache
     healthcheck:
@@ -28,9 +29,9 @@ services:
       traefik.http.routers.immich.rule: "Host(`immich.trkm.io`)"
       traefik.http.services.immich.loadBalancer.server.port: "2283"
 
-  immich-machine-learning:
+  ml:
     container_name: immich_ml
-    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
+    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION}
     restart: unless-stopped
     volumes:
       - model_cache:/cache
@@ -50,7 +51,7 @@ services:
     environment:
       TZ: "America/Chicago"
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["redis-cli", "ping"]
 
 volumes:
   model_cache:

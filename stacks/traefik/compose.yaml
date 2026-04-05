@@ -21,8 +21,8 @@ services:
     environment:
       TZ: "America/Chicago"
       CF_API_EMAIL: "tkm89@proton.me"
-      CF_DNS_API_TOKEN: "${CF_DNS_API_TOKEN}"
-      CF_ZONE_API_TOKEN: "${CF_ZONE_API_TOKEN}"
+      CF_DNS_API_TOKEN: "${CF_DNS_API_TOKEN:?CF_DNS_API_TOKEN is required}"
+      CF_ZONE_API_TOKEN: "${CF_ZONE_API_TOKEN:?CF_ZONE_API_TOKEN is required}"
     command:
       - "--api.dashboard=true"
       - "--api.insecure=true"
@@ -67,7 +67,7 @@ services:
     environment:
       TZ: "America/Chicago"
       TS_AUTH_ONCE: "true"
-      TS_AUTHKEY: "${TS_AUTHKEY}"
+      TS_AUTHKEY: "${TS_AUTHKEY:?TS_AUTHKEY is required}"
       TS_USERSPACE: "false"
       TS_ACCEPT_DNS: "true"
       TS_STATE_DIR: "/var/lib/tailscale"

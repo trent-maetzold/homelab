@@ -20,11 +20,11 @@ services:
       SONARR__APP__INSTANCENAME: "Sonarr HD"
       SONARR__SERVER__URLBASE: "/hd"
       SONARR__AUTH__METHOD: "External"
-      SONARR__AUTH__APIKEY: "${ARR_API_KEY}"
+      SONARR__AUTH__APIKEY: "${ARR_API_KEY:?ARR_API_KEY is required}"
       SONARR__UPDATE__MECHANISM: "Docker"
       SONARR__POSTGRES__HOST: "postgres"
       SONARR__POSTGRES__USER: "sonarr"
-      SONARR__POSTGRES__PASSWORD: "${POSTGRES_PASSWORD}"
+      SONARR__POSTGRES__PASSWORD: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
       SONARR__POSTGRES__MAINDB: "sonarr_hd"
       SONARR__POSTGRES__LOGDB: "sonarr_hd_log"
     labels:

@@ -34,11 +34,11 @@ services:
       - proxy
     environment:
       TZ: "America/Chicago"
-      HEADPLANE_SERVER__COOKIE_SECRET: "${HEADPLANE_SERVER__COOKIE_SECRET}"
+      HEADPLANE_SERVER__COOKIE_SECRET: "${HEADPLANE_SERVER__COOKIE_SECRET:?HEADPLANE_SERVER__COOKIE_SECRET is required}"
     depends_on:
       - app
     healthcheck:
-      test: ["CMD", "/bin/hp_healthcheck"]
+      test: ["/bin/hp_healthcheck"]
       interval: 30s
       timeout: 5s
       start_period: 5s

@@ -1,0 +1,7 @@
+services:
+  gateway:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/openclaw.png"
+      net.unraid.docker.webui: "https://claw.trkm.io"
+      net.unraid.docker.shell: "/bin/bash"

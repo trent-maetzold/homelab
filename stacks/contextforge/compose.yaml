@@ -5,24 +5,32 @@ services:
     container_name: contextforge
     image: ghcr.io/ibm/mcp-context-forge:latest
     restart: unless-stopped
-    volumes:
-      - /mnt/cache/appdata/contextforge/app/data:/data
     networks:
       - mcp
       - proxy
+      - postgres
     environment:
       TZ: "America/Chicago"
-      DATABASE_URL: "sqlite+aiosqlite:////data/contextforge.db"
+      DATABASE_URL: "postgresql+psycopg://contextforge:${CONTEXTFORGE_POSTGRES_PASSWORD:?CONTEXTFORGE_POSTGRES_PASSWORD is required}@postgres/contextforge"
+      APP_ROOT_PATH: "/mcp"
       LOG_LEVEL: "INFO"
       TRANSPORT_TYPE: "all"
-      AUTH_REQUIRED: "False"
+      AUTH_REQUIRED: "false"
+    healthcheck:
+      test: ["wget", "--spider", "--quiet", "http://localhost:4444/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
     labels:
       traefik.enable: "true"
-      traefik.http.routers.contextforge.rule: "Host(`api.trkm.io`)"
+      traefik.http.routers.contextforge.rule: "Host(`api.trkm.io`) && PathPrefix(`/mcp`)"
       traefik.http.services.contextforge.loadBalancer.server.port: "4444"
 
 networks:
   mcp:
     external: true
   proxy:
+    external: true
+  postgres:
     external: true
