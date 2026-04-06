@@ -22,3 +22,6 @@ sync-configs host='unraid':
 sync-stacks host='unraid':
     @ssh {{ host }} 'mkdir -p {{ unraid_stacks_root }}'
     @rsync -av --delete stacks/ {{ host }}:{{ unraid_stacks_root }}/
+
+gen-password:
+    @openssl rand -hex 24

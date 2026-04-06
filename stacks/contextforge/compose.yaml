@@ -11,7 +11,7 @@ services:
       - postgres
     environment:
       TZ: "America/Chicago"
-      DATABASE_URL: "postgresql+psycopg://contextforge:${CONTEXTFORGE_POSTGRES_PASSWORD:?CONTEXTFORGE_POSTGRES_PASSWORD is required}@postgres/contextforge"
+      DATABASE_URL: "postgresql+psycopg://contextforge:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@postgres/contextforge"
       APP_ROOT_PATH: "/mcp"
       LOG_LEVEL: "INFO"
       TRANSPORT_TYPE: "all"
