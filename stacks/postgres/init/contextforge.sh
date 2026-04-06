@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
+source /docker-entrypoint-initdb.d/_lib.sh
 
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
-    CREATE USER contextforge WITH PASSWORD '$CONTEXTFORGE_POSTGRES_PASSWORD';
-    CREATE DATABASE contextforge OWNER contextforge;
-EOSQL
+ensure_user contextforge "$CONTEXTFORGE_POSTGRES_PASSWORD"
+ensure_db contextforge contextforge

@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
+source /docker-entrypoint-initdb.d/_lib.sh
 
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
-    CREATE USER immich WITH PASSWORD '$IMMICH_POSTGRES_PASSWORD';
-    CREATE DATABASE immich OWNER immich;
-EOSQL
+ensure_user immich "$IMMICH_POSTGRES_PASSWORD"
+ensure_db immich immich

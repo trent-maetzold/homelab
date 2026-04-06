@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
+source /docker-entrypoint-initdb.d/_lib.sh
 
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
-    CREATE USER baikal WITH PASSWORD '$BAIKAL_POSTGRES_PASSWORD';
-    CREATE DATABASE baikal OWNER baikal;
-EOSQL
+ensure_user baikal "$BAIKAL_POSTGRES_PASSWORD"
+ensure_db baikal baikal
