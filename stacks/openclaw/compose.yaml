@@ -20,7 +20,12 @@ services:
       GOBIN: "/home/node/.local/bin"
     healthcheck:
       test:
-        ["wget", "--spider", "--tries", "1", "http://localhost:18789/healthz"]
+        - "CMD"
+        - "wget"
+        - "--spider"
+        - "--tries"
+        - "1"
+        - "http://localhost:18789/healthz"
       interval: 30s
       timeout: 5s
       retries: 3

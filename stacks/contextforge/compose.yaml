@@ -17,7 +17,7 @@ services:
       TRANSPORT_TYPE: "all"
       AUTH_REQUIRED: "false"
     healthcheck:
-      test: ["wget", "--spider", "--tries", "1", "http://localhost:4444/health"]
+      test: ["CMD", "wget", "--spider", "--tries", "1", "http://localhost:4444/health"]
       interval: 30s
       timeout: 5s
       retries: 3

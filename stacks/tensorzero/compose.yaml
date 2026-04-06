@@ -24,7 +24,7 @@ services:
       clickhouse:
         condition: service_started
     healthcheck:
-      test: ["wget", "--spider", "--tries", "1", "http://localhost:3000/status"]
+      test: ["CMD", "wget", "--spider", "--tries", "1", "http://localhost:3000/status"]
       interval: 15s
       timeout: 5s
       retries: 5
@@ -73,7 +73,7 @@ services:
       POSTGRES_USER: "tensorzero"
       POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
     healthcheck:
-      test: ["pg_isready", "-U", "tensorzero", "-d", "tensorzero"]
+      test: ["CMD", "pg_isready", "-U", "tensorzero", "-d", "tensorzero"]
       interval: 5s
       timeout: 5s
       retries: 12

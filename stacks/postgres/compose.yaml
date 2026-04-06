@@ -24,7 +24,7 @@ services:
       SEERR_POSTGRES_PASSWORD: "${SEERR_POSTGRES_PASSWORD:?SEERR_POSTGRES_PASSWORD is required}"
       SONARR_POSTGRES_PASSWORD: "${SONARR_POSTGRES_PASSWORD:?SONARR_POSTGRES_PASSWORD is required}"
     healthcheck:
-      test: ["pg_isready", "-U", "postgres"]
+      test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
