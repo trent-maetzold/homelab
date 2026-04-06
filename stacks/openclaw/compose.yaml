@@ -14,7 +14,7 @@ services:
     environment:
       TZ: "America/Chicago"
       OPENCLAW_GATEWAY_TOKEN: "${OPENCLAW_GATEWAY_TOKEN:?OPENCLAW_GATEWAY_TOKEN is required}"
-      OPENROUTER_API_KEY: "${OPENROUTER_API_KEY:?OPENROUTER_API_KEY is required}"
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:?ANTHROPIC_API_KEY is required}"
       NPM_CONFIG_PREFIX: "/home/node/.local"
       CARGO_INSTALL_ROOT: "/home/node/.local"
       GOBIN: "/home/node/.local/bin"
