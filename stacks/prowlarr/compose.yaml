@@ -16,11 +16,11 @@ services:
       PROWLARR__APP__INSTANCENAME: "Prowlarr"
       PROWLARR__APP__URLBASE: ""
       PROWLARR__AUTH__METHOD: "External"
-      PROWLARR__AUTH__APIKEY: "${ARR_API_KEY}"
+      PROWLARR__AUTH__APIKEY: "${ARR_API_KEY:?ARR_API_KEY is required}"
       PROWLARR__UPDATE__MECHANISM: "Docker"
       PROWLARR__POSTGRES__HOST: "postgres"
       PROWLARR__POSTGRES__USER: "prowlarr"
-      PROWLARR__POSTGRES__PASSWORD: "${POSTGRES_PASSWORD}"
+      PROWLARR__POSTGRES__PASSWORD: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
       PROWLARR__POSTGRES__MAINDB: "prowlarr"
       PROWLARR__POSTGRES__LOGDB: "prowlarr_log"
     depends_on:
@@ -42,7 +42,7 @@ services:
       TZ: "America/Chicago"
       VPN_SERVICE_PROVIDER: "protonvpn"
       VPN_TYPE: "wireguard"
-      WIREGUARD_PRIVATE_KEY: "${WIREGUARD_PRIVATE_KEY}"
+      WIREGUARD_PRIVATE_KEY: "${WIREGUARD_PRIVATE_KEY:?WIREGUARD_PRIVATE_KEY is required}"
       SERVER_CITIES: "Chicago"
     labels:
       traefik.enable: "true"

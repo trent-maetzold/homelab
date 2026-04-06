@@ -34,7 +34,7 @@ services:
       TZ: "America/Chicago"
       VPN_SERVICE_PROVIDER: "protonvpn"
       VPN_TYPE: "wireguard"
-      WIREGUARD_PRIVATE_KEY: "${WIREGUARD_PRIVATE_KEY}"
+      WIREGUARD_PRIVATE_KEY: "${WIREGUARD_PRIVATE_KEY:?WIREGUARD_PRIVATE_KEY is required}"
       SERVER_CITIES: "Chicago"
     labels:
       traefik.enable: "true"

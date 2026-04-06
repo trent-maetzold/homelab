@@ -2,6 +2,6 @@ services:
   app:
     labels:
       net.unraid.docker.managed: "composeman"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/flaresolverr.png"
+      net.unraid.docker.icon: "https://raw.githubusercontent.com/FlareSolverr/FlareSolverr/refs/heads/master/resources/flaresolverr_logo.png"
       net.unraid.docker.webui: ""
       net.unraid.docker.shell: "/bin/bash"

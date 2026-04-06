@@ -17,7 +17,7 @@ services:
       DB_PORT: "5432"
       DB_NAME: "seerr"
       DB_USER: "seerr"
-      DB_PASS: "${POSTGRES_PASSWORD}"
+      DB_PASS: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
     labels:
       traefik.enable: "true"
       traefik.http.routers.seerr.rule: "Host(`seerr.trkm.io`)"

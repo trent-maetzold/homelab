@@ -1,12 +1,11 @@
 #!/bin/bash
 set -e
+source /docker-entrypoint-initdb.d/_lib.sh
 
-psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
-    CREATE USER sonarr WITH PASSWORD '$SONARR_POSTGRES_PASSWORD';
-    CREATE DATABASE sonarr_hd OWNER sonarr;
-    CREATE DATABASE sonarr_hd_log OWNER sonarr;
-    CREATE DATABASE sonarr_uhd OWNER sonarr;
-    CREATE DATABASE sonarr_uhd_log OWNER sonarr;
-    CREATE DATABASE sonarr_anime OWNER sonarr;
-    CREATE DATABASE sonarr_anime_log OWNER sonarr;
-EOSQL
+ensure_user sonarr "$SONARR_POSTGRES_PASSWORD"
+ensure_db sonarr_hd sonarr
+ensure_db sonarr_hd_log sonarr
+ensure_db sonarr_uhd sonarr
+ensure_db sonarr_uhd_log sonarr
+ensure_db sonarr_anime sonarr
+ensure_db sonarr_anime_log sonarr

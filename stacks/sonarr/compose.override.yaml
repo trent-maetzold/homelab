@@ -2,20 +2,20 @@ services:
   hd:
     labels:
       net.unraid.docker.managed: "composeman"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr.png"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/sonarr.png"
       net.unraid.docker.webui: "https://sonarr.trkm.io"
       net.unraid.docker.shell: "/bin/bash"
 
   uhd:
     labels:
       net.unraid.docker.managed: "composeman"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr.png"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/sonarr.png"
       net.unraid.docker.webui: "https://sonarr.trkm.io/uhd"
       net.unraid.docker.shell: "/bin/bash"
 
   anime:
     labels:
       net.unraid.docker.managed: "composeman"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/sonarr.png"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/sonarr.png"
       net.unraid.docker.webui: "https://sonarr.trkm.io/anime"
       net.unraid.docker.shell: "/bin/bash"

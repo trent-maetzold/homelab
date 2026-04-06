@@ -9,6 +9,6 @@ services:
   vpn:
     labels:
       net.unraid.docker.managed: "composeman"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/tailscale.png"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/tailscale.png"
       net.unraid.docker.webui: ""
       net.unraid.docker.shell: "/bin/sh"

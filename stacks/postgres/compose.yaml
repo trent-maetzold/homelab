@@ -6,22 +6,13 @@ services:
     image: ghcr.io/immich-app/postgres:18-vectorchord0.5.3-pgvector0.8.1
     restart: unless-stopped
     volumes:
-      - ./init:/docker-entrypoint-initdb.d:ro
       - /mnt/cache/dbdata/postgres/db/data:/var/lib/postgresql
     networks:
       - postgres
     environment:
       TZ: "America/Chicago"
       POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
-      AUTHENTIK_POSTGRES_PASSWORD: "${AUTHENTIK_POSTGRES_PASSWORD}"
-      BAIKAL_POSTGRES_PASSWORD: "${BAIKAL_POSTGRES_PASSWORD}"
-      IMMICH_POSTGRES_PASSWORD: "${IMMICH_POSTGRES_PASSWORD}"
-      LIDARR_POSTGRES_PASSWORD: "${LIDARR_POSTGRES_PASSWORD}"
-      PROWLARR_POSTGRES_PASSWORD: "${PROWLARR_POSTGRES_PASSWORD}"
-      RADARR_POSTGRES_PASSWORD: "${RADARR_POSTGRES_PASSWORD}"
-      SEERR_POSTGRES_PASSWORD: "${SEERR_POSTGRES_PASSWORD}"
-      SONARR_POSTGRES_PASSWORD: "${SONARR_POSTGRES_PASSWORD}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "postgres"]
       interval: 10s
@@ -40,6 +31,36 @@ services:
       - "shared_buffers=512MB"
       - "-c"
       - "wal_compression=on"
+
+  init:
+    container_name: postgres_init
+    image: ghcr.io/immich-app/postgres:18-vectorchord0.5.3-pgvector0.8.1
+    restart: "no"
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d:ro
+    networks:
+      - postgres
+    environment:
+      TZ: "America/Chicago"
+      PGHOST: "db"
+      PGUSER: "postgres"
+      PGPASSWORD: "${POSTGRES_PASSWORD}"
+      AUTHENTIK_POSTGRES_PASSWORD: "${AUTHENTIK_POSTGRES_PASSWORD:?AUTHENTIK_POSTGRES_PASSWORD is required}"
+      BAIKAL_POSTGRES_PASSWORD: "${BAIKAL_POSTGRES_PASSWORD:?BAIKAL_POSTGRES_PASSWORD is required}"
+      CONTEXTFORGE_POSTGRES_PASSWORD: "${CONTEXTFORGE_POSTGRES_PASSWORD:?CONTEXTFORGE_POSTGRES_PASSWORD is required}"
+      IMMICH_POSTGRES_PASSWORD: "${IMMICH_POSTGRES_PASSWORD:?IMMICH_POSTGRES_PASSWORD is required}"
+      LIDARR_POSTGRES_PASSWORD: "${LIDARR_POSTGRES_PASSWORD:?LIDARR_POSTGRES_PASSWORD is required}"
+      PROWLARR_POSTGRES_PASSWORD: "${PROWLARR_POSTGRES_PASSWORD:?PROWLARR_POSTGRES_PASSWORD is required}"
+      RADARR_POSTGRES_PASSWORD: "${RADARR_POSTGRES_PASSWORD:?RADARR_POSTGRES_PASSWORD is required}"
+      SEERR_POSTGRES_PASSWORD: "${SEERR_POSTGRES_PASSWORD:?SEERR_POSTGRES_PASSWORD is required}"
+      SONARR_POSTGRES_PASSWORD: "${SONARR_POSTGRES_PASSWORD:?SONARR_POSTGRES_PASSWORD is required}"
+    depends_on:
+      db:
+        condition: service_healthy
+    command:
+      - "bash"
+      - "-c"
+      - 'for f in /docker-entrypoint-initdb.d/[!_]*.sh; do bash "$$f"; done'
 
 networks:
   postgres:
