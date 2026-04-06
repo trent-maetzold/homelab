@@ -4,8 +4,8 @@ ensure_user() {
     local user=$1
     local password=$2
     psql -v ON_ERROR_STOP=1 <<EOSQL
-CREATE USER IF NOT EXISTS $user WITH PASSWORD '$password';
-ALTER USER $user WITH PASSWORD '$password';
+CREATE ROLE IF NOT EXISTS $user WITH LOGIN PASSWORD '$password';
+ALTER ROLE $user WITH PASSWORD '$password';
 EOSQL
 }
 
