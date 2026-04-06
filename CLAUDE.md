@@ -67,6 +67,19 @@ Omit keys that don't apply. Don't reorder.
 - Prefer inline `environment:` over `env_file:` unless the service
   requires many variables
 - Required secrets must use `${VAR:?VAR is required}` — Compose will fail to start if the variable is unset or empty
+- Variable naming in `.env`: use the repo-idiomatic name for shared cross-stack variables (e.g. `POSTGRES_PASSWORD` stays `POSTGRES_PASSWORD` on the RHS regardless of what the app calls it internally); for app-specific variables, match the app's own key name so the `.env` name and the `environment:` key are identical: `JWT_SECRET_KEY: "${JWT_SECRET_KEY:?JWT_SECRET_KEY is required}"`
+
+#### Environment variable ordering
+
+Within `environment:`, group and order vars as follows:
+
+1. **System** — `TZ`, `PUID`, `PGID`
+2. **Networking** — `HOST`, `PORT`, `APP_ROOT_PATH`, `APP_DOMAIN`
+3. **Data** — `DATABASE_URL`, `REDIS_URL`, other connection strings
+4. **Secrets** — passwords, keys, tokens (`*_KEY`, `*_SECRET`, `*_PASSWORD`, `*_TOKEN`)
+5. **Features** — boolean feature flags (`*_ENABLED`)
+6. **Security** — `AUTH_REQUIRED`, `SSRF_*`, CORS
+7. **Runtime** — `LOG_LEVEL`, transport type, timeouts, tuning
 
 ### Volumes
 

@@ -12,10 +12,18 @@ services:
     environment:
       TZ: "America/Chicago"
       HOST: "0.0.0.0"
+      APP_DOMAIN: "https://api.trkm.io"
       APP_ROOT_PATH: "/mcp"
       DATABASE_URL: "postgresql+psycopg://contextforge:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@postgres/contextforge"
-      TRANSPORT_TYPE: "all"
+      JWT_SECRET_KEY: "${JWT_SECRET_KEY:?JWT_SECRET_KEY is required}"
+      AUTH_ENCRYPTION_SECRET: "${AUTH_ENCRYPTION_SECRET:?AUTH_ENCRYPTION_SECRET is required}"
+      PLATFORM_ADMIN_EMAIL: "${PLATFORM_ADMIN_EMAIL:?PLATFORM_ADMIN_EMAIL is required}"
+      PLATFORM_ADMIN_PASSWORD: "${PLATFORM_ADMIN_PASSWORD:?PLATFORM_ADMIN_PASSWORD is required}"
+      MCPGATEWAY_UI_ENABLED: "true"
+      MCPGATEWAY_ADMIN_API_ENABLED: "true"
       AUTH_REQUIRED: "false"
+      SSRF_ALLOW_PRIVATE_NETWORKS: "true"
+      TRANSPORT_TYPE: "all"
       LOG_LEVEL: "INFO"
     healthcheck:
       test:
