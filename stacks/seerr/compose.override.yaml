@@ -2,6 +2,6 @@ services:
   app:
     labels:
       net.unraid.docker.managed: "composeman"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/seerr.png"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/seerr.png"
       net.unraid.docker.webui: "https://requests.trkm.io"
       net.unraid.docker.shell: "/bin/sh"

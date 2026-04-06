@@ -2,6 +2,6 @@ services:
   app:
     labels:
       net.unraid.docker.managed: "composeman"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/fc362ea4207f0e2e5a6975ff97c3984c1a396505/webp/baikal.webp"
+      net.unraid.docker.icon: "https://sabre.io/img/baikal.png"
       net.unraid.docker.webui: "https://dav.trkm.io"
       net.unraid.docker.shell: "/bin/bash"

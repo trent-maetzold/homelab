@@ -2,13 +2,13 @@ services:
   app:
     labels:
       net.unraid.docker.managed: "composeman"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/qbittorrent.png"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/qbittorrent.png"
       net.unraid.docker.webui: "https://bt.trkm.io"
       net.unraid.docker.shell: "/bin/bash"
 
   vpn:
     labels:
       net.unraid.docker.managed: "composeman"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/gluetun.png"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/gluetun.png"
       net.unraid.docker.webui: ""
       net.unraid.docker.shell: "/bin/sh"

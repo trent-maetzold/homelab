@@ -2,20 +2,20 @@ services:
   server:
     labels:
       net.unraid.docker.managed: "composeman"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/immich.png"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/immich.png"
       net.unraid.docker.webui: "https://immich.trkm.io"
       net.unraid.docker.shell: "/bin/bash"
 
   ml:
     labels:
       net.unraid.docker.managed: "composeman"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/immich.png"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/immich.png"
       net.unraid.docker.webui: ""
       net.unraid.docker.shell: "/bin/bash"
 
   cache:
     labels:
       net.unraid.docker.managed: "composeman"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/redis.png"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/redis.png"
       net.unraid.docker.webui: ""
       net.unraid.docker.shell: "/bin/sh"
