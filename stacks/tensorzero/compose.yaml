@@ -12,19 +12,23 @@ services:
     networks:
       - net
       - proxy
-      - clickhouse
     environment:
       TZ: "America/Chicago"
-      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:?ANTHROPIC_API_KEY is required}"
-      TENSORZERO_CLICKHOUSE_URL: "http://tensorzero:${CLICKHOUSE_PASSWORD:?CLICKHOUSE_PASSWORD is required}@clickhouse:8123/tensorzero"
-      TENSORZERO_POSTGRES_URL: "postgresql://tensorzero:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@db:5432/tensorzero"
+      TENSORZERO_POSTGRES_URL: "postgresql://tensorzero:${POSTGRES_PASSWORD}@postgres:5432/tensorzero"
+      TENSORZERO_CLICKHOUSE_URL: "http://tensorzero:${CLICKHOUSE_PASSWORD}@clickhouse:8123/tensorzero"
     depends_on:
-      db:
+      postgres:
         condition: service_healthy
       clickhouse:
         condition: service_started
     healthcheck:
-      test: ["CMD", "wget", "--spider", "--tries", "1", "http://localhost:3000/status"]
+      test:
+        - "CMD"
+        - "wget"
+        - "--spider"
+        - "--tries"
+        - "1"
+        - "http://localhost:3000/status"
       interval: 15s
       timeout: 5s
       retries: 5
@@ -49,8 +53,8 @@ services:
     environment:
       TZ: "America/Chicago"
       TENSORZERO_GATEWAY_URL: "http://gateway:3000"
-      TENSORZERO_API_KEY: "${TENSORZERO_API_KEY:?TENSORZERO_API_KEY is required}"
-      TENSORZERO_POSTGRES_URL: "postgresql://tensorzero:${POSTGRES_PASSWORD}@db:5432/tensorzero"
+      TENSORZERO_API_KEY: "${TENSORZERO_API_KEY}"
+      TENSORZERO_POSTGRES_URL: "postgresql://tensorzero:${POSTGRES_PASSWORD}@postgres:5432/tensorzero"
     depends_on:
       gateway:
         condition: service_started
@@ -59,19 +63,19 @@ services:
       traefik.http.routers.tensorzero-ui.rule: "Host(`t0.trkm.io`)"
       traefik.http.services.tensorzero-ui.loadBalancer.server.port: "4000"
 
-  db:
-    container_name: tensorzero_db
+  postgres:
+    container_name: tensorzero_postgres
     image: tensorzero/postgres:18
     restart: unless-stopped
     volumes:
-      - /mnt/cache/dbdata/tensorzero/db/data:/var/lib/postgresql
+      - /mnt/cache/dbdata/postgres/tensorzero/data:/var/lib/postgresql
     networks:
       - net
     environment:
       TZ: "America/Chicago"
       POSTGRES_DB: "tensorzero"
       POSTGRES_USER: "tensorzero"
-      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "tensorzero", "-d", "tensorzero"]
       interval: 5s
@@ -80,9 +84,36 @@ services:
       start_period: 30s
       start_interval: 1s
 
+  clickhouse:
+    container_name: tensorzero_clickhouse
+    image: clickhouse:lts
+    restart: unless-stopped
+    volumes:
+      - /mnt/cache/dbdata/clickhouse/tensorzero/data:/var/lib/clickhouse
+      - /mnt/cache/dbdata/clickhouse/tensorzero/log:/var/log/clickhouse-server
+    networks:
+      - net
+    environment:
+      TZ: "America/Chicago"
+      CLICKHOUSE_DB: "tensorzero"
+      CLICKHOUSE_USER: "tensorzero"
+      CLICKHOUSE_PASSWORD: "${CLICKHOUSE_PASSWORD:?CLICKHOUSE_PASSWORD is required}"
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: "1"
+    healthcheck:
+      test:
+        - "CMD"
+        - "wget"
+        - "--spider"
+        - "--tries"
+        - "1"
+        - "http://tensorzero:${CLICKHOUSE_PASSWORD}@localhost:8123/ping"
+      interval: 5s
+      timeout: 2s
+      retries: 12
+      start_period: 30s
+      start_interval: 1s
+
 networks:
   net:
   proxy:
-    external: true
-  clickhouse:
     external: true
