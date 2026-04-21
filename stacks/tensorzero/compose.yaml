@@ -14,10 +14,10 @@ services:
       - proxy
     environment:
       TZ: "America/Chicago"
+      OPENROUTER_API_KEY: "${OPENROUTER_API_KEY}"
+      OPENCODE_API_KEY: "${OPENCODE_API_KEY}"
       TENSORZERO_POSTGRES_URL: "postgresql://tensorzero:${POSTGRES_PASSWORD}@postgres:5432/tensorzero"
       TENSORZERO_CLICKHOUSE_URL: "http://tensorzero:${CLICKHOUSE_PASSWORD}@clickhouse:8123/tensorzero"
-      OPENCODE_API_KEY: "${OPENCODE_API_KEY}"
-      OPENROUTER_API_KEY: "${OPENROUTER_API_KEY}"
     depends_on:
       postgres:
         condition: service_healthy
