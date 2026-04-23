@@ -4,9 +4,9 @@
 
 # ─── MiMo-V2-Pro ───────────────────────────────
 [models.mimo-v2-pro]
-routing = ["opencode", "openrouter"]
+routing = ["opencode-go", "openrouter"]
 
-[models.mimo-v2-pro.providers.opencode]
+[models.mimo-v2-pro.providers.opencode-go]
 type = "openai"
 api_base = "env::OPENCODE_GO_API_BASE"
 api_key_location = "env::OPENCODE_API_KEY"
@@ -19,9 +19,9 @@ model_name = "xiaomi/mimo-v2-pro"
 
 # ─── MiMo-V2-Omni ──────────────────────────────
 [models.mimo-v2-omni]
-routing = ["opencode", "openrouter"]
+routing = ["opencode-go", "openrouter"]
 
-[models.mimo-v2-omni.providers.opencode]
+[models.mimo-v2-omni.providers.opencode-go]
 type = "openai"
 api_base = "env::OPENCODE_GO_API_BASE"
 api_key_location = "env::OPENCODE_API_KEY"

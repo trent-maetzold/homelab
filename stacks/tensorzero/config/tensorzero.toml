@@ -2,3 +2,4 @@
 # Models loaded from config/models/*.toml
 
 [gateway]
+base_path = "/t0"

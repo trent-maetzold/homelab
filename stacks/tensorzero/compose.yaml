@@ -12,9 +12,9 @@ services:
       - proxy
     environment:
       TZ: "America/Chicago"
-      OPENCODE_GO_API_BASE: "${OPENCODE_GO_API_BASE}"
-      OPENCODE_API_KEY: "${OPENCODE_API_KEY}"
       OPENROUTER_API_KEY: "${OPENROUTER_API_KEY}"
+      OPENCODE_API_KEY: "${OPENCODE_API_KEY}"
+      OPENCODE_GO_API_BASE: "${OPENCODE_GO_API_BASE}"
       TENSORZERO_POSTGRES_URL: "postgresql://tensorzero:${POSTGRES_PASSWORD}@postgres:5432/tensorzero"
       TENSORZERO_CLICKHOUSE_URL: "http://tensorzero:${CLICKHOUSE_PASSWORD}@clickhouse:8123/tensorzero"
     depends_on:
@@ -34,10 +34,10 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
-    command: ["--config-file", "/app/config/tensorzero.toml", "--config-file", "/app/config/models/*.toml"]
+    command: ["--config-file", "/app/config/**/*.toml"]
     labels:
       traefik.enable: "true"
-      traefik.http.routers.tensorzero.rule: "Host(`llm.trkm.io`)"
+      traefik.http.routers.tensorzero.rule: "Host(`api.trkm.io`) && PathPrefix(`/t0`)"
       traefik.http.services.tensorzero.loadBalancer.server.port: "3000"
 
   ui:
@@ -51,8 +51,8 @@ services:
       - proxy
     environment:
       TZ: "America/Chicago"
-      TENSORZERO_GATEWAY_URL: "http://gateway:3000"
       TENSORZERO_API_KEY: "${TENSORZERO_API_KEY}"
+      TENSORZERO_GATEWAY_URL: "http://gateway:3000"
       TENSORZERO_POSTGRES_URL: "postgresql://tensorzero:${POSTGRES_PASSWORD}@postgres:5432/tensorzero"
     depends_on:
       gateway:

@@ -4,9 +4,9 @@
 
 # ─── Kimi K2.5 ─────────────────────────────────
 [models.kimi-k2-5]
-routing = ["opencode", "openrouter"]
+routing = ["opencode-go", "openrouter"]
 
-[models.kimi-k2-5.providers.opencode]
+[models.kimi-k2-5.providers.opencode-go]
 type = "openai"
 api_base = "env::OPENCODE_GO_API_BASE"
 api_key_location = "env::OPENCODE_API_KEY"
@@ -19,9 +19,9 @@ model_name = "moonshotai/kimi-k2.5"
 
 # ─── Kimi K2.6 ─────────────────────────────────
 [models.kimi-k2-6]
-routing = ["opencode", "openrouter"]
+routing = ["opencode-go", "openrouter"]
 
-[models.kimi-k2-6.providers.opencode]
+[models.kimi-k2-6.providers.opencode-go]
 type = "openai"
 api_base = "env::OPENCODE_GO_API_BASE"
 api_key_location = "env::OPENCODE_API_KEY"
