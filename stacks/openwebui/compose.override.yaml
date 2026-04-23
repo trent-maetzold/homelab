@@ -2,14 +2,16 @@ services:
   app:
     labels:
       net.unraid.docker.managed: "composeman"
-      net.unraid.docker.icon: "https://avatars.githubusercontent.com/u/158137808"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icon\
+        s/png/open-webui-light.png"
       net.unraid.docker.webui: "https://chat.trkm.io"
       net.unraid.docker.shell: "/bin/bash"
 
   db:
     labels:
       net.unraid.docker.managed: "composeman"
-      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/postgresql.png"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icon\
+        s/png/postgresql.png"
       net.unraid.docker.webui: ""
       net.unraid.docker.shell: "/bin/bash"
 
