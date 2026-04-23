@@ -1,0 +1,80 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+services:
+  app:
+    container_name: openwebui
+    image: ghcr.io/open-webui/open-webui:latest
+    restart: unless-stopped
+    volumes:
+      - /mnt/cache/appdata/openwebui/app/data:/data
+    networks:
+      - net
+      - proxy
+    environment:
+      TZ: "America/Chicago"
+      DATA_DIR: "/data"
+      DATABASE_URL: "postgresql://openwebui:${POSTGRES_PASSWORD}@db:5432/openwebui"
+      REDIS_URL: "redis://cache:6379/0"
+      WEBSOCKET_MANAGER: "redis"
+      ENABLE_WEBSOCKET_SUPPORT: "true"
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - "CMD"
+        - "curl"
+        - "--fail"
+        - "--silent"
+        - "http://localhost:8080/health"
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.openwebui.rule: "Host(`chat.trkm.io`)"
+      traefik.http.services.openwebui.loadBalancer.server.port: "8080"
+
+  db:
+    container_name: openwebui_db
+    image: tensorchord/vchord-postgres:pg18-latest
+    restart: unless-stopped
+    volumes:
+      - /mnt/cache/dbdata/postgres/openwebui/data:/var/lib/postgresql
+    networks:
+      - net
+    environment:
+      TZ: "America/Chicago"
+      POSTGRES_DB: "openwebui"
+      POSTGRES_USER: "openwebui"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "openwebui", "-d", "openwebui"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+      start_interval: 1s
+
+  cache:
+    container_name: openwebui_cache
+    image: docker.io/valkey/valkey:latest
+    restart: unless-stopped
+    networks:
+      - net
+    environment:
+      TZ: "America/Chicago"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+networks:
+  net:
+  proxy:
+    external: true
