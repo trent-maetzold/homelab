@@ -1,0 +1,27 @@
+[models.glm-5-1]
+routing = ["opencode", "openrouter"]
+
+[models.glm-5-1.providers.opencode]
+type = "openai"
+api_base = "env::OPENCODE_GO_API_BASE"
+api_key_location = "env::OPENCODE_API_KEY"
+model_name = "glm-5.1"
+
+[models.glm-5-1.providers.openrouter]
+type = "openrouter"
+api_key_location = "env::OPENROUTER_API_KEY"
+model_name = "thudm/glm-5.1"
+
+[models.glm-5]
+routing = ["opencode", "openrouter"]
+
+[models.glm-5.providers.opencode]
+type = "openai"
+api_base = "env::OPENCODE_GO_API_BASE"
+api_key_location = "env::OPENCODE_API_KEY"
+model_name = "glm-5"
+
+[models.glm-5.providers.openrouter]
+type = "openrouter"
+api_key_location = "env::OPENROUTER_API_KEY"
+model_name = "thudm/glm-5"

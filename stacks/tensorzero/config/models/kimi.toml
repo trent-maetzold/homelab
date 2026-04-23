@@ -1,0 +1,27 @@
+[models.kimi-k2-5]
+routing = ["opencode", "openrouter"]
+
+[models.kimi-k2-5.providers.opencode]
+type = "openai"
+api_base = "env::OPENCODE_GO_API_BASE"
+api_key_location = "env::OPENCODE_API_KEY"
+model_name = "kimi-k2.5"
+
+[models.kimi-k2-5.providers.openrouter]
+type = "openrouter"
+api_key_location = "env::OPENROUTER_API_KEY"
+model_name = "moonshot/kimi-k2.5"
+
+[models.kimi-k2-6]
+routing = ["opencode", "openrouter"]
+
+[models.kimi-k2-6.providers.opencode]
+type = "openai"
+api_base = "env::OPENCODE_GO_API_BASE"
+api_key_location = "env::OPENCODE_API_KEY"
+model_name = "kimi-k2.6"
+
+[models.kimi-k2-6.providers.openrouter]
+type = "openrouter"
+api_key_location = "env::OPENROUTER_API_KEY"
+model_name = "moonshot/kimi-k2.6"

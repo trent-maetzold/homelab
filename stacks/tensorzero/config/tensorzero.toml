@@ -1,0 +1,4 @@
+# TensorZero Gateway Configuration
+# Models loaded from config/models/*.toml
+
+[gateway]
