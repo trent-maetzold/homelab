@@ -29,7 +29,7 @@ services:
         - "--spider"
         - "--tries"
         - "1"
-        - "http://localhost:3000/status"
+        - "http://localhost:3000/t0/status"
       interval: 15s
       timeout: 5s
       retries: 5
@@ -52,7 +52,7 @@ services:
     environment:
       TZ: "America/Chicago"
       TENSORZERO_API_KEY: "${TENSORZERO_API_KEY}"
-      TENSORZERO_GATEWAY_URL: "http://gateway:3000"
+      TENSORZERO_GATEWAY_URL: "http://gateway:3000/t0"
       TENSORZERO_POSTGRES_URL: "postgresql://tensorzero:${POSTGRES_PASSWORD}@postgres:5432/tensorzero"
     depends_on:
       gateway:
