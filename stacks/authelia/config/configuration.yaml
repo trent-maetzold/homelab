@@ -1,0 +1,16 @@
+session:
+  cookies:
+    - domain: "trkm.io"
+      authelia_url: "https://auth.trkm.io"
+      default_redirection_url: "https://auth.trkm.io/settings"
+
+access_control:
+  rules:
+    - domain: "auth.trkm.io"
+      policy: "bypass"
+    - domain: "*.trkm.io"
+      policy: "two_factor"
+
+identity_providers:
+  oidc:
+    clients: []

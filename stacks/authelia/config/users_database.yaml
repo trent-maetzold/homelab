@@ -1,0 +1,14 @@
+users:
+  tmaetzold:
+    displayname: "Trent Maetzold"
+    password: ""
+    email: "trent@maetzold.co"
+    groups:
+      - admins
+      - family
+  jmaetzold:
+    displayname: "Justine Maetzold"
+    password: ""
+    email: "justine.maetzold@gmail.com"
+    groups:
+      - family

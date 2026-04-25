@@ -25,7 +25,7 @@ services:
       CF_ZONE_API_TOKEN: "${CF_ZONE_API_TOKEN:?CF_ZONE_API_TOKEN is required}"
     command:
       - "--api.dashboard=true"
-      - "--api.insecure=true"
+      - "--api.insecure=false"
       - "--log.level=INFO"
       - "--log.filepath=/var/log/traefik.log"
       - "--accesslog=true"
@@ -47,11 +47,6 @@ services:
       - "--certificatesResolvers.cloudflare.acme.dnsChallenge=true"
       - "--certificatesResolvers.cloudflare.acme.dnsChallenge.provider=cloudflare"
       - "--serversTransport.insecureSkipVerify=true"
-    labels:
-      traefik.enable: "true"
-      traefik.http.routers.traefik.rule: "Host(`traefik.trkm.io`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
-      traefik.http.routers.traefik.service: "api@internal"
-      traefik.http.services.traefik.loadBalancer.server.port: "80"
 
   vpn:
     container_name: traefik_ts
