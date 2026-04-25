@@ -1,5 +1,20 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
 
+x-authentik-env: &authentik-env
+  AUTHENTIK_EMAIL__FROM: "admin@trkm.io"
+  AUTHENTIK_EMAIL__HOST: "smtp.protonmail.ch"
+  AUTHENTIK_EMAIL__PORT: "587"
+  AUTHENTIK_EMAIL__USERNAME: "admin@trkm.io"
+  AUTHENTIK_EMAIL__PASSWORD: "${PROTONMAIL_SMTP_TOKEN:?PROTONMAIL_SMTP_TOKEN is required}"
+  AUTHENTIK_EMAIL__USE_TLS: "true"
+  AUTHENTIK_EMAIL__USE_SSL: "false"
+  AUTHENTIK_EMAIL__TIMEOUT: "10"
+  AUTHENTIK_POSTGRESQL__HOST: "db"
+  AUTHENTIK_POSTGRESQL__NAME: "authentik"
+  AUTHENTIK_POSTGRESQL__USER: "authentik"
+  AUTHENTIK_POSTGRESQL__PASSWORD: "${POSTGRES_PASSWORD}"
+  AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY:?AUTHENTIK_SECRET_KEY is required}"
+
 services:
   server:
     container_name: authentik
@@ -14,11 +29,7 @@ services:
       - proxy
     environment:
       TZ: "America/Chicago"
-      AUTHENTIK_POSTGRESQL__HOST: "db"
-      AUTHENTIK_POSTGRESQL__NAME: "authentik"
-      AUTHENTIK_POSTGRESQL__USER: "authentik"
-      AUTHENTIK_POSTGRESQL__PASSWORD: "${POSTGRES_PASSWORD}"
-      AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY}"
+      <<: *authentik-env
     depends_on:
       db:
         condition: service_healthy
@@ -42,11 +53,7 @@ services:
       - net
     environment:
       TZ: "America/Chicago"
-      AUTHENTIK_POSTGRESQL__HOST: "db"
-      AUTHENTIK_POSTGRESQL__NAME: "authentik"
-      AUTHENTIK_POSTGRESQL__USER: "authentik"
-      AUTHENTIK_POSTGRESQL__PASSWORD: "${POSTGRES_PASSWORD}"
-      AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY:?AUTHENTIK_SECRET_KEY is required}"
+      <<: *authentik-env
     depends_on:
       db:
         condition: service_healthy
