@@ -3,7 +3,8 @@
 services:
   server:
     container_name: authentik
-    image: ghcr.io/goauthentik/server:${AUTHENTIK_VERSION:?AUTHENTIK_VERSION is required}
+    image: ghcr.io/goauthentik/server:${AUTHENTIK_VERSION:?AUTHENTIK_VERSION is
+      required}
     restart: unless-stopped
     volumes:
       - /mnt/cache/appdata/authentik/shared/data:/data
@@ -11,14 +12,16 @@ services:
     networks:
       - net
       - proxy
-      - postgres
     environment:
       TZ: "America/Chicago"
-      AUTHENTIK_POSTGRESQL__HOST: "postgres"
+      AUTHENTIK_POSTGRESQL__HOST: "db"
       AUTHENTIK_POSTGRESQL__NAME: "authentik"
       AUTHENTIK_POSTGRESQL__USER: "authentik"
-      AUTHENTIK_POSTGRESQL__PASSWORD: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
-      AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY:?AUTHENTIK_SECRET_KEY is required}"
+      AUTHENTIK_POSTGRESQL__PASSWORD: "${POSTGRES_PASSWORD}"
+      AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY}"
+    depends_on:
+      db:
+        condition: service_healthy
     command: ["server"]
     labels:
       traefik.enable: "true"
@@ -37,19 +40,40 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - net
-      - postgres
     environment:
       TZ: "America/Chicago"
-      AUTHENTIK_POSTGRESQL__HOST: "postgres"
+      AUTHENTIK_POSTGRESQL__HOST: "db"
       AUTHENTIK_POSTGRESQL__NAME: "authentik"
       AUTHENTIK_POSTGRESQL__USER: "authentik"
       AUTHENTIK_POSTGRESQL__PASSWORD: "${POSTGRES_PASSWORD}"
-      AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY}"
+      AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY:?AUTHENTIK_SECRET_KEY is required}"
+    depends_on:
+      db:
+        condition: service_healthy
     command: ["worker"]
+
+  db:
+    container_name: authentik_db
+    image: postgres:18
+    restart: unless-stopped
+    volumes:
+      - /mnt/cache/dbdata/postgres/authentik/data:/var/lib/postgresql
+    networks:
+      - net
+    environment:
+      TZ: "America/Chicago"
+      POSTGRES_DB: "authentik"
+      POSTGRES_USER: "authentik"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "authentik", "-d", "authentik"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+      start_interval: 1s
 
 networks:
   net:
   proxy:
-    external: true
-  postgres:
     external: true

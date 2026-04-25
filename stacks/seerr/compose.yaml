@@ -8,23 +8,43 @@ services:
     volumes:
       - /mnt/cache/appdata/seerr/app/config:/app/config
     networks:
+      - net
       - proxy
-      - postgres
     environment:
       TZ: "America/Chicago"
       DB_TYPE: "postgres"
-      DB_HOST: "postgres"
+      DB_HOST: "db"
       DB_PORT: "5432"
       DB_NAME: "seerr"
       DB_USER: "seerr"
-      DB_PASS: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
+      DB_PASS: "${POSTGRES_PASSWORD}"
     labels:
       traefik.enable: "true"
       traefik.http.routers.seerr.rule: "Host(`seerr.trkm.io`)"
       traefik.http.services.seerr.loadBalancer.server.port: "5055"
 
+  db:
+    container_name: seerr_db
+    image: postgres:18
+    restart: unless-stopped
+    volumes:
+      - /mnt/cache/dbdata/postgres/seerr/data:/var/lib/postgresql
+    networks:
+      - net
+    environment:
+      TZ: "America/Chicago"
+      POSTGRES_DB: "seerr"
+      POSTGRES_USER: "seerr"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "seerr", "-d", "seerr"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+      start_interval: 1s
+
 networks:
+  net:
   proxy:
-    external: true
-  postgres:
     external: true
