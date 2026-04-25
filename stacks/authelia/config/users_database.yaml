@@ -1,14 +1,14 @@
 users:
   tmaetzold:
     displayname: "Trent Maetzold"
-    password: ""
+    password: "$argon2id$v=19$m=65536,t=3,p=4$aMz9e0rMcZaucWr2NxG0Cg$5+NJUU7YwiJ5gLHBpSLHM1rQgh1l2RHjLrxL2+rOYuI"
     email: "trent@maetzold.co"
     groups:
       - admins
       - family
   jmaetzold:
     displayname: "Justine Maetzold"
-    password: ""
+    password: "$argon2id$v=19$m=65536,t=3,p=4$y8kcUHfmLjm836W+9ZqjSw$C78uKK8pAOMMOfKEb+48PdANft6Y7rHiUcWr2WQYtWQ"
     email: "justine.maetzold@gmail.com"
     groups:
       - family
