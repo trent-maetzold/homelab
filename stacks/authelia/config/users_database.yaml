@@ -1,14 +1,46 @@
 users:
-  tmaetzold:
-    displayname: "Trent Maetzold"
-    password: "$argon2id$v=19$m=65536,t=3,p=4$aMz9e0rMcZaucWr2NxG0Cg$5+NJUU7YwiJ5gLHBpSLHM1rQgh1l2RHjLrxL2+rOYuI"
-    email: "trent@maetzold.co"
-    groups:
-      - admins
-      - family
-  jmaetzold:
-    displayname: "Justine Maetzold"
-    password: "$argon2id$v=19$m=65536,t=3,p=4$y8kcUHfmLjm836W+9ZqjSw$C78uKK8pAOMMOfKEb+48PdANft6Y7rHiUcWr2WQYtWQ"
-    email: "justine.maetzold@gmail.com"
-    groups:
-      - family
+    jmaetzold:
+        password: $argon2id$v=19$m=65536,t=3,p=4$y8kcUHfmLjm836W+9ZqjSw$C78uKK8pAOMMOfKEb+48PdANft6Y7rHiUcWr2WQYtWQ
+        displayname: Justine Maetzold
+        email: justine.maetzold@gmail.com
+        groups:
+            - family
+        given_name: ""
+        middle_name: ""
+        family_name: ""
+        nickname: ""
+        gender: ""
+        birthdate: ""
+        website: ""
+        profile: ""
+        picture: ""
+        zoneinfo: ""
+        locale: ""
+        phone_number: ""
+        phone_extension: ""
+        disabled: false
+        address: null
+        extra: {}
+    tmaetzold:
+        password: $argon2id$v=19$m=65536,t=3,p=4$1PO/J/FgSYQ0D73LSdtH7A$5SHth9E292zixNfpHEShilaCe8esCWyuvoTxkCB1qI4
+        displayname: Trent Maetzold
+        email: trent@maetzold.co
+        groups:
+            - admins
+            - family
+        given_name: ""
+        middle_name: ""
+        family_name: ""
+        nickname: ""
+        gender: ""
+        birthdate: ""
+        website: ""
+        profile: ""
+        picture: ""
+        zoneinfo: ""
+        locale: ""
+        phone_number: ""
+        phone_extension: ""
+        disabled: false
+        address: null
+        extra: {}
