@@ -71,7 +71,7 @@ services:
       TS_AUTH_ONCE: "true"
       TS_AUTHKEY: "${TS_AUTHKEY:?TS_AUTHKEY is required}"
       TS_USERSPACE: "false"
-      TS_ACCEPT_DNS: "true"
+      TS_ACCEPT_DNS: "false"
       TS_STATE_DIR: "/var/lib/tailscale"
       TS_EXTRA_ARGS: "--login-server=https://hs.trkm.io"
     depends_on:
