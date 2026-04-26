@@ -25,8 +25,8 @@ services:
       CF_ZONE_API_TOKEN: "${CF_ZONE_API_TOKEN:?CF_ZONE_API_TOKEN is required}"
     command:
       - "--api.dashboard=true"
-      - "--api.insecure=false"
-      - "--log.level=INFO"
+      - "--api.disabledashboardad=true"
+      - "--log.level=DEBUG"
       - "--log.filepath=/var/log/traefik.log"
       - "--accesslog=true"
       - "--accesslog.filepath=/var/log/traefik-access.log"
@@ -49,11 +49,10 @@ services:
       - "--serversTransport.insecureSkipVerify=true"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.traefik.rule: "Host(`traefik.trkm.io`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
-      traefik.http.routers.traefik.service: "api@internal"
-      traefik.http.routers.traefik.entryPoints: "websecure"
-      traefik.http.routers.traefik.tls: "true"
-      traefik.http.routers.traefik.middlewares: "authelia@docker"
+      traefik.http.routers.api.rule: "Host(`traefik.trkm.io`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
+      traefik.http.routers.api.service: "api@internal"
+      traefik.http.routers.api.middlewares: "authelia@docker"
+      traefik.http.services.api.loadBalancer.server.port: "1"
 
   vpn:
     container_name: traefik_ts
@@ -71,7 +70,6 @@ services:
       TS_AUTH_ONCE: "true"
       TS_AUTHKEY: "${TS_AUTHKEY:?TS_AUTHKEY is required}"
       TS_USERSPACE: "false"
-      TS_ACCEPT_DNS: "false"
       TS_STATE_DIR: "/var/lib/tailscale"
       TS_EXTRA_ARGS: "--login-server=https://hs.trkm.io"
     depends_on:
