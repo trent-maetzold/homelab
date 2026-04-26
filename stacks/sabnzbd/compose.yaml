@@ -39,6 +39,7 @@ services:
     labels:
       traefik.enable: "true"
       traefik.http.routers.sabnzbd.rule: "Host(`nzb.trkm.io`)"
+      traefik.http.routers.sabnzbd.middlewares: "authelia@docker"
       traefik.http.services.sabnzbd.loadBalancer.server.port: "8080"
 
 networks:
