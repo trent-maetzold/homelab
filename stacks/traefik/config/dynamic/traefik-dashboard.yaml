@@ -3,5 +3,6 @@ http:
     traefik-dashboard:
       rule: "Host(`traefik.trkm.io`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
       service: api@internal
-      middlewares:
-        - authelia@docker
+      entryPoints:
+        - websecure
+      tls: {}
