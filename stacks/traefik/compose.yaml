@@ -47,6 +47,13 @@ services:
       - "--certificatesResolvers.cloudflare.acme.dnsChallenge=true"
       - "--certificatesResolvers.cloudflare.acme.dnsChallenge.provider=cloudflare"
       - "--serversTransport.insecureSkipVerify=true"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.traefik.rule: "Host(`traefik.trkm.io`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
+      traefik.http.routers.traefik.service: "api@internal"
+      traefik.http.routers.traefik.entryPoints: "websecure"
+      traefik.http.routers.traefik.tls: "true"
+      traefik.http.routers.traefik.middlewares: "authelia@docker"
 
   vpn:
     container_name: traefik_ts
