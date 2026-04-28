@@ -10,6 +10,7 @@ services:
       - ./config/headscale/config.yaml:/etc/headscale/config.yaml
       - /mnt/cache/appdata/headscale/app/data:/var/lib/headscale
     networks:
+      - headscale
       - proxy
     environment:
       TZ: "America/Chicago"
@@ -31,6 +32,7 @@ services:
       - /mnt/cache/appdata/headscale/ui/data:/var/lib/headplane
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
+      - headscale
       - proxy
     environment:
       TZ: "America/Chicago"
@@ -49,5 +51,7 @@ services:
       traefik.http.services.headplane.loadBalancer.server.port: "3000"
 
 networks:
+  headscale:
+    external: true
   proxy:
     external: true

@@ -17,6 +17,7 @@ services:
     networks:
       br0:
         ipv4_address: 10.10.20.10
+      headscale:
       proxy:
     environment:
       TZ: "America/Chicago"
@@ -71,12 +72,14 @@ services:
       TS_AUTHKEY: "${TS_AUTHKEY:?TS_AUTHKEY is required}"
       TS_USERSPACE: "false"
       TS_STATE_DIR: "/var/lib/tailscale"
-      TS_EXTRA_ARGS: "--login-server=https://hs.trkm.io"
+      TS_EXTRA_ARGS: "--login-server=http://headscale:8080"
     depends_on:
       - proxy
 
 networks:
   br0:
+    external: true
+  headscale:
     external: true
   proxy:
     external: true
