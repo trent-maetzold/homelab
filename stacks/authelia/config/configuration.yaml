@@ -7,33 +7,42 @@ session:
 access_control:
   default_policy: two_factor
   rules:
-    - domains:
+    - domain:
         - "auth.trkm.io"
         - "ha.trkm.io"
         - "matrix.trkm.io"
         - "seerr.trkm.io"
       policy: bypass
 
-    - domains:
+    - domain:
         - "bt.trkm.io"
         - "chat.trkm.io"
         - "immich.trkm.io"
         - "lidarr.trkm.io"
         - "nzb.trkm.io"
         - "prowlarr.trkm.io"
-      path: "^/api/"
+      resources:
+        - "^/api/"
       policy: bypass
 
-    - domains:
+    - domain:
         - "radarr.trkm.io"
         - "sonarr.trkm.io"
-      path: "^/hd/api/|^/uhd/api/|^/anime/api/"
+      resources:
+        - "^/hd/api/"
+        - "^/uhd/api/"
+        - "^/anime/api/"
       policy: bypass
 
     - domain: "api.trkm.io"
-      path: "^/t0/|^/mcp|^/webhook/github"
+      resources:
+        - "^/t0/"
+        - "^/mcp"
+        - "^/webhook/github"
       policy: bypass
 
     - domain: "dav.trkm.io"
-      path: "^/.well-known/|^/dav.php/"
+      resources:
+        - "^/.well-known/"
+        - "^/dav.php/"
       policy: bypass
