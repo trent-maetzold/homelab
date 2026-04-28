@@ -2,6 +2,20 @@ services:
   app:
     labels:
       net.unraid.docker.managed: "composeman"
-      net.unraid.docker.icon: "https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/authelia.png"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/authelia.png"
       net.unraid.docker.webui: "https://auth.trkm.io"
       net.unraid.docker.shell: "/bin/sh"
+
+  cache:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/valkey.png"
+      net.unraid.docker.webui: ""
+      net.unraid.docker.shell: "/bin/sh"
+
+  db:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/postgres.png"
+      net.unraid.docker.webui: ""
+      net.unraid.docker.shell: "/bin/bash"
