@@ -5,8 +5,35 @@ session:
       default_redirection_url: "https://auth.trkm.io/settings"
 
 access_control:
+  default_policy: two_factor
   rules:
-    - domain: "auth.trkm.io"
-      policy: "bypass"
-    - domain: "*.trkm.io"
-      policy: "two_factor"
+    - domains:
+        - "auth.trkm.io"
+        - "ha.trkm.io"
+        - "matrix.trkm.io"
+        - "seerr.trkm.io"
+      policy: bypass
+
+    - domains:
+        - "bt.trkm.io"
+        - "chat.trkm.io"
+        - "immich.trkm.io"
+        - "lidarr.trkm.io"
+        - "nzb.trkm.io"
+        - "prowlarr.trkm.io"
+      path: "^/api/"
+      policy: bypass
+
+    - domains:
+        - "radarr.trkm.io"
+        - "sonarr.trkm.io"
+      path: "^/hd/api/|^/uhd/api/|^/anime/api/"
+      policy: bypass
+
+    - domain: "api.trkm.io"
+      path: "^/t0/|^/mcp|^/webhook/github"
+      policy: bypass
+
+    - domain: "dav.trkm.io"
+      path: "^/.well-known/|^/dav.php/"
+      policy: bypass
