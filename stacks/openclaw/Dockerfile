@@ -40,8 +40,8 @@ ENV RUSTUP_HOME=${HOME}/.local/share/rustup
 ENV CARGO_HOME=${HOME}/.local/share/cargo
 ENV GOPATH=${HOME}/.local/share/go
 
-ENV PATH=${CARGO_HOME}/bin:${PATH}
 ENV PATH=${NPM_CONFIG_PREFIX}/bin:${PATH}
+ENV PATH=${CARGO_HOME}/bin:${PATH}
 ENV PATH=${GOPATH}/bin:${PATH}
 ENV PATH=${HOME}/.local/bin:${PATH}
 
