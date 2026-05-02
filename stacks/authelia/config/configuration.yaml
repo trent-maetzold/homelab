@@ -10,6 +10,7 @@ access_control:
     - domain:
         - "auth.trkm.io"
         - "ha.trkm.io"
+        - "hs.trkm.io"
         - "matrix.trkm.io"
         - "seerr.trkm.io"
       policy: bypass
