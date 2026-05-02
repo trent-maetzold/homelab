@@ -1,52 +1,40 @@
 FROM archlinux:base-devel
 
-ARG OPENCLAW_USER=claw
-ARG OPENCLAW_GROUP=agents
+ARG AGENT_USER=claw
+ARG AGENT_GROUP=agents
 
-RUN pacman -Syyu --noconfirm \
-  # languages and runtimes
-  nodejs \
-  npm \
-  rustup \
-  go \
-  uv \
-  # cli tools
-  github-cli \
-  khal \
-  vdirsyncer \
-  # build dependencies
-  libffi \
-  openssl \
-  sqlite \
-  zlib \
-  # networking and version control
-  curl \
-  wget \
-  git \
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# ── System packages ───────────────────────────────────────────────────────────
+RUN mkdir -p /usr/local/bin && \
+  pacman-key --init && \
+  pacman-key --populate archlinux && \
+  pacman -Syyu --noconfirm \
+  curl wget git openssl \
+  nodejs npm pnpm bun \
+  rustup go uv \
+  fzf bat fd \
   && pacman -Scc --noconfirm
 
-RUN groupadd -g 1000 ${OPENCLAW_GROUP} && \
-  useradd -m -u 1000 -g 1000 -s /bin/bash ${OPENCLAW_USER}
+RUN curl -fsSL https://github.com/tailcallhq/forgecode/releases/latest/download/forge-x86_64-unknown-linux-gnu \
+  -o /usr/local/sbin/forge && chmod 755 /usr/local/sbin/forge && \
+  curl -fsSL https://openclaw.ai/install.sh | bash -s -- --no-onboard
 
-ENV HOME=/home/${OPENCLAW_USER}
+# ── Users and groups ──────────────────────────────────────────────────────────
+RUN groupadd -g 2000 ${AGENT_GROUP} && \
+  useradd -m -u 2000 -g 2000 -s /bin/bash ${AGENT_USER}
 
-USER ${OPENCLAW_USER}
-WORKDIR ${HOME}
+# ── agent ─────────────────────────────────────────────────────────────────────
+USER ${AGENT_USER}
 
-# Override default tool directories
-ENV NPM_CONFIG_PREFIX=${HOME}/.local/share/npm
-ENV NPM_CONFIG_CACHE=${HOME}/.local/share/npm/cache
-ENV RUSTUP_HOME=${HOME}/.local/share/rustup
-ENV CARGO_HOME=${HOME}/.local/share/cargo
-ENV GOPATH=${HOME}/.local/share/go
+ENV NPM_CONFIG_PREFIX=/home/${AGENT_USER}/.local/share/npm \
+  NPM_CONFIG_CACHE=/home/${AGENT_USER}/.local/share/npm/cache \
+  RUSTUP_HOME=/home/${AGENT_USER}/.local/share/rustup \
+  CARGO_HOME=/home/${AGENT_USER}/.local/share/cargo \
+  GOPATH=/home/${AGENT_USER}/.local/share/go
+ENV PATH=/home/${AGENT_USER}/.local/share/go/bin:${PATH}
+ENV PATH=/home/${AGENT_USER}/.local/share/cargo/bin:${PATH}
+ENV PATH=/home/${AGENT_USER}/.local/share/npm/bin:${PATH}
+ENV PATH=/home/${AGENT_USER}/.local/bin:${PATH}
 
-ENV PATH=${NPM_CONFIG_PREFIX}/bin:${PATH}
-ENV PATH=${CARGO_HOME}/bin:${PATH}
-ENV PATH=${GOPATH}/bin:${PATH}
-ENV PATH=${HOME}/.local/bin:${PATH}
-
-RUN rustup default stable && \
-  curl -fsSL https://openclaw.ai/install.sh | bash && \
-  curl -fsSL https://forgecode.dev/cli | sh
-
-CMD ["/bin/bash"]
+CMD ["node", "openclaw.mjs", "gateway", "--allow-unconfigured"]

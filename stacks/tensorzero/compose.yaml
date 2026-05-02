@@ -10,6 +10,7 @@ services:
     networks:
       - net
       - proxy
+      - tensorzero
     environment:
       TZ: "America/Chicago"
       OPENROUTER_API_KEY: "${OPENROUTER_API_KEY}"
@@ -115,4 +116,6 @@ services:
 networks:
   net:
   proxy:
+    external: true
+  tensorzero:
     external: true

@@ -78,3 +78,5 @@ networks:
   net:
   proxy:
     external: true
+  openclaw:
+    external: true
