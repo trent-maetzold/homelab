@@ -1,12 +1,12 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
 
 services:
-  app:
+  server:
     container_name: tuwunel
     image: jevolk/tuwunel:latest
     restart: unless-stopped
     volumes:
-      - /mnt/cache/appdata/tuwunel/app/config:/var/lib/tuwunel
+      - /mnt/cache/appdata/tuwunel/server/config:/var/lib/tuwunel
     networks:
       - proxy
     environment:
