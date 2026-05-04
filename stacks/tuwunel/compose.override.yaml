@@ -1,5 +1,5 @@
 services:
-  app:
+  server:
     labels:
       net.unraid.docker.managed: "composeman"
       net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/matrix-synapse-light.png"
