@@ -14,10 +14,10 @@ services:
       TZ: "America/Chicago"
       OPENCODE_GO_API_KEY: "${OPENCODE_GO_API_KEY}"
       MATRIX_HOMESERVER: "https://matrix.trkm.io"
-      MATRIX_USER_ID: "@trkm:matrix.trkm.io"
       MATRIX_ACCESS_TOKEN: "${MATRIX_ACCESS_TOKEN}"
       MATRIX_ENCRYPTION: "true"
       MATRIX_DEVICE_ID: "hermes-gateway"
+      MATRIX_ALLOWED_USERS: "@trkm:matrix.trkm.io"
       MATRIX_HOME_ROOM: "!UWpsgEh7fDahQ9ykFt:matrix.trkm.io"
       MATRIX_RECOVERY_KEY: "${MATRIX_RECOVERY_KEY}"
 
