@@ -4,4 +4,4 @@ services:
       net.unraid.docker.managed: "composeman"
       net.unraid.docker.icon: "https://contextforge-org.github.io/mcp-workshop/logo.png"
       net.unraid.docker.webui: "https://api.trkm.io/mcp/admin"
-      net.unraid.docker.shell: "/bin/sh"
+      net.unraid.docker.shell: "/bin/bash"

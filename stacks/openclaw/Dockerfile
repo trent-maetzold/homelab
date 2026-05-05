@@ -26,6 +26,7 @@ RUN groupadd -g 2000 ${AGENT_GROUP} && \
 
 # ── agent ─────────────────────────────────────────────────────────────────────
 USER ${AGENT_USER}
+WORKDIR /home/${AGENT_USER}
 
 ENV NPM_CONFIG_PREFIX=/home/${AGENT_USER}/.local/share/npm \
   NPM_CONFIG_CACHE=/home/${AGENT_USER}/.local/share/npm/cache \
@@ -37,4 +38,4 @@ ENV PATH=/home/${AGENT_USER}/.local/share/cargo/bin:${PATH}
 ENV PATH=/home/${AGENT_USER}/.local/share/npm/bin:${PATH}
 ENV PATH=/home/${AGENT_USER}/.local/bin:${PATH}
 
-CMD ["node", "openclaw.mjs", "gateway", "--allow-unconfigured"]
+CMD ["openclaw", "gateway", "--allow-unconfigured"]

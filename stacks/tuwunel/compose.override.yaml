@@ -4,4 +4,4 @@ services:
       net.unraid.docker.managed: "composeman"
       net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/matrix-synapse-light.png"
       net.unraid.docker.webui: "https://matrix.trkm.io"
-      net.unraid.docker.shell: "/bin/sh"
+      net.unraid.docker.shell: ""

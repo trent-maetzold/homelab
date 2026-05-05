@@ -1,0 +1,101 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+services:
+  api:
+    container_name: honcho
+    image: honcho:local
+    restart: unless-stopped
+    networks:
+      - net
+      - proxy
+    environment:
+      TZ: "America/Chicago"
+      DB_CONNECTION_URI: "postgresql+psycopg://postgres:${HONCHO_POSTGRES_PASSWORD}@db:5432/postgres"
+      CACHE_URL: "redis://cache:6379/0?suppress=true"
+      LLM_OPENAI_API_KEY: "${OPENROUTER_API_KEY}"
+      CACHE_ENABLED: "true"
+      AUTH_USE_AUTH: "false"
+      DERIVER_MODEL_CONFIG__TRANSPORT: "openai"
+      DERIVER_MODEL_CONFIG__MODEL: "google/gemini-2.5-flash"
+      DERIVER_MODEL_CONFIG__OVERRIDES__BASE_URL: "https://openrouter.ai/api/v1"
+      DIALECTIC_MODEL_CONFIG__TRANSPORT: "openai"
+      DIALECTIC_MODEL_CONFIG__MODEL: "google/gemini-2.5-flash"
+      DIALECTIC_MODEL_CONFIG__OVERRIDES__BASE_URL: "https://openrouter.ai/api/v1"
+      SUMMARY_MODEL_CONFIG__TRANSPORT: "openai"
+      SUMMARY_MODEL_CONFIG__MODEL: "google/gemini-2.5-flash"
+      SUMMARY_MODEL_CONFIG__OVERRIDES__BASE_URL: "https://openrouter.ai/api/v1"
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+    entrypoint: ["sh", "docker/entrypoint.sh"]
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.honcho.rule: "Host(`honcho.trkm.io`)"
+      traefik.http.services.honcho.loadBalancer.server.port: "8000"
+
+  deriver:
+    container_name: honcho_deriver
+    image: honcho:local
+    restart: unless-stopped
+    networks:
+      - net
+    environment:
+      TZ: "America/Chicago"
+      DB_CONNECTION_URI: "postgresql+psycopg://postgres:${HONCHO_POSTGRES_PASSWORD}@db:5432/postgres"
+      CACHE_URL: "redis://cache:6379/0?suppress=true"
+      LLM_OPENAI_API_KEY: "${OPENROUTER_API_KEY}"
+      CACHE_ENABLED: "true"
+      DERIVER_MODEL_CONFIG__TRANSPORT: "openai"
+      DERIVER_MODEL_CONFIG__MODEL: "google/gemini-2.5-flash"
+      DERIVER_MODEL_CONFIG__OVERRIDES__BASE_URL: "https://openrouter.ai/api/v1"
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+    entrypoint: ["/app/.venv/bin/python", "-m", "src.deriver"]
+
+  db:
+    container_name: honcho_db
+    image: tensorchord/vchord-suite:pg18-latest
+    restart: unless-stopped
+    volumes:
+      - ./config/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - /mnt/cache/dbdata/postgres/honcho/data:/var/lib/postgresql/data
+    networks:
+      - net
+    environment:
+      TZ: "America/Chicago"
+      POSTGRES_DB: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "${HONCHO_POSTGRES_PASSWORD:?HONCHO_POSTGRES_PASSWORD is required}"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres", "-d", "postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    command: ["postgres", "-c", "max_connections=200"]
+
+  cache:
+    container_name: honcho_cache
+    image: docker.io/valkey/valkey:9
+    restart: unless-stopped
+    networks:
+      - net
+    environment:
+      TZ: "America/Chicago"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+networks:
+  net:
+  proxy:
+    external: true

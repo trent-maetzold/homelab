@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+services:
+  gateway:
+    container_name: hermes
+    image: nousresearch/hermes-agent:latest
+    restart: unless-stopped
+    command: gateway run
+    volumes:
+      - /mnt/cache/appdata/hermes/gateway/data:/opt/data
+    networks:
+      - net
+    environment:
+      TZ: "America/Chicago"
+
+networks:
+  net:

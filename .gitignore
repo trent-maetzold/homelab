@@ -10,6 +10,7 @@ stacks/bifrost/config/config.json
 tools.yaml
 
 # Unraid composeman runtime files
+plans/
 autostart
 .compose.lock
 last_cmd.log

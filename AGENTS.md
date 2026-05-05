@@ -45,9 +45,10 @@ Keys within each service definition must follow this order:
 12. `env_file`
 13. `depends_on`
 14. `healthcheck`
-15. `command`
-16. `ulimits`
-17. `labels`
+15. `entrypoint`
+16. `command`
+17. `ulimits`
+18. `labels`
 
 Omit keys that don't apply. Don't reorder.
 
@@ -133,10 +134,16 @@ openssl rand -hex 24
 2. Add an init script at `stacks/<engine>/init/<stack>.<sh|sql>`
 3. Reference the shared network and hostname in the consumer stack's environment
 
+### Database images
+
+- Use `tensorchord/vchord-suite:pg18-latest` for any stack that requires `pgvector` or `vectorchord` (includes both pre-installed).
+- Use `postgres:18` (or a pg18-based variant) for all new stacks requiring PostgreSQL.
+
 ### Networks
 
 - External networks declared with `external: true`
 - Internal stack networks defined at the bottom of the file
+- Network list order within a service: `net` (the stack's internal network), `proxy`, then any additional networks in alphabetical order
 
 ### Labels
 
@@ -149,7 +156,7 @@ openssl rand -hex 24
     2. Project's own hosted asset (GitHub repo avatar, official logo URL)
     3. Never omit.
   - `net.unraid.docker.webui`: the web UI URL — set to `""` if no web UI
-  - `net.unraid.docker.shell`: `/bin/bash` if available, `/bin/sh` otherwise
+  - `net.unraid.docker.shell`: check whether the image provides `/bin/bash`; if yes use `/bin/bash`, otherwise check `/bin/sh`; if neither exists leave the value blank (`""`)
 - `name` file: plain text display name for the stack (e.g. `TensorZero`, `Baïkal`)
 - `icon_url` file: same icon URL as used in `compose.override.yaml`
 

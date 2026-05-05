@@ -20,4 +20,4 @@ services:
       net.unraid.docker.managed: "composeman"
       net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/valkey.png"
       net.unraid.docker.webui: ""
-      net.unraid.docker.shell: "/bin/sh"
+      net.unraid.docker.shell: "/bin/bash"

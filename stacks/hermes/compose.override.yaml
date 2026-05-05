@@ -1,0 +1,7 @@
+services:
+  gateway:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/npm/@lobehub/icons-static-png@latest/dark/hermesagent.png"
+      net.unraid.docker.webui: ""
+      net.unraid.docker.shell: "/bin/bash"

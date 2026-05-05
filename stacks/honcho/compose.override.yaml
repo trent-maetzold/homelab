@@ -1,0 +1,28 @@
+services:
+  api:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/openai.png"
+      net.unraid.docker.webui: "https://honcho.trkm.io"
+      net.unraid.docker.shell: "/bin/sh"
+
+  deriver:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/openai.png"
+      net.unraid.docker.webui: ""
+      net.unraid.docker.shell: "/bin/sh"
+
+  db:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/postgresql.png"
+      net.unraid.docker.webui: ""
+      net.unraid.docker.shell: "/bin/bash"
+
+  cache:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/valkey.png"
+      net.unraid.docker.webui: ""
+      net.unraid.docker.shell: "/bin/bash"
