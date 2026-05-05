@@ -18,7 +18,7 @@ services:
       MATRIX_ACCESS_TOKEN: "${MATRIX_ACCESS_TOKEN}"
       MATRIX_ENCRYPTION: "true"
       MATRIX_DEVICE_ID: "hermes-gateway"
-      MATRIX_HOME_ROOM: "!bOPl0lnBFLE47ggK4D:matrix.trkm.io"
+      MATRIX_HOME_ROOM: "!UWpsgEh7fDahQ9ykFt:matrix.trkm.io"
       MATRIX_RECOVERY_KEY: "${MATRIX_RECOVERY_KEY}"
 
 networks:
