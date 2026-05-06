@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+services:
+  zot:
+    container_name: zot
+    image: ghcr.io/project-zot/zot-linux-amd64:latest
+    restart: unless-stopped
+    volumes:
+      - /mnt/cache/appdata/zot:/var/lib/registry
+    ports:
+      - "5000:5000"
+    networks:
+      - proxy
+    environment:
+      TZ: "America/Chicago"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.zot.rule: "Host(`reg.trkm.io`)"
+      traefik.http.services.zot.loadBalancer.server.port: "5000"
+
+networks:
+  proxy:
+    external: true
