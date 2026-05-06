@@ -1,5 +1,5 @@
 services:
-  zot:
+  registry:
     labels:
       net.unraid.docker.managed: "composeman"
       net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/selfhst/icons/svg/zot-registry-light.svg"
