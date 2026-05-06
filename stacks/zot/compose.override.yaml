@@ -2,6 +2,6 @@ services:
   zot:
     labels:
       net.unraid.docker.managed: "composeman"
-      net.unraid.docker.icon: "https://avatars.githubusercontent.com/u/93798821?v=4"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/selfhst/icons/svg/zot-registry-light.svg"
       net.unraid.docker.webui: "https://reg.trkm.io"
       net.unraid.docker.shell: ""
