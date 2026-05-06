@@ -3,7 +3,7 @@
 services:
   gateway:
     container_name: hermes
-    image: nousresearch/hermes-agent:latest
+    build: .
     restart: unless-stopped
     command: gateway run
     volumes:
