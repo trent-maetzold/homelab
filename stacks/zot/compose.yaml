@@ -1,14 +1,12 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
 
 services:
-  zot:
+  registry:
     container_name: zot
-    image: ghcr.io/project-zot/zot-linux-amd64:latest
+    image: ghcr.io/project-zot/zot:latest
     restart: unless-stopped
     volumes:
-      - /mnt/cache/appdata/zot:/var/lib/registry
-    ports:
-      - "5000:5000"
+      - /mnt/cache/appdata/zot/registry/registry:/var/lib/registry
     networks:
       - proxy
     environment:
