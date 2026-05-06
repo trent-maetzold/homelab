@@ -35,7 +35,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
-    command: ["--config-file", "/app/config/**/*.toml"]
+    command: "--config-file /app/config/**/*.toml"
     labels:
       traefik.enable: "true"
       traefik.http.routers.tensorzero.rule: "Host(`api.trkm.io`) && PathPrefix(`/t0`)"
