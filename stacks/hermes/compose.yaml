@@ -8,7 +8,7 @@ services:
     command: gateway run
     volumes:
       - /mnt/cache/appdata/hermes/gateway/data:/opt/data
-      - ./config/config.yaml
+      - ./config/config.yaml:/opt/data/config.yaml
     networks:
       - net
       - searxng
