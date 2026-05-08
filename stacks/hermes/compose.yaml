@@ -3,7 +3,7 @@
 services:
   gateway:
     container_name: hermes
-    build: .
+    image: nousresearch/hermes-agent:latest
     restart: unless-stopped
     command: gateway run
     volumes:
@@ -13,6 +13,10 @@ services:
     environment:
       TZ: "America/Chicago"
       OPENCODE_GO_API_KEY: "${OPENCODE_GO_API_KEY}"
+      SEARXNG_URL: "${SEARXNG_URL}"
+      FIRECRAWL_API_KEY: "${FIRECRAWL_API_KEY}"
+      TAVILY_API_KEY: "${TAVILY_API_KEY}"
+      EXA_API_KEY: "${EXA_API_KEY}"
       MATRIX_HOMESERVER: "https://matrix.trkm.io"
       MATRIX_ACCESS_TOKEN: "${MATRIX_ACCESS_TOKEN}"
       MATRIX_RECOVERY_KEY: "${MATRIX_RECOVERY_KEY}"
