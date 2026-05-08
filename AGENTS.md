@@ -144,6 +144,7 @@ openssl rand -hex 24
 - External networks declared with `external: true`
 - Internal stack networks defined at the bottom of the file
 - Network list order within a service: `net` (the stack's internal network), `proxy`, then any additional networks in alphabetical order
+- Stacks without a web UI omit `ports:` and Traefik labels entirely; cross-stack access uses an external network instead of `proxy`
 
 ### Labels
 
@@ -152,7 +153,7 @@ openssl rand -hex 24
 - Unraid composeman labels go in `compose.override.yaml`, never in `compose.yaml`:
   - `net.unraid.docker.managed: "composeman"` — required on every service
   - `net.unraid.docker.icon`: icon URL. Resolution order:
-    1. dashboard-icons PNG — `https://raw.githubusercontent.com/homarr-labs/dashboard-icons/refs/heads/main/png/<name>.png` (curl to verify 200)
+    1. dashboard-icons PNG — `https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/<name>.png` (curl to verify 200)
     2. Project's own hosted asset (GitHub repo avatar, official logo URL)
     3. Never omit.
   - `net.unraid.docker.webui`: the web UI URL — set to `""` if no web UI
