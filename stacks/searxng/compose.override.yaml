@@ -1,0 +1,14 @@
+services:
+  core:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/searxng.png"
+      net.unraid.docker.webui: ""
+      net.unraid.docker.shell: "/bin/sh"
+
+  cache:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/valkey.png"
+      net.unraid.docker.webui: ""
+      net.unraid.docker.shell: "/bin/bash"

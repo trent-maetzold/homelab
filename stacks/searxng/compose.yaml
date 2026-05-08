@@ -1,0 +1,46 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+services:
+  core:
+    container_name: searxng
+    image: docker.io/searxng/searxng:latest
+    restart: unless-stopped
+    volumes:
+      - /mnt/cache/appdata/searxng/core/config:/etc/searxng
+      - /mnt/cache/appdata/searxng/core/data:/var/cache/searxng
+    networks:
+      - net
+      - searxng
+    environment:
+      TZ: "America/Chicago"
+      SEARXNG_SECRET: "${SEARXNG_SECRET:?SEARXNG_SECRET is required}"
+      SEARXNG_IMAGE_PROXY: "true"
+    depends_on:
+      cache:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:8080"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  cache:
+    container_name: searxng_cache
+    image: docker.io/valkey/valkey:latest
+    restart: unless-stopped
+    networks:
+      - net
+    environment:
+      TZ: "America/Chicago"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+networks:
+  net:
+  searxng:
+    external: true
