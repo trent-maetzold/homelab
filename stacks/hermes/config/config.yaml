@@ -2,6 +2,11 @@ model:
   default: minimax-m2.7
   provider: opencode-go
   base_url: https://opencode.ai/zen/go/v1
+auxiliary:
+  title_generation:
+    enabled: true
+    provider: opencode-go
+    model: deepseek-v4-flash
 terminal:
   backend: local
   cwd: .
@@ -13,7 +18,7 @@ terminal:
   container_disk: 51200
   container_persistent: true
 web:
-  search_backend: "exa"
+  search_backend: "searxng"
 browser:
   inactivity_timeout: 120
 tool_loop_guardrails:
