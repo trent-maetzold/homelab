@@ -1,5 +1,5 @@
 model:
-  default: kimi-k2.6
+  default: minimax-m2.7
   provider: opencode-go
   base_url: https://opencode.ai/zen/go/v1
 terminal:
@@ -12,6 +12,8 @@ terminal:
   container_memory: 5120
   container_disk: 51200
   container_persistent: true
+web:
+  search_backend: "exa"
 browser:
   inactivity_timeout: 120
 tool_loop_guardrails:
