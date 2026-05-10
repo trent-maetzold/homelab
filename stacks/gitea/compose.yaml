@@ -18,7 +18,7 @@ services:
       GITEA__database__HOST: "db:5432"
       GITEA__database__NAME: "gitea"
       GITEA__database__USER: "gitea"
-      GITEA__database__PASSWD: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
+      GITEA__database__PASSWD: "${POSTGRES_PASSWORD}"
       GITEA__server__DOMAIN: "tea.trkm.io"
       GITEA__server__ROOT_URL: "https://tea.trkm.io/"
     depends_on:
@@ -34,10 +34,6 @@ services:
       traefik.enable: "true"
       traefik.http.routers.gitea.rule: "Host(`tea.trkm.io`)"
       traefik.http.services.gitea.loadBalancer.server.port: "3000"
-      traefik.http.middlewares.gitea-redirect.redirectscheme.scheme: "https"
-      traefik.http.routers.gitea-insecure.rule: "Host(`tea.trkm.io`)"
-      traefik.http.routers.gitea-insecure.middlewares: "gitea-redirect"
-      traefik.http.routers.gitea-insecure.entrypoints: "web"
 
   db:
     container_name: gitea_db
