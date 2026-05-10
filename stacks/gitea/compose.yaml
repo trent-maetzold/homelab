@@ -1,0 +1,66 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+services:
+  app:
+    container_name: gitea
+    hostname: gitea
+    image: gitea/gitea:latest
+    restart: unless-stopped
+    volumes:
+      - /mnt/cache/appdata/gitea/app/config:/data
+      - /mnt/cache/appdata/gitea/app/data:/var/lib/gitea
+      - /mnt/cache/appdata/gitea/app/log:/var/log/gitea
+      - /mnt/user/data/gitea/repos:/git/repos
+    networks:
+      - net
+    environment:
+      TZ: "America/Chicago"
+      USER_UID: "99"
+      USER_GID: "100"
+      GITEA__database__DB_TYPE: "postgres"
+      GITEA__database__HOST: "postgres:5432"
+      GITEA__database__NAME: "gitea"
+      GITEA__database__USER: "gitea"
+      GITEA__database__PASSWD: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.gitea.rule: "Host(`tea.trkm.io`)"
+      traefik.http.services.gitea.loadBalancer.server.port: "3000"
+      traefik.http.middlewares.gitea-redirect.redirectscheme.scheme: "https"
+      traefik.http.routers.gitea-insecure.rule: "Host(`tea.trkm.io`)"
+      traefik.http.routers.gitea-insecure.middlewares: "gitea-redirect"
+      traefik.http.routers.gitea-insecure.entrypoints: "web"
+
+  postgres:
+    container_name: gitea_db
+    hostname: gitea-db
+    image: postgres:18
+    restart: unless-stopped
+    volumes:
+      - /mnt/cache/dbdata/postgres/gitea/data:/var/lib/postgresql/data
+    networks:
+      - net
+    environment:
+      TZ: "America/Chicago"
+      POSTGRES_USER: "gitea"
+      POSTGRES_DB: "gitea"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "gitea"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+networks:
+  net:
+    driver: bridge
