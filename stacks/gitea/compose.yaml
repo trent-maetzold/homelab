@@ -39,8 +39,6 @@ services:
     restart: unless-stopped
     volumes:
       - /mnt/cache/dbdata/postgres/gitea/data:/var/lib/postgresql/data
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
     networks:
       - net
     environment:
