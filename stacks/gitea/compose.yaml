@@ -3,9 +3,9 @@
 services:
   app:
     container_name: gitea
-    hostname: gitea
     image: gitea/gitea:latest
     restart: unless-stopped
+    user: "1000:1000"
     volumes:
       - /mnt/cache/appdata/gitea/app/config:/data
       - /mnt/cache/appdata/gitea/app/data:/var/lib/gitea
@@ -15,8 +15,6 @@ services:
       - net
     environment:
       TZ: "America/Chicago"
-      USER_UID: "99"
-      USER_GID: "100"
       GITEA__database__DB_TYPE: "postgres"
       GITEA__database__HOST: "postgres:5432"
       GITEA__database__NAME: "gitea"
@@ -42,7 +40,6 @@ services:
 
   postgres:
     container_name: gitea_db
-    hostname: gitea-db
     image: postgres:18
     restart: unless-stopped
     volumes:
