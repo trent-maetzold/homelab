@@ -19,6 +19,7 @@ services:
       GITEA__database__NAME: "gitea"
       GITEA__database__USER: "gitea"
       GITEA__database__PASSWD: "${POSTGRES_PASSWORD}"
+      GITEA__pages__ENABLED: "true"
     depends_on:
       db:
         condition: service_healthy
