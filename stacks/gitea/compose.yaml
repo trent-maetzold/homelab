@@ -39,7 +39,7 @@ services:
     image: postgres:18
     restart: unless-stopped
     volumes:
-      - /mnt/cache/dbdata/postgres/gitea/data:/var/lib/postgresql/data
+      - /mnt/cache/dbdata/postgres/gitea/data:/var/lib/postgresql
     networks:
       - net
     environment:
@@ -56,3 +56,4 @@ services:
 
 networks:
   net:
+
