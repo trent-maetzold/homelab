@@ -11,6 +11,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
     networks:
       - net
+      - proxy
     environment:
       TZ: "America/Chicago"
       GITEA__database__DB_TYPE: "postgres"
@@ -55,4 +56,6 @@ services:
 
 networks:
   net:
+  proxy:
+    external: true
 
