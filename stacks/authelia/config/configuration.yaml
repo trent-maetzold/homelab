@@ -13,6 +13,7 @@ access_control:
         - "hs.trkm.io"
         - "matrix.trkm.io"
         - "seerr.trkm.io"
+        - "tea.trkm.io"
       policy: bypass
 
     - domain:
