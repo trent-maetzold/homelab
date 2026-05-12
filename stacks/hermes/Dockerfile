@@ -24,6 +24,10 @@ RUN curl -fsSL \
   https://github.com/tailcallhq/forgecode/releases/latest/download/forge-x86_64-unknown-linux-gnu \
   -o /usr/local/bin/forge && \
   chmod +x /usr/local/bin/forge && \
+  curl -fsSL \
+  https://github.com/anomalyco/opencode/releases/latest/download/opencode-linux-x64.tar.gz \
+  | tar -xz -C /usr/local/bin && \
+  chmod +x /usr/local/bin/opencode && \
   chmod -R a+rX /opt/hermes && \
   chown -R hermes:hermes /opt/hermes/ui-tui /opt/hermes/node_modules
 
