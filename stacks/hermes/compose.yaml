@@ -14,8 +14,6 @@ services:
       - searxng
     environment:
       TZ: "America/Chicago"
-      DOCKER_HOST: tcp://dind:2376
-      DOCKER_CERT_PATH: /certs
       OPENCODE_GO_API_KEY: "${OPENCODE_GO_API_KEY}"
       SEARXNG_URL: "http://searxng:8888"
       FIRECRAWL_API_KEY: "${FIRECRAWL_API_KEY}"
@@ -27,6 +25,8 @@ services:
       MATRIX_ALLOWED_USERS: "${MATRIX_ALLOWED_USERS}"
       MATRIX_ENCRYPTION: "true"
       GITHUB_PERSONAL_ACCESS_TOKEN: "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      DOCKER_HOST: tcp://dind:2376
+      DOCKER_CERT_PATH: /certs
     command: gateway run
 
   dind:
@@ -34,13 +34,13 @@ services:
     image: docker:dind
     restart: unless-stopped
     privileged: true
+    volumes:
+      - /mnt/cache/appdata/hermes/shared/certs:/certs
     networks:
       - net
     environment:
       TZ: "America/Chicago"
       DOCKER_TLS_CERTDIR: /certs
-    volumes:
-      - /mnt/cache/appdata/hermes/shared/certs:/certs
 
 networks:
   net:
