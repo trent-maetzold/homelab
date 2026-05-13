@@ -1,7 +1,0 @@
-services:
-  app:
-    labels:
-      net.unraid.docker.managed: "composeman"
-      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/caddy.png"
-      net.unraid.docker.webui: "http://static.trkm.io"
-      net.unraid.docker.shell: "/bin/sh"
