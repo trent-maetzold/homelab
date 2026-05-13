@@ -1,6 +1,17 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
 
 services:
+  dind:
+    image: docker:dind
+    container_name: hermes_dind
+    privileged: true
+    environment:
+      DOCKER_TLS_CERTDIR: ""
+    networks:
+      - net
+    volumes:
+      - /mnt/cache/appdata/hermes/shared/certs:/certs
+
   gateway:
     container_name: hermes
     image: nousresearch/hermes-agent:latest
@@ -14,6 +25,7 @@ services:
       - searxng
     environment:
       TZ: "America/Chicago"
+      DOCKER_HOST: tcp://dind:2375
       OPENCODE_GO_API_KEY: "${OPENCODE_GO_API_KEY}"
       SEARXNG_URL: "http://searxng:8888"
       FIRECRAWL_API_KEY: "${FIRECRAWL_API_KEY}"
