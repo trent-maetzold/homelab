@@ -5,8 +5,6 @@ services:
     container_name: gitea
     image: gitea/gitea:latest
     restart: unless-stopped
-    ports:
-      - "222:22"
     volumes:
       - /mnt/cache/appdata/gitea/app/config:/data
       - /etc/timezone:/etc/timezone:ro
@@ -21,9 +19,10 @@ services:
       GITEA__database__NAME: "gitea"
       GITEA__database__USER: "gitea"
       GITEA__database__PASSWD: "${POSTGRES_PASSWORD}"
-      GITEA__server__START_SSH_SERVER: "true"
       GITEA__server__SSH_DOMAIN: "tea.trkm.io"
-      GITEA__server__SSH_PORT: "222"
+      GITEA__server__SSH_PORT: "22"
+      GITEA__server__SSH_LISTEN_PORT: "2222"
+      GITEA__server__START_SSH_SERVER: "true"
       GITEA__pages__ENABLED: "true"
     depends_on:
       db:
@@ -38,6 +37,9 @@ services:
       traefik.enable: "true"
       traefik.http.routers.gitea.rule: "Host(`tea.trkm.io`)"
       traefik.http.services.gitea.loadBalancer.server.port: "3000"
+      traefik.tcp.routers.gitea-ssh.rule: "HostSNI(`*`)"
+      traefik.tcp.routers.gitea-ssh.entrypoints: "ssh"
+      traefik.tcp.services.gitea-ssh.loadBalancer.server.port: "2222"
 
   db:
     container_name: gitea_db
