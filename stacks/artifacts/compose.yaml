@@ -14,7 +14,7 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
-    entrypoint: ["sh", "-c", "printf '%s\\n' 'artifacts.trkm.io {' '  file_server /srv/artifacts' '}' | caddy run --config - --adapter caddyfile"]
+    command: caddy file-server --browse --root /srv --listen :80
     labels:
       traefik.enable: "true"
       traefik.http.routers.artifacts.rule: "Host(`artifacts.trkm.io`)"
