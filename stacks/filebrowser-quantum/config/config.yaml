@@ -1,0 +1,12 @@
+server:
+  sources:
+    - path: "/data"
+    - path: "/appdata"
+
+userDefaults:
+  darkMode: true
+  permissions:
+    modify: true
+    share: true
+    delete: true
+    create: true

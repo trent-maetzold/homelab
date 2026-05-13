@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+services:
+  app:
+    container_name: filebrowser
+    image: gtstef/filebrowser:stable
+    restart: unless-stopped
+    volumes:
+      - /mnt/cache/appdata/filebrowser/app/data:/home/filebrowser/data
+      - ./config/config.yaml:/home/filebrowser/data/config.yaml:ro
+      - /mnt/user/data:/data
+      - /mnt/cache/appdata:/appdata
+    networks:
+      - net
+      - proxy
+    environment:
+      TZ: "America/Chicago"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.filebrowser.rule: "Host(`files.trkm.io`)"
+      traefik.http.services.filebrowser.loadBalancer.server.port: "80"
+
+networks:
+  net:
+  proxy:
+    external: true
