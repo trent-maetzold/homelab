@@ -3,26 +3,23 @@
 services:
   app:
     container_name: static
+    hostname: static
     image: ghcr.io/caddyserver/caddy:latest
     restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
     volumes:
       - /opt/data/home/www/html:/www:ro
     networks:
       - proxy
-    ports:
-      - "80:80"
-      - "443:443"
-    command:
-      - sh
-      - -c
-      - |
-        printf '%s\n' 'static.trkm.io {' '  file_server /www' '}' | caddy run --config - --adapter caddyfile
     healthcheck:
       test: ["CMD-SHELL", "wget --spider --quiet http://localhost/ || exit 1"]
       interval: 30s
       timeout: 5s
       retries: 3
       start_period: 10s
+    entrypoint: ["sh", "-c", "printf '%s\\n' 'static.trkm.io {' '  file_server /www' '}' | caddy run --config - --adapter caddyfile"]
     labels:
       traefik.enable: "true"
       traefik.http.routers.static.rule: "Host(`static.trkm.io`)"
