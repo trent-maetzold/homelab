@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+services:
+  artifacts:
+    image: ghcr.io/caddyserver/caddy:latest
+    restart: unless-stopped
+    volumes:
+      - /mnt/cache/appdata/artifacts/app/data:/srv/artifacts:ro
+    networks:
+      - proxy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider --quiet http://localhost/ || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    entrypoint: ["sh", "-c", "printf '%s\\n' 'artifacts.trkm.io {' '  file_server /srv/artifacts' '}' | caddy run --config - --adapter caddyfile"]
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.artifacts.rule: "Host(`artifacts.trkm.io`)"
+      traefik.http.services.artifacts.loadBalancer.server.port: "80"
+
+networks:
+  proxy:
+    external: true
