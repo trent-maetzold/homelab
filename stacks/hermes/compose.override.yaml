@@ -5,3 +5,10 @@ services:
       net.unraid.docker.icon: "https://cdn.jsdelivr.net/npm/@lobehub/icons-static-png@latest/dark/hermesagent.png"
       net.unraid.docker.webui: ""
       net.unraid.docker.shell: "/bin/bash"
+
+  dind:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/docker.png"
+      net.unraid.docker.webui: ""
+      net.unraid.docker.shell: ""

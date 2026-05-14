@@ -8,10 +8,10 @@ services:
       context: .
       dockerfile: Dockerfile
     restart: unless-stopped
-    command: gateway run
     volumes:
       - /mnt/cache/appdata/hermes/gateway/data:/opt/data
       - ./config/config.yaml:/opt/data/config.yaml
+      - /mnt/cache/appdata/hermes/shared/certs/client:/certs/client
     networks:
       - net
       - searxng
@@ -30,6 +30,23 @@ services:
       GITHUB_PERSONAL_ACCESS_TOKEN: "${GITHUB_PERSONAL_ACCESS_TOKEN}"
       GITEA_HOST: "https://tea.trkm.io"
       GITEA_ACCESS_TOKEN: "${GITEA_ACCESS_TOKEN}"
+      DOCKER_HOST: "tcp://dind:2376"
+      DOCKER_TLS_VERIFY: "1"
+      DOCKER_CERT_PATH: "/certs/client"
+    command: gateway run
+
+  dind:
+    container_name: hermes_dind
+    image: docker:dind
+    restart: unless-stopped
+    privileged: true
+    volumes:
+      - /mnt/cache/appdata/hermes/shared/certs:/certs
+    networks:
+      - net
+    environment:
+      TZ: "America/Chicago"
+      DOCKER_TLS_CERTDIR: "/certs"
 
 networks:
   net:
