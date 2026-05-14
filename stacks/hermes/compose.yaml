@@ -25,8 +25,8 @@ services:
       MATRIX_ALLOWED_USERS: "${MATRIX_ALLOWED_USERS}"
       MATRIX_ENCRYPTION: "true"
       GITHUB_PERSONAL_ACCESS_TOKEN: "${GITHUB_PERSONAL_ACCESS_TOKEN}"
-      DOCKER_HOST: tcp://dind:2376
-      DOCKER_CERT_PATH: /certs
+      DOCKER_HOST: "tcp://dind:2376"
+      DOCKER_CERT_PATH: "/certs"
     command: gateway run
 
   dind:
@@ -40,7 +40,7 @@ services:
       - net
     environment:
       TZ: "America/Chicago"
-      DOCKER_TLS_CERTDIR: /certs
+      DOCKER_TLS_CERTDIR: "/certs"
 
 networks:
   net:
