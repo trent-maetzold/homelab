@@ -3,7 +3,10 @@
 services:
   gateway:
     container_name: hermes
-    image: nousresearch/hermes-agent:latest
+    image: nousresearch/hermes-agent:local
+    build:
+      context: .
+      dockerfile: Dockerfile
     restart: unless-stopped
     volumes:
       - /mnt/cache/appdata/hermes/gateway/data:/opt/data
@@ -25,6 +28,8 @@ services:
       MATRIX_ALLOWED_USERS: "${MATRIX_ALLOWED_USERS}"
       MATRIX_ENCRYPTION: "true"
       GITHUB_PERSONAL_ACCESS_TOKEN: "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      GITEA_HOST: "https://tea.trkm.io"
+      GITEA_ACCESS_TOKEN: "${GITEA_ACCESS_TOKEN}"
       DOCKER_HOST: "tcp://dind:2376"
       DOCKER_TLS_VERIFY: "1"
       DOCKER_CERT_PATH: "/certs/client"
