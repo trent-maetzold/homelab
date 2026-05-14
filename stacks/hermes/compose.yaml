@@ -37,7 +37,7 @@ services:
 
   dind:
     container_name: hermes_dind
-    hostname: dind
+    hostname: docker
     image: docker:dind
     restart: unless-stopped
     privileged: true
