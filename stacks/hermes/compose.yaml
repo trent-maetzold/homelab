@@ -37,6 +37,7 @@ services:
 
   dind:
     container_name: hermes_dind
+    hostname: dind
     image: docker:dind
     restart: unless-stopped
     privileged: true
@@ -52,3 +53,4 @@ networks:
   net:
   searxng:
     external: true
+
