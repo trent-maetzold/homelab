@@ -8,7 +8,7 @@ services:
     volumes:
       - /mnt/cache/appdata/hermes/gateway/data:/opt/data
       - ./config/config.yaml:/opt/data/config.yaml
-      - /mnt/cache/appdata/hermes/shared/certs:/certs/client
+      - /mnt/cache/appdata/hermes/shared/certs:/certs
     networks:
       - net
       - searxng
@@ -26,7 +26,7 @@ services:
       MATRIX_ENCRYPTION: "true"
       GITHUB_PERSONAL_ACCESS_TOKEN: "${GITHUB_PERSONAL_ACCESS_TOKEN}"
       DOCKER_HOST: "tcp://dind:2376"
-      DOCKER_CERT_PATH: "/certs"
+      DOCKER_CERT_PATH: "/certs/client"
     command: gateway run
 
   dind:
