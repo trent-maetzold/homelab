@@ -16,6 +16,7 @@ ENV CARGO_HOME=${HOME}/.local/share/cargo \
 # ---- Add tools here ----
 RUN apt-get update && \
   apt-get install -y --no-install-recommends \
+  docker-io docker-compose \
   golang-go rustup \
   bat fd-find fzf && \
   rm -rf /var/lib/apt/lists/* && \
