@@ -13,24 +13,32 @@ ENV CARGO_HOME=${HOME}/.local/share/cargo \
   ${HOME}/.local/share/npm/bin:\
   ${PATH}"
 
-# ---- Add tools here ----
+# Apt Dependencies
 RUN apt-get update && \
   apt-get install -y --no-install-recommends \
-  docker-io docker-compose \
+  docker-cli docker-compose \
   golang-go rustup \
   bat fd-find fzf && \
   rm -rf /var/lib/apt/lists/* && \
   ln -s /usr/bin/fdfind /usr/local/bin/fd
-RUN curl -fsSL \
+
+RUN chmod -R a+rX /opt/hermes && \
+  chown -R hermes:hermes /opt/hermes/ui-tui /opt/hermes/node_modules && \
+  # Install ForgeCode
+  curl -fsSL \
   https://github.com/tailcallhq/forgecode/releases/latest/download/forge-x86_64-unknown-linux-gnu \
   -o /usr/local/bin/forge && \
   chmod +x /usr/local/bin/forge && \
+  # Install Opencode
   curl -fsSL \
   https://github.com/anomalyco/opencode/releases/latest/download/opencode-linux-x64.tar.gz \
   | tar -xz -C /usr/local/bin && \
   chmod +x /usr/local/bin/opencode && \
-  chmod -R a+rX /opt/hermes && \
-  chown -R hermes:hermes /opt/hermes/ui-tui /opt/hermes/node_modules
+  # Install Claude Code
+  LATEST=$(curl -fsSL https://downloads.claude.ai/claude-code-releases/latest) && \
+  curl -fsSL "https://downloads.claude.ai/claude-code-releases/${LATEST}/linux-x64/claude" \
+  -o /usr/local/bin/claude && \
+  chmod +x /usr/local/bin/claude
 
 # Set install locations and path for the running agent
 ENV HOME=/opt/data/home
