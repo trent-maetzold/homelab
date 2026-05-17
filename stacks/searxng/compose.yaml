@@ -14,6 +14,7 @@ services:
     environment:
       TZ: "America/Chicago"
       SEARXNG_BIND_ADDRESS: "0.0.0.0"
+      SEARXNG_PORT: "8888"
       SEARXNG_SECRET: "${SEARXNG_SECRET:?SEARXNG_SECRET is required}"
       SEARXNG_IMAGE_PROXY: "true"
     depends_on:

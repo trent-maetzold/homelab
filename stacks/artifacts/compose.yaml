@@ -2,10 +2,10 @@
 
 services:
   artifacts:
-    image: ghcr.io/caddyserver/caddy:latest
+    image: caddy:latest
     restart: unless-stopped
     volumes:
-      - /mnt/cache/appdata/artifacts/app/data:/srv/artifacts:ro
+      - /mnt/cache/data/artifacts:/srv/artifacts:ro
     networks:
       - proxy
     healthcheck:
