@@ -24,7 +24,8 @@ RUN apt-get update && \
   rm -rf /var/lib/apt/lists/* && \
   ln -s /usr/bin/fdfind /usr/local/bin/fd
 
-RUN chmod -R a+rX /opt/hermes && \
+RUN chmod +x /opt/hermes/docker/pre-entrypoint.sh && \
+  chmod -R a+rX /opt/hermes && \
   chown -R hermes:hermes /opt/hermes/ui-tui /opt/hermes/node_modules && \
   # Install Opencode
   curl -fsSL \
