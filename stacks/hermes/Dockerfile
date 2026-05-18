@@ -13,6 +13,8 @@ ENV CARGO_HOME=${HOME}/.local/share/cargo \
   ${HOME}/.local/share/npm/bin:\
   ${PATH}"
 
+COPY ./pre-entrypoint.sh /opt/hermes/docker/pre-entrypoint.sh
+
 # Apt Dependencies
 RUN apt-get update && \
   apt-get install -y --no-install-recommends \
@@ -24,11 +26,6 @@ RUN apt-get update && \
 
 RUN chmod -R a+rX /opt/hermes && \
   chown -R hermes:hermes /opt/hermes/ui-tui /opt/hermes/node_modules && \
-  # Install ForgeCode
-  curl -fsSL \
-  https://github.com/tailcallhq/forgecode/releases/latest/download/forge-x86_64-unknown-linux-gnu \
-  -o /usr/local/bin/forge && \
-  chmod +x /usr/local/bin/forge && \
   # Install Opencode
   curl -fsSL \
   https://github.com/anomalyco/opencode/releases/latest/download/opencode-linux-x64.tar.gz \
@@ -51,3 +48,5 @@ ENV CARGO_HOME=${HOME}/.local/share/cargo \
   ${HOME}/.local/share/go/bin:\
   ${HOME}/.local/share/npm/bin:\
   ${PATH}"
+
+ENTRYPOINT [ "/usr/bin/tini", "-g", "--", "/opt/hermes/docker/pre-entrypoint.sh" ]
