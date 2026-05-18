@@ -18,7 +18,8 @@ services:
       - searxng
     environment:
       TZ: "America/Chicago"
-      OPENCODE_GO_API_KEY: "${OPENCODE_GO_API_KEY}"
+      OPENCODE_API_KEY: "${OPENCODE_API_KEY}"
+      OPENCODE_GO_API_KEY: "${OPENCODE_API_KEY}"
       CLAUDE_CODE_OAUTH_TOKEN: "${CLAUDE_CODE_OAUTH_TOKEN}"
       SEARXNG_URL: "http://searxng:8888"
       FIRECRAWL_API_KEY: "${FIRECRAWL_API_KEY}"
