@@ -7,6 +7,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    pull_policy: build
     restart: unless-stopped
     volumes:
       - /mnt/cache/appdata/hermes/gateway/data:/opt/data
