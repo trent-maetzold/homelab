@@ -1,0 +1,56 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+services:
+  runner_user:
+    container_name: github_runner_user
+    image: myoung34/github-runner:latest
+    restart: unless-stopped
+    volumes:
+      - /mnt/cache/appdata/github_runner/shared/certs/client:/certs/client:ro
+    networks:
+      - net
+    environment:
+      TZ: "America/Chicago"
+      RUNNER_SCOPE: "user"
+      ACCESS_TOKEN: "${GITHUB_PERSONAL_ACCESS_TOKEN:?GITHUB_PERSONAL_ACCESS_TOKEN is required}"
+      RUNNER_NAME_PREFIX: "homelab"
+      EPHEMERAL: "true"
+      DOCKER_HOST: "tcp://dind:2376"
+      DOCKER_TLS_VERIFY: "1"
+      DOCKER_CERT_PATH: "/certs/client"
+
+  runner_org:
+    container_name: github_runner_org
+    image: myoung34/github-runner:latest
+    restart: unless-stopped
+    volumes:
+      - /mnt/cache/appdata/github_runner/shared/certs/client:/certs/client:ro
+    networks:
+      - net
+    environment:
+      TZ: "America/Chicago"
+      RUNNER_SCOPE: "org"
+      ORG_NAME: "hardmcp"
+      ACCESS_TOKEN: "${GITHUB_PERSONAL_ACCESS_TOKEN:?GITHUB_PERSONAL_ACCESS_TOKEN is required}"
+      RUNNER_NAME_PREFIX: "homelab"
+      EPHEMERAL: "true"
+      DOCKER_HOST: "tcp://dind:2376"
+      DOCKER_TLS_VERIFY: "1"
+      DOCKER_CERT_PATH: "/certs/client"
+
+  dind:
+    container_name: github_runner_dind
+    hostname: dind
+    image: docker:dind
+    restart: unless-stopped
+    privileged: true
+    volumes:
+      - /mnt/cache/appdata/github_runner/shared/certs:/certs
+    networks:
+      - net
+    environment:
+      TZ: "America/Chicago"
+      DOCKER_TLS_CERTDIR: "/certs"
+
+networks:
+  net:

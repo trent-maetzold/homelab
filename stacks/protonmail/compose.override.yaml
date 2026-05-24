@@ -1,0 +1,7 @@
+services:
+  bridge:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/proton-mail.png"
+      net.unraid.docker.webui: ""
+      net.unraid.docker.shell: "/bin/bash"
