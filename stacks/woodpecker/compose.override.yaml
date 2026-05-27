@@ -2,14 +2,14 @@ services:
   server:
     labels:
       net.unraid.docker.managed: "composeman"
-      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/woodpecker-ci.png"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/selfhst/icons/png/woodpecker-ci-light.png"
       net.unraid.docker.webui: "https://ci.trkm.io"
       net.unraid.docker.shell: "/bin/sh"
 
   agent:
     labels:
       net.unraid.docker.managed: "composeman"
-      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/woodpecker-ci.png"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/selfhst/icons/png/woodpecker-ci-light.png"
       net.unraid.docker.webui: ""
       net.unraid.docker.shell: "/bin/sh"
 
