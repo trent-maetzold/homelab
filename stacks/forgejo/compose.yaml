@@ -7,7 +7,7 @@ services:
     restart: unless-stopped
     volumes:
       - /mnt/cache/appdata/forgejo/server/data:/data
-      - ./config/app.ini:/data/gitea/conf/app.ini
+      - ./config/app.ini:/data/app.ini
     networks:
       - net
       - proxy
