@@ -14,8 +14,12 @@ services:
     environment:
       TZ: "America/Chicago"
       FORGEJO__database__PASSWD: "${POSTGRES_PASSWORD}"
+      FORGEJO__security__SECRET_KEY: "${FORGEJO_SECRET_KEY:?FORGEJO_SECRET_KEY is required}"
+      FORGEJO__security__INTERNAL_TOKEN: "${FORGEJO_INTERNAL_TOKEN:?FORGEJO_INTERNAL_TOKEN is required}"
     depends_on:
       db:
+        condition: service_healthy
+      cache:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:3000/"]
@@ -27,6 +31,21 @@ services:
       traefik.enable: "true"
       traefik.http.routers.forgejo.rule: "Host(`forge.trkm.io`)"
       traefik.http.services.forgejo.loadBalancer.server.port: "3000"
+
+  cache:
+    container_name: forgejo_cache
+    image: docker.io/valkey/valkey:latest
+    restart: unless-stopped
+    networks:
+      - net
+    environment:
+      TZ: "America/Chicago"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
 
   db:
     container_name: forgejo_db
