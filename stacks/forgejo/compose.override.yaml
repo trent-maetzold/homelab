@@ -1,10 +1,10 @@
 services:
-  app:
+  server:
     labels:
       net.unraid.docker.managed: "composeman"
-      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/selfhst/icons/png/gitea.png"
-      net.unraid.docker.webui: "https://tea.trkm.io"
-      net.unraid.docker.shell: "/bin/bash"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/forgejo.png"
+      net.unraid.docker.webui: "https://forge.trkm.io"
+      net.unraid.docker.shell: "/bin/sh"
 
   db:
     labels:
@@ -12,4 +12,3 @@ services:
       net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/postgres.png"
       net.unraid.docker.webui: ""
       net.unraid.docker.shell: "/bin/bash"
-

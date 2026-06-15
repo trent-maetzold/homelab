@@ -1,0 +1,68 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+services:
+  server:
+    container_name: forgejo
+    image: codeberg.org/forgejo/forgejo:latest
+    restart: unless-stopped
+    volumes:
+      - /mnt/cache/appdata/forgejo/server/data:/data
+      - ./config/app.ini:/data/gitea/conf/app.ini
+    networks:
+      - net
+      - proxy
+    environment:
+      TZ: "America/Chicago"
+      FORGEJO__database__DB_TYPE: "postgres"
+      FORGEJO__database__HOST: "db:5432"
+      FORGEJO__database__NAME: "forgejo"
+      FORGEJO__database__USER: "forgejo"
+      FORGEJO__database__PASSWD: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
+      FORGEJO__server__DOMAIN: "forge.trkm.io"
+      FORGEJO__server__ROOT_URL: "https://forge.trkm.io"
+      FORGEJO__server__SSH_DOMAIN: "forge.trkm.io"
+      FORGEJO__server__SSH_PORT: "22"
+      FORGEJO__server__SSH_LISTEN_PORT: "2222"
+      FORGEJO__server__START_SSH_SERVER: "true"
+      FORGEJO__oauth2_client__ENABLE_AUTO_REGISTRATION: "true"
+      FORGEJO__oauth2_client__ACCOUNT_LINKING: "login"
+      FORGEJO__oauth2_client__UPDATE_AVATAR: "true"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.forgejo.rule: "Host(`forge.trkm.io`)"
+      traefik.http.services.forgejo.loadBalancer.server.port: "3000"
+
+  db:
+    container_name: forgejo_db
+    image: postgres:18
+    restart: unless-stopped
+    volumes:
+      - /mnt/cache/dbdata/postgres/forgejo/data:/var/lib/postgresql
+    networks:
+      - net
+    environment:
+      TZ: "America/Chicago"
+      POSTGRES_DB: "forgejo"
+      POSTGRES_USER: "forgejo"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "forgejo", "-d", "forgejo"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+      start_interval: 1s
+
+networks:
+  net:
+  proxy:
+    external: true
