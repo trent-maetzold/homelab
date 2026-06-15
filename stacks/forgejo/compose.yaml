@@ -7,13 +7,13 @@ services:
     restart: unless-stopped
     volumes:
       - /mnt/cache/appdata/forgejo/server/data:/data
-      - ./config/app.ini:/data/app.ini
+      - ./config/app.ini:/data/gitea/conf/app.ini
     networks:
       - net
       - proxy
     environment:
       TZ: "America/Chicago"
-      FORGEJO__database__PASSWD: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
+      FORGEJO__database__PASSWD: "${POSTGRES_PASSWORD}"
     depends_on:
       db:
         condition: service_healthy
