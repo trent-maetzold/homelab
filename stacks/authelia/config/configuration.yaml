@@ -64,7 +64,7 @@ identity_providers:
         public: false
         authorization_policy: "two_factor"
         redirect_uris:
-          - "https://forge.trkm.io/user/oauth2/authelia/callback"
+          - "https://forge.trkm.io/user/oauth2/Authelia/callback"
         scopes:
           - "openid"
           - "profile"
