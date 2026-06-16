@@ -60,7 +60,7 @@ identity_providers:
     clients:
       - client_id: "forgejo"
         client_name: "Forgejo"
-        client_secret: "${AUTHELIA_FORGEJO_CLIENT_SECRET_HASH}"
+        client_secret: '{{ env "AUTHELIA_FORGEJO_CLIENT_SECRET_HASH" }}'
         public: false
         authorization_policy: "two_factor"
         redirect_uris:
