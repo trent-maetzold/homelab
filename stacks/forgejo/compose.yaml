@@ -11,7 +11,7 @@ services:
       - net
       - proxy
     env_file:
-      - forgejo.env
+      - config/forgejo.env
     environment:
       TZ: "America/Chicago"
       FORGEJO__database__PASSWD: "${POSTGRES_PASSWORD}"
