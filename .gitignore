@@ -2,6 +2,7 @@
 *.env
 .env.*
 !.env.example
+!**/config/*.env
 stacks/bifrost/config/config.json
 *.swp
 *.swo
