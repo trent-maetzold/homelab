@@ -7,17 +7,14 @@ services:
     restart: unless-stopped
     volumes:
       - /mnt/cache/appdata/forgejo/server/data:/data
-      - ./config/app.ini:/data/gitea/conf/app.ini
     networks:
       - net
       - proxy
+    env_file:
+      - forgejo.env
     environment:
       TZ: "America/Chicago"
       FORGEJO__database__PASSWD: "${POSTGRES_PASSWORD}"
-      FORGEJO__security__SECRET_KEY: "${FORGEJO_SECRET_KEY:?FORGEJO_SECRET_KEY is required}"
-      FORGEJO__security__INTERNAL_TOKEN: "${FORGEJO_INTERNAL_TOKEN:?FORGEJO_INTERNAL_TOKEN is required}"
-      FORGEJO__security__LFS_JWT_SECRET: "${FORGEJO_LFS_JWT_SECRET:?FORGEJO_LFS_JWT_SECRET is required}"
-      FORGEJO__oauth2__JWT_SECRET: "${FORGEJO_JWT_SECRET:?FORGEJO_JWT_SECRET is required}"
       FORGEJO__mailer__PASSWD: "${PROTONMAIL_SMTP_TOKEN:?PROTONMAIL_SMTP_TOKEN is required}"
     depends_on:
       db:
