@@ -6,8 +6,9 @@ services:
     image: ghcr.io/authelia/authelia:latest
     restart: unless-stopped
     volumes:
-      - ./config:/config
-      - /mnt/cache/appdata/authelia/oidc.pem:/config/oidc.pem:ro
+      - /mnt/cache/appdata/authelia/app/config:/config
+      - ./config/configuration.yaml:/config/configuration.yaml
+      - ./config/users_database.yaml:/config/users_database.yaml
     networks:
       - net
       - proxy
