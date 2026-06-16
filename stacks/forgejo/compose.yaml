@@ -34,7 +34,7 @@ services:
 
   cache:
     container_name: forgejo_cache
-    image: docker.io/valkey/valkey:latest
+    image: docker.io/valkey/valkey:9
     restart: unless-stopped
     networks:
       - net
