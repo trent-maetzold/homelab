@@ -3,7 +3,7 @@
 services:
   server:
     container_name: forgejo
-    image: codeberg.org/forgejo/forgejo:latest
+    image: codeberg.org/forgejo/forgejo:15
     restart: unless-stopped
     volumes:
       - /mnt/cache/appdata/forgejo/server/data:/data
