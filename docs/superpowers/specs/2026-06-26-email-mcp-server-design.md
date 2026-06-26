@@ -81,7 +81,9 @@ accounts:
     provider: proton
     address: me@proton.me
     password_env: PROTON_PERSONAL_PASSWORD
-    totp_secret_env: PROTON_PERSONAL_TOTP_SECRET  # optional; generates TOTP codes at login
+    # Provide one of the following if 2FA is enabled:
+    totp_secret_env: PROTON_PERSONAL_TOTP_SECRET  # generates TOTP codes at login
+    totp_code_env: PROTON_PERSONAL_TOTP_CODE      # one-time code used at login
 ```
 
 Pydantic Settings provides optional env overrides (e.g., `MCP_EMAIL_LOG_LEVEL`).
@@ -91,7 +93,7 @@ Pydantic Settings provides optional env overrides (e.g., `MCP_EMAIL_LOG_LEVEL`).
 - `name` defaults to `address` if omitted.
 - `provider` must be `proton` for the MVP.
 - The env var named by `password_env` is required at runtime.
-- If Proton 2FA is enabled and no `totp_secret_env` is supplied, login fails with a clear error.
+- If Proton 2FA is enabled and neither `totp_secret_env` nor `totp_code_env` is supplied, login fails with a clear error.
 
 ## Components
 
@@ -120,6 +122,7 @@ EmailClient (abstract)
     └─ ImapClient
            └─ ProtonMailClient
 ```
+
 `EmailClient` defines the tool-facing contract:
 
 - `list_folders()`
@@ -142,13 +145,12 @@ EmailClient (abstract)
 - `inbox_folder_name()`
 - `normalize_label(label)`
 - `archive_message(conn, message_id)` — default moves to archive folder.
+
 `ProtonMailClient` only overrides Proton folder/label semantics (e.g., archive moves to the `Archive` folder, labels are copied/deleted in label folders). No generic IMAP code lives in the Proton class.
 
 ### `server.py`
-FastMCP server. Registers one tool per `EmailClient` method. Mounts:
 
-- `/sse` — MCP SSE endpoint.
-- `/health` — liveness check for Docker.
+FastMCP server. Registers one tool per `EmailClient` method. Mounts:
 
 ### `models.py`
 
@@ -183,9 +185,8 @@ Tools expose the `Message-ID` header as `message_id`. Internally the client maps
 
 ## Data Flow Examples
 
-### Read an email
-
 1. FastMCP receives `read_email(mailbox="personal", message_id="<abc@example.com>")`.
+2. `server.py` asks `bridge_manager` for the bridge password for `personal`.
 3. `mail_client` returns a `ProtonMailClient` for that account, connected to `127.0.0.1:1143`.
 4. Select the requested folder and search `HEADER Message-ID <abc@example.com>`.
 5. Fetch `text/plain`, `text/html`, and `BODYSTRUCTURE` for attachments.
@@ -226,7 +227,7 @@ Tools expose the `Message-ID` header as `message_id`. Internally the client maps
 
 ### Base image
 
-Use `shenxn/protonmail-bridge:3.25.0-build` (or a pinned digest) as the base. It already contains the headless bridge binary, `pass`, `socat`, and GPG params. The Dockerfile adds Python 3.12, `uv`, and the `mcp_email` package.
+Use `shenxn/protonmail-bridge:build` pinned to a specific digest as the base. It already contains the headless bridge binary, `pass`, `socat`, and GPG params. The Dockerfile adds Python 3.12, `uv`, and the `mcp_email` package.
 
 ### Compose outline
 
