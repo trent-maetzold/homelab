@@ -20,3 +20,6 @@ started_at
 has_build
 services
 services_cache_mode
+
+# Worktrees
+.worktrees/
