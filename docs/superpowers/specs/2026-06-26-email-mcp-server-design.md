@@ -57,19 +57,25 @@ stacks/mcp-email/
 │   └── accounts.yaml.example
 └── src/
     └── mcp_email/
-        ├── clients/
+        ├── client/
         │   ├── __init__.py
         │   ├── email.py
+        │   ├── factory.py
         │   ├── imap.py
-        │   └── protonmail.py
+        │   └── protonmail/
+        │       ├── __init__.py
+        │       ├── bridge_manager.py
+        │       ├── client.py
+        │       ├── factory.py
+        │       └── proto/
+        │           ├── bridge.proto
+        │           ├── bridge_pb2.py
+        │           └── bridge_pb2_grpc.py
         ├── config.py
-        ├── bridge_manager.py
         ├── models.py
         ├── server.py
         ├── __init__.py
-        ├── __main__.py
-        └── proto/
-            └── bridge.proto
+        └── __main__.py
 ```
 
 - `/root` — persisted bridge vault, GPG key, and pass store.
@@ -105,29 +111,28 @@ Pydantic Settings provides optional env overrides (e.g., `MCP_EMAIL_LOG_LEVEL`).
 
 Loads and validates `accounts.yaml` plus Pydantic Settings env overrides. Exposes a typed `Settings` object to the rest of the app.
 
-### `bridge_manager.py`
+### `client` package
 
-Manages the bridge subprocess and a gRPC client generated from `bridge.proto`.
-
-Responsibilities:
-
-- Initialize GPG / `pass` if needed.
-- Start / stop `proton-bridge --grpc`.
-- Wait for the gRPC socket config.
-- Log in configured accounts and handle TOTP/mailbox-password flows.
-- Expose per-account state and bridge-generated IMAP/SMTP credentials.
-
-### `clients` package
-
-Provider-agnostic mail clients.
+All code that talks to a mail backend lives here.
 
 ```text
-clients.email.EmailClient (abstract)
-    └─ clients.imap.ImapClient
-           └─ clients.protonmail.ProtonMailClient
+client.email.EmailClient (abstract)
+    └─ client.imap.ImapClient
+           └─ client.protonmail.client.ProtonMailClient
 ```
 
-`clients.email.EmailClient` defines the tool-facing contract:
+`client.factory.ClientFactory` defines the lifecycle contract that `server.py` uses:
+
+- `start()` / `stop()`
+- `is_connected(account)`
+- `get_client(account) -> EmailClient`
+- `get_summary(account) -> Optional[MailboxSummary]`
+
+`client.protonmail.factory.ProtonMailClientFactory` is the only implementation in the MVP. It owns the bridge subprocess and the generated gRPC proto, so `server.py`, `__main__.py`, `config.py`, and `models.py` never import bridge or proto code.
+
+`client.protonmail.bridge_manager` is an internal detail of the Proton factory. It initializes GPG/`pass`, starts `proton-bridge --grpc`, waits for the gRPC socket config, logs in configured accounts, and exposes per-account state and bridge-generated IMAP/SMTP credentials.
+
+`client.email.EmailClient` defines the tool-facing contract:
 
 - `list_folders()`
 - `search_emails(folder, ...)`
@@ -140,7 +145,7 @@ clients.email.EmailClient (abstract)
 - `draft_email(...)`
 - `get_summary()`
 
-`clients.imap.ImapClient` implements the contract using `imapclient` + STARTTLS. It is generic and can target any IMAP/SMTP host and port; only `ProtonMailClient` defaults to the local bridge. It exposes small provider hooks that subclasses override:
+`client.imap.ImapClient` implements the contract using `imapclient` + STARTTLS. It is generic and can target any IMAP/SMTP host and port; only `ProtonMailClient` defaults to the local bridge. It exposes small provider hooks that subclasses override:
 
 - `trash_folder_name()`
 - `archive_folder_name()`
@@ -148,9 +153,8 @@ clients.email.EmailClient (abstract)
 - `sent_folder_name()`
 - `inbox_folder_name()`
 - `normalize_label(label)`
-- `archive_message(conn, message_id)` — default moves to archive folder.
 
-`clients.protonmail.ProtonMailClient` only overrides Proton folder/label semantics (e.g., archive moves to the `Archive` folder, labels are copied/deleted in label folders). No generic IMAP code lives in the Proton class.
+`client.protonmail.client.ProtonMailClient` only overrides Proton folder/label semantics. No generic IMAP code lives in the Proton class.
 
 ### `server.py`
 
@@ -192,8 +196,8 @@ Tools expose the `Message-ID` header as `message_id`. Internally the client maps
 ## Data Flow Examples
 
 1. FastMCP receives `read_email(mailbox="personal", message_id="<abc@example.com>")`.
-2. `server.py` asks `bridge_manager` for the bridge password for `personal`.
-3. The server instantiates a `clients.protonmail.ProtonMailClient` for that account, connected to the local bridge at `127.0.0.1:1143`.
+2. `server.py` asks the configured `ClientFactory` for a client for `personal`.
+3. The factory starts/uses the Proton Bridge internally and returns a `client.protonmail.client.ProtonMailClient` connected to the local bridge at `127.0.0.1:1143`.
 4. Select the requested folder and search `HEADER Message-ID <abc@example.com>`.
 5. Fetch `text/plain`, `text/html`, and `BODYSTRUCTURE` for attachments.
 6. If `mark_read=True`, set `\\Seen`.
@@ -218,7 +222,7 @@ Tools expose the `Message-ID` header as `message_id`. Internally the client maps
 
 - Proton credentials live only in env vars / Docker secrets, never in tracked config.
 - The bridge vault and GPG key live in a persisted Docker volume.
-- gRPC communication with the bridge is local-only over TLS; the token is read from the bridge-written config file.
+- gRPC communication with the bridge is local-only over TLS; the token is read from the bridge-written config file. This is entirely inside `client.protonmail`.
 - IMAP/SMTP connections use STARTTLS. For ProtonMail they go to the local bridge; the generic `ImapClient` can target any host/port.
 - No authentication is implemented on the MCP SSE endpoint in the MVP; it is assumed to be behind Traefik/Authelia.
 
