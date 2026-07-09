@@ -1,0 +1,20 @@
+services:
+  gateway:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "/plugins/compose.manager/include/Icon.php?project=bifrost"
+      net.unraid.docker.webui: "https://bifrost.trkm.io"
+      net.unraid.docker.shell: "/bin/sh"
+  db:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/postgres.png"
+      net.unraid.docker.webui: ""
+      net.unraid.docker.shell: "/bin/bash"
+
+  opencode-go:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/opencode-dark.png"
+      net.unraid.docker.webui: "https://bifrost.trkm.io/opencode-go/dashboard"
+      net.unraid.docker.shell: "/bin/sh"
