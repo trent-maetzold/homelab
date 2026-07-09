@@ -29,9 +29,6 @@
     },
     "retention_days": 90
   },
-  "vector_store": {
-    "enabled": false
-  },
   "providers": {
     "opencode-go": {
       "keys": [
@@ -43,7 +40,8 @@
         }
       ],
       "network_config": {
-        "base_url": "http://opencode-go:8787"
+        "base_url": "http://opencode-go:8787",
+        "allow_private_network": true
       }
     }
   }
