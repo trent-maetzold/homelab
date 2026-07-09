@@ -17,6 +17,13 @@ access_control:
         - "seerr.trkm.io"
       policy: "bypass"
 
+    - domain: "unraid.trkm.io"
+      resources:
+        - "^/graphql"
+        - "^/plugins/"
+        - "^/sub/"
+      policy: "bypass"
+
     - domain:
         - "bt.trkm.io"
         - "chat.trkm.io"
@@ -32,6 +39,8 @@ access_control:
         - "bifrost.trkm.io"
       resources:
         - "^/v1/"
+        - "^/api/"
+        - "^/mcp/"
       policy: "bypass"
 
     - domain:
@@ -41,12 +50,6 @@ access_control:
         - "^/hd/api/"
         - "^/uhd/api/"
         - "^/anime/api/"
-      policy: "bypass"
-
-    - domain: "api.trkm.io"
-      resources:
-        - "^/mcp"
-        - "^/webhook/github"
       policy: "bypass"
 
 identity_providers:
