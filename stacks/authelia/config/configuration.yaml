@@ -5,7 +5,7 @@ session:
       default_redirection_url: "https://auth.trkm.io/settings"
 
 access_control:
-  default_policy: two_factor
+  default_policy: "two_factor"
   rules:
     - domain:
         - "auth.trkm.io"
@@ -13,9 +13,10 @@ access_control:
         - "ha.trkm.io"
         - "hs.trkm.io"
         - "matrix.trkm.io"
+        - "searxng.trkm.io"
         - "seerr.trkm.io"
         - "tea.trkm.io"
-      policy: bypass
+      policy: "bypass"
 
     - domain:
         - "bt.trkm.io"
@@ -26,7 +27,7 @@ access_control:
         - "prowlarr.trkm.io"
       resources:
         - "^/api/"
-      policy: bypass
+      policy: "bypass"
 
     - domain:
         - "radarr.trkm.io"
@@ -35,20 +36,20 @@ access_control:
         - "^/hd/api/"
         - "^/uhd/api/"
         - "^/anime/api/"
-      policy: bypass
+      policy: "bypass"
 
     - domain: "api.trkm.io"
       resources:
         - "^/t0/"
         - "^/mcp"
         - "^/webhook/github"
-      policy: bypass
+      policy: "bypass"
 
     - domain: "dav.trkm.io"
       resources:
         - "^/.well-known/"
         - "^/dav.php/"
-      policy: bypass
+      policy: "bypass"
 
 identity_providers:
   oidc:
@@ -56,11 +57,11 @@ identity_providers:
       - key_id: "main"
         algorithm: "RS256"
         use: "sig"
-        key: {{ secret "/config/oidc.pem" | mindent 10 "|" | msquote }}
+        key: "{{ secret '/config/oidc.pem' | mindent 10 '|' | msquote }}"
     clients:
       - client_id: "forgejo"
         client_name: "Forgejo"
-        client_secret: '{{ env "AUTHELIA_FORGEJO_CLIENT_SECRET_HASH" }}'
+        client_secret: "{{ env 'AUTHELIA_FORGEJO_CLIENT_SECRET_HASH' }}"
         public: false
         authorization_policy: "two_factor"
         redirect_uris:
