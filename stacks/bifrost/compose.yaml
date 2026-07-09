@@ -13,8 +13,8 @@ services:
       - proxy
     environment:
       TZ: "America/Chicago"
-      BIFROST_ENCRYPTION_KEY: "${BIFROST_ENCRYPTION_KEY:?BIFROST_ENCRYPTION_KEY is required}"
       OPENCODE_GO_API_KEY: "${OPENCODE_GO_API_KEY:?OPENCODE_GO_API_KEY is required}"
+      BIFROST_ENCRYPTION_KEY: "${BIFROST_ENCRYPTION_KEY:?BIFROST_ENCRYPTION_KEY is required}"
       PG_PASSWORD: "${POSTGRES_PASSWORD}"
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/health"]
@@ -24,14 +24,8 @@ services:
       start_period: 40s
     labels:
       traefik.enable: "true"
-      # Dashboard
       traefik.http.routers.bifrost.rule: "Host(`bifrost.trkm.io`)"
       traefik.http.services.bifrost.loadBalancer.server.port: "8080"
-      # Gateway API
-      traefik.http.middlewares.bifrost-strip.stripPrefix.prefixes: "/bifrost"
-      traefik.http.routers.bifrost-api.rule: "Host(`api.trkm.io`) && PathPrefix(`/bifrost`)"
-      traefik.http.routers.bifrost-api.middlewares: "bifrost-strip"
-      traefik.http.routers.bifrost-api.service: "bifrost"
 
   db:
     container_name: bifrost_db
