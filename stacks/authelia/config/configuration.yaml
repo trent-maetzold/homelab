@@ -15,7 +15,6 @@ access_control:
         - "matrix.trkm.io"
         - "searxng.trkm.io"
         - "seerr.trkm.io"
-        - "tea.trkm.io"
       policy: "bypass"
 
     - domain:
@@ -30,6 +29,12 @@ access_control:
       policy: "bypass"
 
     - domain:
+        - "bifrost.trkm.io"
+      resources:
+        - "^/v1/"
+      policy: "bypass"
+
+    - domain:
         - "radarr.trkm.io"
         - "sonarr.trkm.io"
       resources:
@@ -40,15 +45,8 @@ access_control:
 
     - domain: "api.trkm.io"
       resources:
-        - "^/t0/"
         - "^/mcp"
         - "^/webhook/github"
-      policy: "bypass"
-
-    - domain: "dav.trkm.io"
-      resources:
-        - "^/.well-known/"
-        - "^/dav.php/"
       policy: "bypass"
 
 identity_providers:
