@@ -15,7 +15,7 @@ services:
     environment:
       TZ: "America/Chicago"
       X_AUTHELIA_CONFIG: "/config/configuration.yaml"
-      X_AUTHELIA_CONFIG_FILTERS: "expand-env,template"
+      X_AUTHELIA_CONFIG_FILTERS: "template"
       AUTHELIA_AUTHENTICATION_BACKEND_FILE_PATH: "/config/users_database.yaml"
       AUTHELIA_NOTIFIER_SMTP_SENDER: "admin@trkm.io"
       AUTHELIA_NOTIFIER_SMTP_ADDRESS: "smtp.protonmail.ch:587"
