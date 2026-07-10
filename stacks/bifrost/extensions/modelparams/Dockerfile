@@ -20,4 +20,5 @@ ENV PATH="/opt/venv/bin:${PATH}"
 
 EXPOSE 8000
 
-CMD ["granian", "--host", "0.0.0.0", "--port", "8000", "modelparams.main:app"]
+ENTRYPOINT ["granian", "--interface", "asgi"]
+CMD ["modelparams.main:app", "--host", "0.0.0.0", "--port", "8000"]
