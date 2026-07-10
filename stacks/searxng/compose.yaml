@@ -28,8 +28,8 @@ services:
       start_period: 10s
     labels:
       traefik.enable: "true"
-      traefik.http.routers.sabnzbd.rule: "Host(`searxng.trkm.io`)"
-      traefik.http.services.sabnzbd.loadBalancer.server.port: "8888"
+      traefik.http.routers.searxng.rule: "Host(`searxng.trkm.io`)"
+      traefik.http.services.searxng.loadBalancer.server.port: "8888"
 
   cache:
     container_name: searxng_cache
