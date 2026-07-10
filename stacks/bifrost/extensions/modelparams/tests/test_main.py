@@ -5,7 +5,7 @@ from fastapi.testclient import TestClient
 from pydantic import TypeAdapter
 
 from modelparams.main import app
-from modelparams.schema import (
+from modelparams.schemas.app import (
     BifrostMode,
     BifrostParameterModel,
     BifrostPricingModel,
@@ -137,7 +137,9 @@ class TestEndpointRegistration:
         assert params["mode"]["required"] is False
 
         # Verify response schema references BifrostPricingModel
-        resp_schema = json.dumps(path["responses"]["200"]["content"]["application/json"]["schema"])
+        resp_schema = json.dumps(
+            path["responses"]["200"]["content"]["application/json"]["schema"]
+        )
         assert "BifrostPricingModel" in resp_schema
 
     def test_datasheet_model_parameters_endpoint(self):
@@ -150,5 +152,7 @@ class TestEndpointRegistration:
         assert "provider" in params
         assert "mode" in params
 
-        resp_schema = json.dumps(path["responses"]["200"]["content"]["application/json"]["schema"])
+        resp_schema = json.dumps(
+            path["responses"]["200"]["content"]["application/json"]["schema"]
+        )
         assert "BifrostParameterModel" in resp_schema

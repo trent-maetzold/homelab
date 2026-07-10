@@ -15,10 +15,16 @@ dependencies = [
   "granian>=2.7.9",
   "httpx2>=2.5.0",
   "pydantic>=2.13.4",
+  "pydantic-settings>=2.14.2",
 ]
 
 [dependency-groups]
-dev = ["pytest>=9.1.1", "pytest-cov>=7.1.0", "pytest-mock>=3.15.1"]
+dev = [
+    "datamodel-code-generator>=0.68.1",
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "pytest-mock>=3.15.1",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

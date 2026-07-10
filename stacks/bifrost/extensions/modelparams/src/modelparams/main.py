@@ -1,6 +1,10 @@
 from fastapi import FastAPI, Query
 
-from modelparams.schema import BifrostMode, BifrostParameterModel, BifrostPricingModel
+from modelparams.schemas.app import (
+    BifrostMode,
+    BifrostParameterModel,
+    BifrostPricingModel,
+)
 
 app = FastAPI(
     title="Bifrost Model Parameters",
