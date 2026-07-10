@@ -35,7 +35,7 @@ def test_bifrost_pricing_schema():
     r.raise_for_status()
     raw = r.json()
 
-    from modelparams.schemas.app import PricingModel
+    from modelparams.schemas.bifrost import PricingModel
 
     errors = []
     for key, entry in raw.items():
@@ -61,7 +61,7 @@ def test_bifrost_parameters_schema():
     r.raise_for_status()
     raw = r.json()
 
-    from modelparams.schemas.app import ParameterModel
+    from modelparams.schemas.bifrost import ParameterModel
 
     errors = []
     for key, entry in raw.items():

@@ -135,9 +135,9 @@ class ParameterModel(PricingModel):
     model_parameters: list[Parameter] | None = None
 
 
-class BifrostPricingModels(RootModel[dict[str, PricingModel]]):
+class BifrostPricingDatasheet(RootModel[dict[str, PricingModel]]):
     """Bifrost pricing datasheet, keyed by model route ID."""
 
 
-class BifrostParameterModels(RootModel[dict[str, ParameterModel]]):
+class BifrostModelParametersDatasheet(RootModel[dict[str, ParameterModel]]):
     """Bifrost model-parameters datasheet, keyed by model route ID."""

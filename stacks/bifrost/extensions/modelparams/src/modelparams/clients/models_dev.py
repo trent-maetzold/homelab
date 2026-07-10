@@ -1,7 +1,7 @@
 from modelparams.clients.base import BaseClient
-from modelparams.schemas.app import (
-    BifrostParameterModels,
-    BifrostPricingModels,
+from modelparams.schemas.bifrost import (
+    BifrostModelParametersDatasheet,
+    BifrostPricingDatasheet,
 )
 from modelparams.schemas.clients.models_dev import ModelsDevCatalog
 
@@ -11,10 +11,10 @@ class ModelsDevClient(BaseClient):
 
     def from_api(self) -> ModelsDevCatalog: ...
 
-    def to_datasheet(self) -> BifrostPricingModels:
+    def to_datasheet(self) -> BifrostPricingDatasheet:
         """Fetch models.dev catalog and return Bifrost pricing entries."""
         ...
 
-    def to_datasheet_model_parameters(self) -> BifrostParameterModels:
+    def to_datasheet_model_parameters(self) -> BifrostModelParametersDatasheet:
         """Fetch models.dev catalog and return Bifrost model-parameter entries."""
         ...
