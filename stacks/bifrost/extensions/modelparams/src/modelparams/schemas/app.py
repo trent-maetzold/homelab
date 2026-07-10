@@ -54,22 +54,30 @@ class ParameterArrayType(StrEnum):
 
 
 class PricingMetadata(BaseModel):
+    """Bifrost pricing metadata."""
+
     notes: str | None = None
 
 
 class ParameterRange(BaseModel):
+    """Numeric range constraint for a model parameter."""
+
     min: float | None = None
     max: float | None = None
     step: float | None = None
 
 
 class ParameterArray(BaseModel):
+    """Array-type parameter definition metadata."""
+
     type: ParameterArrayType | None = None
     maxElements: int | None = None
     minElements: int | None = None
 
 
 class Parameter(BaseModel):
+    """A single model parameter definition in Bifrost's model-parameters format."""
+
     id: str | None = None
     label: str
     helpText: str | None = None
