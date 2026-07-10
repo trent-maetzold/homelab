@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from modelparams.schemas.bifrost import (
+from modelparams.schemas.getbifrost_ai import (
     BifrostMode,
     BifrostModelParametersDatasheet,
     BifrostPricingDatasheet,

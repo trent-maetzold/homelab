@@ -2,14 +2,14 @@ import httpx2
 
 from modelparams.clients.base import BaseClient
 from modelparams.config import Settings
-from modelparams.schemas.bifrost import (
+from modelparams.schemas.getbifrost_ai import (
     BifrostMode,
     BifrostModelParametersDatasheet,
     BifrostPricingDatasheet,
     ParameterModel,
     PricingModel,
 )
-from modelparams.schemas.clients.models_dev import ModelsDevCatalog
+from modelparams.schemas.models_dev import ModelsDevCatalog
 
 settings = Settings()
 
@@ -30,6 +30,7 @@ class ModelsDevClient(BaseClient):
     def _ensure_catalog(self) -> ModelsDevCatalog:
         if self._catalog is not None:
             return self._catalog
+
         return self.from_api()
 
     @staticmethod
@@ -37,8 +38,10 @@ class ModelsDevClient(BaseClient):
         """Guess Bifrost mode from a model's modalities."""
         if model.modalities and model.modalities.input:
             has_image = any(m.value == "image" for m in model.modalities.input)
+
             if has_image:
                 return BifrostMode.image_generation
+
         return BifrostMode.chat
 
     @staticmethod
@@ -46,6 +49,7 @@ class ModelsDevClient(BaseClient):
         """Convert per-million-token cost to per-token cost."""
         if cost_per_million is None:
             return None
+
         return cost_per_million / 1_000_000
 
     def to_pricing_datasheet(
@@ -58,6 +62,7 @@ class ModelsDevClient(BaseClient):
         for provider_id, prov in catalog.root.items():
             if provider is not None and provider_id != provider:
                 continue
+
             if not prov.models:
                 continue
 
@@ -90,9 +95,7 @@ class ModelsDevClient(BaseClient):
                     ),
                     supports_function_calling=model.tool_call,
                     supports_system_messages=True,
-                    supports_prompt_caching=bool(
-                        cost and cost.cache_read is not None
-                    ),
+                    supports_prompt_caching=bool(cost and cost.cache_read is not None),
                     supports_response_schema=model.structured_output,
                     supports_reasoning=model.reasoning,
                     supported_endpoints=["chat"],
@@ -111,6 +114,7 @@ class ModelsDevClient(BaseClient):
         for provider_id, prov in catalog.root.items():
             if provider is not None and provider_id != provider:
                 continue
+
             if not prov.models:
                 continue
 
@@ -143,9 +147,7 @@ class ModelsDevClient(BaseClient):
                     ),
                     supports_function_calling=model.tool_call,
                     supports_system_messages=True,
-                    supports_prompt_caching=bool(
-                        cost and cost.cache_read is not None
-                    ),
+                    supports_prompt_caching=bool(cost and cost.cache_read is not None),
                     supports_response_schema=model.structured_output,
                     supports_reasoning=model.reasoning,
                     supported_endpoints=["chat"],

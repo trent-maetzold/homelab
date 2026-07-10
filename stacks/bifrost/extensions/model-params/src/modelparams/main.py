@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Query
 
 from modelparams.clients import get_client
-from modelparams.schemas.bifrost import (
+from modelparams.schemas.getbifrost_ai import (
     BifrostMode,
     BifrostModelParametersDatasheet,
     BifrostPricingDatasheet,

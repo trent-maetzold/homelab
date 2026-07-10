@@ -1,5 +1,5 @@
-import pytest
 import httpx2
+import pytest
 from pydantic import ValidationError
 
 pytestmark = pytest.mark.integration
@@ -11,7 +11,7 @@ def test_models_dev_schema():
     r.raise_for_status()
 
     try:
-        from modelparams.schemas.clients.models_dev import ModelsDevCatalog
+        from modelparams.schemas.models_dev import ModelsDevCatalog
 
         catalog = ModelsDevCatalog.model_validate_json(r.text)
     except ValidationError as e:
@@ -35,7 +35,7 @@ def test_bifrost_pricing_schema():
     r.raise_for_status()
     raw = r.json()
 
-    from modelparams.schemas.bifrost import PricingModel
+    from modelparams.schemas.getbifrost_ai import PricingModel
 
     errors = []
     for key, entry in raw.items():
@@ -61,7 +61,7 @@ def test_bifrost_parameters_schema():
     r.raise_for_status()
     raw = r.json()
 
-    from modelparams.schemas.bifrost import ParameterModel
+    from modelparams.schemas.getbifrost_ai import ParameterModel
 
     errors = []
     for key, entry in raw.items():

@@ -5,11 +5,11 @@ import httpx2
 import pytest
 
 from modelparams.clients.models_dev import ModelsDevClient
-from modelparams.schemas.bifrost import (
+from modelparams.schemas.getbifrost_ai import (
     BifrostModelParametersDatasheet,
     BifrostPricingDatasheet,
 )
-from modelparams.schemas.clients.models_dev import ModelsDevCatalog
+from modelparams.schemas.models_dev import ModelsDevCatalog
 
 FIXTURE = Path(__file__).parent / "fixtures" / "models_dev_subset.json"
 
