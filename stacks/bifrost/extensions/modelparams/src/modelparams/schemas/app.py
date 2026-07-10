@@ -8,8 +8,7 @@ from __future__ import annotations
 
 from enum import StrEnum
 
-from pydantic import BaseModel
-
+from pydantic import BaseModel, RootModel
 
 # ── Enums ──────────────────────────────────────────────────────────────────────
 
@@ -87,7 +86,7 @@ class Parameter(BaseModel):
     array: ParameterArray | None = None
 
 
-class BifrostPricingModel(BaseModel):
+class PricingModel(BaseModel):
     """A single model pricing entry in Bifrost's datasheet format."""
 
     provider: str | None = None
@@ -127,10 +126,18 @@ class BifrostPricingModel(BaseModel):
     supported_endpoints: list[str] | None = None
 
 
-class BifrostParameterModel(BifrostPricingModel):
+class ParameterModel(PricingModel):
     """A model parameter entry in Bifrost's model-parameters format.
 
-    Extends BifrostPricingModel with a list of parameter definitions.
+    Extends PricingModel with a list of parameter definitions.
     """
 
     model_parameters: list[Parameter] | None = None
+
+
+class BifrostPricingModels(RootModel[dict[str, PricingModel]]):
+    """Bifrost pricing datasheet, keyed by model route ID."""
+
+
+class BifrostParameterModels(RootModel[dict[str, ParameterModel]]):
+    """Bifrost model-parameters datasheet, keyed by model route ID."""

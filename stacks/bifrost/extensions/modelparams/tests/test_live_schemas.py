@@ -11,11 +11,11 @@ def test_models_dev_schema():
     r.raise_for_status()
 
     try:
-        from modelparams.schemas.clients.models_dev import ModelCatalog
+        from modelparams.schemas.clients.models_dev import ModelsDevCatalog
 
-        catalog = ModelCatalog.model_validate_json(r.text)
+        catalog = ModelsDevCatalog.model_validate_json(r.text)
     except ValidationError as e:
-        pytest.fail(f"ModelCatalog validation failed:\n{e}")
+        pytest.fail(f"ModelsDevCatalog validation failed:\n{e}")
 
     # Sanity-check a few known entries
     assert len(catalog.root) > 0, "catalog has no providers"
@@ -30,17 +30,17 @@ def test_models_dev_schema():
 
 
 def test_bifrost_pricing_schema():
-    """Bifrost /datasheet entries all parse cleanly against BifrostPricingModel."""
+    """Bifrost /datasheet entries all parse cleanly against PricingModel."""
     r = httpx2.get("https://getbifrost.ai/datasheet", follow_redirects=True, timeout=30)
     r.raise_for_status()
     raw = r.json()
 
-    from modelparams.schemas.app import BifrostPricingModel
+    from modelparams.schemas.app import PricingModel
 
     errors = []
     for key, entry in raw.items():
         try:
-            BifrostPricingModel.model_validate(entry)
+            PricingModel.model_validate(entry)
         except ValidationError as e:
             errors.append((key, str(e)))
 
@@ -52,7 +52,7 @@ def test_bifrost_pricing_schema():
 
 
 def test_bifrost_parameters_schema():
-    """Bifrost /datasheet/model-parameters entries parse against BifrostParameterModel."""
+    """Bifrost /datasheet/model-parameters entries parse against ParameterModel."""
     r = httpx2.get(
         "https://getbifrost.ai/datasheet/model-parameters",
         follow_redirects=True,
@@ -61,12 +61,12 @@ def test_bifrost_parameters_schema():
     r.raise_for_status()
     raw = r.json()
 
-    from modelparams.schemas.app import BifrostParameterModel
+    from modelparams.schemas.app import ParameterModel
 
     errors = []
     for key, entry in raw.items():
         try:
-            BifrostParameterModel.model_validate(entry)
+            ParameterModel.model_validate(entry)
         except ValidationError as e:
             errors.append((key, str(e)))
 

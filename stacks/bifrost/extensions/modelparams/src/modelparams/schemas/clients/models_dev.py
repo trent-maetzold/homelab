@@ -10,7 +10,6 @@ from enum import StrEnum
 
 from pydantic import BaseModel, RootModel
 
-
 # ── Enums ──────────────────────────────────────────────────────────────────────
 
 
@@ -108,6 +107,5 @@ class Provider(BaseModel):
     models: dict[str, Model] | None = None
 
 
-class ModelCatalog(RootModel[dict[str, Provider]]):
+class ModelsDevCatalog(RootModel[dict[str, Provider]]):
     """Top-level models.dev catalog, a dict of provider_id → Provider."""
-    pass

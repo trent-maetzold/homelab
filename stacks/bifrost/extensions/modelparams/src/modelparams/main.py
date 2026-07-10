@@ -2,8 +2,8 @@ from fastapi import FastAPI, Query
 
 from modelparams.schemas.app import (
     BifrostMode,
-    BifrostParameterModel,
-    BifrostPricingModel,
+    BifrostParameterModels,
+    BifrostPricingModels,
 )
 
 app = FastAPI(
@@ -14,7 +14,7 @@ app = FastAPI(
 
 @app.get(
     "/datasheet",
-    response_model=dict[str, BifrostPricingModel],
+    response_model=BifrostPricingModels,
     summary="Fetch model pricing datasheet",
 )
 async def get_datasheet(
@@ -22,7 +22,7 @@ async def get_datasheet(
         default=None, description="Filter by provider identifier"
     ),
     mode: BifrostMode | None = Query(default=None, description="Filter by model mode"),
-) -> dict[str, BifrostPricingModel]:
+) -> BifrostPricingModels:
     """Return a pricing datasheet in the Bifrost `pricing_url` format.
 
     Maps 1:1 to `GET https://getbifrost.ai/datasheet`, translating models.dev
@@ -33,7 +33,7 @@ async def get_datasheet(
 
 @app.get(
     "/datasheet/model-parameters",
-    response_model=dict[str, BifrostParameterModel],
+    response_model=BifrostParameterModels,
     summary="Fetch model parameter definitions",
 )
 async def get_datasheet_model_parameters(
@@ -41,7 +41,7 @@ async def get_datasheet_model_parameters(
         default=None, description="Filter by provider identifier"
     ),
     mode: BifrostMode | None = Query(default=None, description="Filter by model mode"),
-) -> dict[str, BifrostParameterModel]:
+) -> BifrostParameterModels:
     """Return model parameter definitions in the Bifrost `model_parameters_url` format.
 
     Maps 1:1 to `GET https://getbifrost.ai/datasheet/model-parameters`, translating
