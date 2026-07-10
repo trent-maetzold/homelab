@@ -1,12 +1,19 @@
-from enum import Enum
+from enum import StrEnum
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+_SOURCE_URLS = {"models.dev": "https://models.dev/api.json"}
 
-class Source(Enum):
+
+class Source(StrEnum):
     """Model data source provider."""
 
-    MODELS_DEV = 1
+    MODELS_DEV = "models.dev"
+
+    @property
+    def url(self) -> str:
+        """Return the API base URL for this data source."""
+        return _SOURCE_URLS[self.value]
 
 
 class Settings(BaseSettings):

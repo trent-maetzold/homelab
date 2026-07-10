@@ -4,11 +4,13 @@ from pathlib import Path
 import httpx2
 import pytest
 
+from modelparams.clients.models_dev import ModelsDevClient
 from modelparams.schemas.bifrost import (
     BifrostModelParametersDatasheet,
     BifrostPricingDatasheet,
 )
 from modelparams.schemas.clients.models_dev import ModelsDevCatalog
+
 FIXTURE = Path(__file__).parent / "fixtures" / "models_dev_subset.json"
 
 
@@ -24,8 +26,6 @@ def mock_models_dev(mocker):
 
 @pytest.fixture
 def client(mock_models_dev):
-    from modelparams.clients.models_dev import ModelsDevClient
-
     return ModelsDevClient()
 
 
@@ -41,21 +41,20 @@ class TestModelsDevClient:
         assert "anthropic" in catalog.root
         assert "google" in catalog.root
 
-    def test_to_datasheet_returns_pricing(self, client):
-        """to_datasheet() returns BifrostPricingDatasheet with entries."""
-        datasheet = client.to_datasheet()
+    def test_to_pricing_datasheet_returns_pricing(self, client):
+        """to_pricing_datasheet() returns BifrostPricingDatasheet with entries."""
+        datasheet = client.to_pricing_datasheet()
         assert isinstance(datasheet, BifrostPricingDatasheet)
         assert len(datasheet.root) > 0
 
-        # Check a sample entry has required fields
         sample = next(iter(datasheet.root.values()))
         assert sample.provider is not None
         assert sample.base_model is not None
         assert sample.mode is not None
 
-    def test_to_datasheet_model_parameters_returns_params(self, client):
-        """to_datasheet_model_parameters() returns BifrostModelParametersDatasheet."""
-        datasheet = client.to_datasheet_model_parameters()
+    def test_to_model_parameters_datasheet_returns_params(self, client):
+        """to_model_parameters_datasheet() returns BifrostModelParametersDatasheet."""
+        datasheet = client.to_model_parameters_datasheet()
         assert isinstance(datasheet, BifrostModelParametersDatasheet)
         assert len(datasheet.root) > 0
 
@@ -63,11 +62,27 @@ class TestModelsDevClient:
         assert sample.provider is not None
         assert sample.base_model is not None
 
+    def test_filter_by_provider(self, client):
+        """Filtering by provider returns only that provider's models."""
+        ds = client.to_pricing_datasheet(provider="openai")
+        assert all(m.provider == "openai" for m in ds.root.values())
+        assert len(ds.root) > 0
+
+    def test_filter_by_mode(self, client):
+        """Filtering by mode returns only matching entries."""
+        ds = client.to_pricing_datasheet(mode="chat")
+        if ds.root:
+            sample = next(iter(ds.root.values()))
+            assert sample.mode == "chat"
+
+    def test_filter_unknown_provider_returns_empty(self, client):
+        """Filtering by unknown provider returns empty datasheet."""
+        ds = client.to_pricing_datasheet(provider="nonexistent")
+        assert len(ds.root) == 0
+
     def test_cached_catalog_reused(self, client):
         """Second call without re-fetching still returns results."""
-        # First call fetches
         _ = client.from_api()
-        # Second call should use cache, not re-fetch
-        datasheet = client.to_datasheet()
+        datasheet = client.to_pricing_datasheet()
         assert isinstance(datasheet, BifrostPricingDatasheet)
         assert len(datasheet.root) > 0

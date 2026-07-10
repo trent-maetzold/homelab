@@ -2,7 +2,7 @@
 #   filename:  models_dev_provider_composite.json
 #   timestamp: 2026-07-10T16:04:55+00:00
 #
-# Refactored to use dict[str, Model] for the models field and root ModelCatalog type.
+# Refactored to use dict[str, Model] for the models field and ModelsDevCatalog root type.
 
 from __future__ import annotations
 

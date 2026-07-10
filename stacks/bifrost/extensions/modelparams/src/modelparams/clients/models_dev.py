@@ -1,6 +1,7 @@
 import httpx2
 
 from modelparams.clients.base import BaseClient
+from modelparams.config import Settings
 from modelparams.schemas.bifrost import (
     BifrostMode,
     BifrostModelParametersDatasheet,
@@ -10,8 +11,7 @@ from modelparams.schemas.bifrost import (
 )
 from modelparams.schemas.clients.models_dev import ModelsDevCatalog
 
-
-_MODELS_DEV_URL = "https://models.dev/api.json"
+settings = Settings()
 
 
 class ModelsDevClient(BaseClient):
@@ -22,7 +22,7 @@ class ModelsDevClient(BaseClient):
 
     def from_api(self) -> ModelsDevCatalog:
         """Fetch the models.dev catalog and parse it through ModelsDevCatalog."""
-        r = httpx2.get(_MODELS_DEV_URL, follow_redirects=True, timeout=30)
+        r = httpx2.get(settings.source.url, follow_redirects=True, timeout=30)
         r.raise_for_status()
         self._catalog = ModelsDevCatalog.model_validate_json(r.text)
         return self._catalog
@@ -48,15 +48,23 @@ class ModelsDevClient(BaseClient):
             return None
         return cost_per_million / 1_000_000
 
-    def to_datasheet(self) -> BifrostPricingDatasheet:
+    def to_pricing_datasheet(
+        self, provider: str | None = None, mode: BifrostMode | None = None
+    ) -> BifrostPricingDatasheet:
         """Translate the models.dev catalog into Bifrost pricing datasheet format."""
         catalog = self._ensure_catalog()
         entries: dict[str, PricingModel] = {}
 
-        for provider_id, provider in catalog.root.items():
-            if not provider.models:
+        for provider_id, prov in catalog.root.items():
+            if provider is not None and provider_id != provider:
                 continue
-            for model_id, model in provider.models.items():
+            if not prov.models:
+                continue
+
+            for model_id, model in prov.models.items():
+                if mode is not None and self._infer_mode(model) != mode:
+                    continue
+
                 cost = model.cost
                 limit = model.limit
                 mods = model.modalities
@@ -65,16 +73,26 @@ class ModelsDevClient(BaseClient):
                     provider=provider_id,
                     base_model=model_id,
                     mode=self._infer_mode(model),
-                    input_cost_per_token=self._cost_per_token(cost.input if cost else None),
-                    output_cost_per_token=self._cost_per_token(cost.output if cost else None),
-                    cache_read_input_token_cost=self._cost_per_token(cost.cache_read if cost else None),
+                    input_cost_per_token=self._cost_per_token(
+                        cost.input if cost else None
+                    ),
+                    output_cost_per_token=self._cost_per_token(
+                        cost.output if cost else None
+                    ),
+                    cache_read_input_token_cost=self._cost_per_token(
+                        cost.cache_read if cost else None
+                    ),
                     max_input_tokens=limit.context if limit else None,
                     max_output_tokens=limit.output if limit else None,
                     max_tokens=limit.output if limit else None,
-                    supports_vision=bool(mods and any(m.value == "image" for m in mods.input)),
+                    supports_vision=bool(
+                        mods and any(m.value == "image" for m in mods.input)
+                    ),
                     supports_function_calling=model.tool_call,
                     supports_system_messages=True,
-                    supports_prompt_caching=bool(cost and cost.cache_read is not None),
+                    supports_prompt_caching=bool(
+                        cost and cost.cache_read is not None
+                    ),
                     supports_response_schema=model.structured_output,
                     supports_reasoning=model.reasoning,
                     supported_endpoints=["chat"],
@@ -83,15 +101,23 @@ class ModelsDevClient(BaseClient):
 
         return BifrostPricingDatasheet(root=entries)
 
-    def to_datasheet_model_parameters(self) -> BifrostModelParametersDatasheet:
+    def to_model_parameters_datasheet(
+        self, provider: str | None = None, mode: BifrostMode | None = None
+    ) -> BifrostModelParametersDatasheet:
         """Translate the models.dev catalog into Bifrost model-parameters format."""
         catalog = self._ensure_catalog()
         entries: dict[str, ParameterModel] = {}
 
-        for provider_id, provider in catalog.root.items():
-            if not provider.models:
+        for provider_id, prov in catalog.root.items():
+            if provider is not None and provider_id != provider:
                 continue
-            for model_id, model in provider.models.items():
+            if not prov.models:
+                continue
+
+            for model_id, model in prov.models.items():
+                if mode is not None and self._infer_mode(model) != mode:
+                    continue
+
                 cost = model.cost
                 limit = model.limit
                 mods = model.modalities
@@ -100,16 +126,26 @@ class ModelsDevClient(BaseClient):
                     provider=provider_id,
                     base_model=model_id,
                     mode=self._infer_mode(model),
-                    input_cost_per_token=self._cost_per_token(cost.input if cost else None),
-                    output_cost_per_token=self._cost_per_token(cost.output if cost else None),
-                    cache_read_input_token_cost=self._cost_per_token(cost.cache_read if cost else None),
+                    input_cost_per_token=self._cost_per_token(
+                        cost.input if cost else None
+                    ),
+                    output_cost_per_token=self._cost_per_token(
+                        cost.output if cost else None
+                    ),
+                    cache_read_input_token_cost=self._cost_per_token(
+                        cost.cache_read if cost else None
+                    ),
                     max_input_tokens=limit.context if limit else None,
                     max_output_tokens=limit.output if limit else None,
                     max_tokens=limit.output if limit else None,
-                    supports_vision=bool(mods and any(m.value == "image" for m in mods.input)),
+                    supports_vision=bool(
+                        mods and any(m.value == "image" for m in mods.input)
+                    ),
                     supports_function_calling=model.tool_call,
                     supports_system_messages=True,
-                    supports_prompt_caching=bool(cost and cost.cache_read is not None),
+                    supports_prompt_caching=bool(
+                        cost and cost.cache_read is not None
+                    ),
                     supports_response_schema=model.structured_output,
                     supports_reasoning=model.reasoning,
                     supported_endpoints=["chat"],

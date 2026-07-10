@@ -2,7 +2,7 @@
 #   filename:  bifrost_param_model_rich.json
 #   timestamp: 2026-07-10T16:04:55+00:00
 #
-# Manually extended with StrEnum types and BifrostParameterModel split.
+# Manually extended with StrEnum types and ParameterModel split.
 
 from __future__ import annotations
 
