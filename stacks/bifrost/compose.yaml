@@ -75,6 +75,7 @@ services:
     container_name: bifrost_model_params
     build:
       context: ./extensions/model-params
+    pull_policy: build
     restart: unless-stopped
     networks:
       - net
