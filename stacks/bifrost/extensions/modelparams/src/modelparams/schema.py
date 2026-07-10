@@ -1,0 +1,124 @@
+from enum import StrEnum
+
+from pydantic import BaseModel
+
+# ── Enums ──────────────────────────────────────────────────────────────────────
+
+
+class BifrostMode(StrEnum):
+    """Model mode in the Bifrost pricing datasheet."""
+
+    chat = "chat"
+    image_generation = "image_generation"
+    embedding = "embedding"
+    rerank = "rerank"
+    audio_transcription = "audio_transcription"
+    responses = "responses"
+    completion = "completion"
+    audio_speech = "audio_speech"
+    ocr = "ocr"
+    image_edit = "image_edit"
+    search = "search"
+    realtime = "realtime"
+    video_generation = "video_generation"
+    moderation = "moderation"
+    vector_store = "vector_store"
+
+
+class ParameterType(StrEnum):
+    """Bifrost model parameter UI type."""
+
+    select = "select"
+    number = "number"
+    array = "array"
+    boolean = "boolean"
+    text = "text"
+
+
+class ParameterArrayType(StrEnum):
+    """Element type for array-type model parameters."""
+
+    text = "text"
+
+
+# ── Output schemas (Bifrost) ───────────────────────────────────────────────────
+
+
+class BifrostPricingModel(BaseModel):
+    """A single model pricing entry in Bifrost's datasheet format.
+
+    Fields vary by model type (chat, image_generation, etc.) so most are optional.
+    """
+
+    provider: str | None = None
+    base_model: str | None = None
+    mode: BifrostMode | None = None
+
+    # Token-based pricing (chat / text models)
+    input_cost_per_token: float | None = None
+    output_cost_per_token: float | None = None
+    cache_read_input_token_cost: float | None = None
+
+    # Image-based pricing
+    output_cost_per_image: float | None = None
+    input_cost_per_pixel: float | None = None
+    output_cost_per_pixel: float | None = None
+    input_cost_per_image_token: float | None = None
+    input_cost_per_audio_token: float | None = None
+
+    # Token limits
+    max_input_tokens: int | None = None
+    max_output_tokens: int | None = None
+    max_tokens: int | None = None
+
+    # Capability flags
+    supports_vision: bool | None = None
+    supports_function_calling: bool | None = None
+    supports_system_messages: bool | None = None
+    supports_prompt_caching: bool | None = None
+    supports_response_schema: bool | None = None
+    supports_reasoning: bool | None = None
+    supports_pdf_input: bool | None = None
+    supports_video_input: bool | None = None
+
+    # Metadata
+    metadata: dict[str, str | float] | None = None
+    source: str | None = None
+    supported_endpoints: list[str] | None = None
+
+
+class ParameterRange(BaseModel):
+    """Numeric range constraint for a model parameter."""
+
+    min: float | None = None
+    max: float | None = None
+    step: float | None = None
+
+
+class ParameterArray(BaseModel):
+    """Array-type parameter definition metadata."""
+
+    type: ParameterArrayType
+    maxElements: int
+    minElements: int
+
+
+class Parameter(BaseModel):
+    """A single model parameter definition in the Bifrost model-parameters format."""
+
+    id: str | None = None
+    label: str
+    helpText: str | None = None
+    type: ParameterType | None = None
+    default: float | bool | str | dict[str, str] | list[str] | None = None
+    range: ParameterRange | None = None
+    array: ParameterArray | None = None
+
+
+class BifrostParameterModel(BifrostPricingModel):
+    """A model parameter entry in Bifrost's model-parameters format.
+
+    Extends BifrostPricingModel with a list of parameter definitions.
+    """
+
+    model_parameters: list[Parameter] | None = None
