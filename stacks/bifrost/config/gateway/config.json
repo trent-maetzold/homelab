@@ -44,5 +44,12 @@
         "allow_private_network": true
       }
     }
+  },
+  "framework": {
+    "pricing": {
+      "pricing_url": "http://ext-model-params:8000/datasheet",
+      "model_parameters_url": "http://ext-model-params:8000/datasheet/model-parameters",
+      "pricing_sync_interval": 86400
+    }
   }
 }

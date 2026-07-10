@@ -14,6 +14,12 @@ app = FastAPI(
 )
 
 
+@app.get("/health")
+async def health():
+    """Return service health status."""
+    return {"status": "ok"}
+
+
 @app.get(
     "/datasheet",
     response_model=BifrostPricingDatasheet,
