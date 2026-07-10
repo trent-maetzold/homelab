@@ -117,6 +117,7 @@ class TestParameterSchema:
         assert model.model_parameters is None
 
 
+@pytest.mark.integration
 class TestEndpointRegistration:
     """Endpoints are registered with the correct method, path, and parameters."""
 
