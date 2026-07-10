@@ -91,7 +91,9 @@ class ModelsDevClient(BaseClient):
                     max_output_tokens=limit.output if limit else None,
                     max_tokens=limit.output if limit else None,
                     supports_vision=bool(
-                        mods and any(m.value == "image" for m in mods.input)
+                        mods
+                        and mods.input
+                        and any(m.value == "image" for m in mods.input)
                     ),
                     supports_function_calling=model.tool_call,
                     supports_system_messages=True,
@@ -143,7 +145,9 @@ class ModelsDevClient(BaseClient):
                     max_output_tokens=limit.output if limit else None,
                     max_tokens=limit.output if limit else None,
                     supports_vision=bool(
-                        mods and any(m.value == "image" for m in mods.input)
+                        mods
+                        and mods.input
+                        and any(m.value == "image" for m in mods.input)
                     ),
                     supports_function_calling=model.tool_call,
                     supports_system_messages=True,
