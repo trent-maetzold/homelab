@@ -18,3 +18,10 @@ services:
       net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/opencode-dark.png"
       net.unraid.docker.webui: "https://bifrost.trkm.io/opencode-go/dashboard"
       net.unraid.docker.shell: "/bin/sh"
+
+  ext-model-params:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/prometheus.png"
+      net.unraid.docker.webui: ""
+      net.unraid.docker.shell: "/bin/bash"
