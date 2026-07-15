@@ -1,59 +1,36 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
 
 services:
-  gateway:
+  suite:
     container_name: hermes
-    image: nousresearch/hermes-agent:local
-    build:
-      context: .
-      dockerfile: Dockerfile
-    pull_policy: build
+    image: ascensionoid/hermes-suite:latest
     restart: unless-stopped
     volumes:
-      - /mnt/cache/appdata/hermes/gateway/data:/opt/data
-      - ./config/config.yaml:/opt/data/config.yaml
-      - /mnt/cache/appdata/hermes/shared/certs/client:/certs/client
-      - /mnt/cache/data/artifacts:/opt/data/home/artifacts
+      - /mnt/cache/appdata/hermes/suite/data:/opt/data
     networks:
-      - net
-      - searxng
+      - proxy
     environment:
       TZ: "America/Chicago"
       OPENCODE_API_KEY: "${OPENCODE_API_KEY}"
       OPENCODE_GO_API_KEY: "${OPENCODE_API_KEY}"
-      CLAUDE_CODE_OAUTH_TOKEN: "${CLAUDE_CODE_OAUTH_TOKEN}"
-      SEARXNG_URL: "http://searxng:8888"
-      FIRECRAWL_API_KEY: "${FIRECRAWL_API_KEY}"
-      TAVILY_API_KEY: "${TAVILY_API_KEY}"
-      EXA_API_KEY: "${EXA_API_KEY}"
-      MATRIX_HOMESERVER: "https://matrix.trkm.io"
-      MATRIX_ACCESS_TOKEN: "${MATRIX_ACCESS_TOKEN}"
-      MATRIX_RECOVERY_KEY: "${MATRIX_RECOVERY_KEY}"
-      MATRIX_ALLOWED_USERS: "${MATRIX_ALLOWED_USERS}"
-      MATRIX_ENCRYPTION: "true"
-      GITHUB_PERSONAL_ACCESS_TOKEN: "${GITHUB_PERSONAL_ACCESS_TOKEN}"
-      GITEA_HOST: "https://tea.trkm.io"
-      GITEA_ACCESS_TOKEN: "${GITEA_ACCESS_TOKEN}"
-      DOCKER_HOST: "tcp://dind:2376"
-      DOCKER_TLS_VERIFY: "1"
-      DOCKER_CERT_PATH: "/certs/client"
-    command: gateway run
-
-  dind:
-    container_name: hermes_dind
-    hostname: dind
-    image: docker:dind
-    restart: unless-stopped
-    privileged: true
-    volumes:
-      - /mnt/cache/appdata/hermes/shared/certs:/certs
-    networks:
-      - net
-    environment:
-      TZ: "America/Chicago"
-      DOCKER_TLS_CERTDIR: "/certs"
+      TRKM_GATEWAY_API_KEY: ${TRKM_GATEWAY_API_KEY:?TRKM_GATEWAY_API_KEY is required}
+      SEARXNG_URL: "https://searxng.trkm.io"
+    labels:
+      traefik.enable: "true"
+      # Gateway
+      traefik.http.routers.hermes-gateway.rule: "Host(`api.trkm.io`) && PathPrefix(`/hermes`)"
+      traefik.http.routers.hermes-gateway.middlewares: "hermes-gateway-stripprefix"
+      traefik.http.middlewares.hermes-gateway-stripprefix.stripprefix.prefixes: "/hermes"
+      traefik.http.services.hermes-gateway.loadBalancer.server.port: "8642"
+      # Web UI
+      traefik.http.routers.hermes-webui.rule: "Host(`hermes.trkm.io`)"
+      traefik.http.services.hermes-webui.loadBalancer.server.port: "8787"
+      # Dashboard
+      traefik.http.routers.hermes-dashboard.rule: "Host(`hermes.trkm.io`) && PathPrefix(`/dashboard`)"
+      traefik.http.routers.hermes-dashboard.middlewares: "hermes-dashboard-stripprefix"
+      traefik.http.middlewares.hermes-dashboard-stripprefix.stripprefix.prefixes: "/dashboard"
+      traefik.http.services.hermes-dashboard.loadBalancer.server.port: "9119"
 
 networks:
-  net:
-  searxng:
+  proxy:
     external: true
