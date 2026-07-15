@@ -19,14 +19,17 @@ services:
       traefik.enable: "true"
       # Gateway
       traefik.http.routers.hermes-gateway.rule: "Host(`api.trkm.io`) && PathPrefix(`/hermes`)"
+      traefik.http.routers.hermes-gateway.service: "hermes-gateway"
       traefik.http.routers.hermes-gateway.middlewares: "hermes-gateway-stripprefix"
       traefik.http.middlewares.hermes-gateway-stripprefix.stripprefix.prefixes: "/hermes"
       traefik.http.services.hermes-gateway.loadBalancer.server.port: "8642"
       # Web UI
       traefik.http.routers.hermes-webui.rule: "Host(`hermes.trkm.io`)"
+      traefik.http.routers.hermes-webui.service: "hermes-webui"
       traefik.http.services.hermes-webui.loadBalancer.server.port: "8787"
       # Dashboard
       traefik.http.routers.hermes-dashboard.rule: "Host(`hermes.trkm.io`) && PathPrefix(`/dashboard`)"
+      traefik.http.routers.hermes-dashboard.service: "hermes-dashboard"
       traefik.http.routers.hermes-dashboard.middlewares: "hermes-dashboard-stripprefix"
       traefik.http.middlewares.hermes-dashboard-stripprefix.stripprefix.prefixes: "/dashboard"
       traefik.http.services.hermes-dashboard.loadBalancer.server.port: "9119"
