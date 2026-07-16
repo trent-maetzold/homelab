@@ -26,7 +26,7 @@ services:
     command: ["--config", "/app/config.yaml", "--port", "4000"]
     labels:
       traefik.enable: "true"
-      traefik.http.routers.litellm.rule: "Host(`litellm.trkm.io`)"
+      traefik.http.routers.litellm.rule: "Host(`api.trkm.io`)"
       traefik.http.routers.litellm.service: "litellm"
       traefik.http.services.litellm.loadBalancer.server.port: "4000"
 

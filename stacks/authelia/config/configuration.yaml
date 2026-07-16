@@ -8,6 +8,7 @@ access_control:
   default_policy: "two_factor"
   rules:
     - domain:
+        - "api.trkm.io"
         - "auth.trkm.io"
         - "forge.trkm.io"
         - "ha.trkm.io"
@@ -36,14 +37,6 @@ access_control:
       policy: "bypass"
 
     - domain:
-        - "bifrost.trkm.io"
-      resources:
-        - "^/v1/"
-        - "^/api/"
-        - "^/mcp/"
-      policy: "bypass"
-
-    - domain:
         - "radarr.trkm.io"
         - "sonarr.trkm.io"
       resources:
@@ -58,11 +51,11 @@ identity_providers:
       - key_id: "main"
         algorithm: "RS256"
         use: "sig"
-        key: {{ secret "/config/oidc.pem" | mindent 10 "|" | msquote }}
+        key: { { secret "/config/oidc.pem" | mindent 10 "|" | msquote } }
     clients:
       - client_id: "forgejo"
         client_name: "Forgejo"
-        client_secret: {{ env "AUTHELIA_FORGEJO_CLIENT_SECRET_HASH" }}
+        client_secret: { { env "AUTHELIA_FORGEJO_CLIENT_SECRET_HASH" } }
         public: false
         authorization_policy: "two_factor"
         redirect_uris:
