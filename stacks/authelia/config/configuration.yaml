@@ -12,6 +12,7 @@ access_control:
         - "auth.trkm.io"
         - "forge.trkm.io"
         - "ha.trkm.io"
+        - "hermes.trkm.io"
         - "hs.trkm.io"
         - "matrix.trkm.io"
         - "searxng.trkm.io"
