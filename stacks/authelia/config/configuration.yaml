@@ -14,9 +14,13 @@ access_control:
         - "ha.trkm.io"
         - "hermes.trkm.io"
         - "hs.trkm.io"
-        - "matrix.trkm.io"
         - "searxng.trkm.io"
         - "seerr.trkm.io"
+      policy: "bypass"
+
+    - domain: "traefik.trkm.io"
+      resources:
+        - "^/dashboard/"
       policy: "bypass"
 
     - domain: "unraid.trkm.io"
