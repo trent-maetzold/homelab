@@ -41,12 +41,20 @@ services:
       - /etc/localtime:/etc/localtime:ro
     networks:
       - net
+      - proxy
     environment:
       HOME: "/data"
       OPENAI_TARGET_API_URL: "https://opencode.ai/zen/go"
       ANTHROPIC_TARGET_API_URL: "https://opencode.ai/zen/go"
       GEMINI_TARGET_API_URL: "https://opencode.ai/zen/go"
       HEADROOM_TELEMETRY: "off"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.litellm-headroom-opencode-go.rule: "Host(`headroom.trkm.io`) && PathPrefix(`/opencode-go`)"
+      traefik.http.routers.litellm-headroom-opencode-go.service: "litellm-headroom-opencode-go"
+      traefik.http.routers.litellm-headroom-opencode-go.middlewares: "litellm-headroom-opencode-go-strip"
+      traefik.http.middlewares.litellm-headroom-opencode-go-strip.stripPrefix.prefixes: "/opencode-go"
+      traefik.http.services.litellm-headroom-opencode-go.loadBalancer.server.port: "8787"
 
 networks:
   net:
