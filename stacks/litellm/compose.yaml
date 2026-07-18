@@ -13,12 +13,14 @@ services:
       - net
       - proxy
     environment:
-      LITELLM_MASTER_KEY: "${LITELLM_MASTER_KEY:?LITELLM_MASTER_KEY is required}"
-      OPENCODE_GO_API_KEY: "${OPENCODE_GO_API_KEY:?OPENCODE_GO_API_KEY is required}"
+      LITELLM_MASTER_KEY: "${LITELLM_MASTER_KEY:?}"
+      OPENCODE_GO_API_KEY: "${OPENCODE_GO_API_KEY:?}"
     healthcheck:
       test:
-        - "CMD-SHELL"
-        - "python3 -c import urllib.request; urllib.request.urlopen('http://localhost:4000/health/liveliness')"
+        - "CMD"
+        - "python3"
+        - "-c"
+        - "import urllib.request; urllib.request.urlopen('http://localhost:4000/health/liveness')"
       interval: 30s
       timeout: 10s
       retries: 3
@@ -26,7 +28,7 @@ services:
     command: ["--config", "/app/config.yaml", "--port", "4000"]
     labels:
       traefik.enable: "true"
-      traefik.http.routers.litellm.rule: "Host(`api.trkm.io`)"
+      traefik.http.routers.litellm.rule: "Host(`api.trkm.io`) && !PathPrefix(`/hermes`)"
       traefik.http.routers.litellm.service: "litellm"
       traefik.http.services.litellm.loadBalancer.server.port: "4000"
 
