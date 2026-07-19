@@ -1,7 +1,7 @@
 model_list:
   - model_name: minimax-m3
     litellm_params:
-      model: anthropic/opencode-go/minimax-m3
+      model: anthropic/minimax-m3
       api_key: os.environ/OPENCODE_GO_API_KEY
       api_base: http://opencode-go:8787
       input_cost_per_token: 3.0e-07
@@ -18,7 +18,7 @@ model_list:
 
   - model_name: deepseek-v4-flash
     litellm_params:
-      model: openai/opencode-go/deepseek-v4-flash
+      model: openai/deepseek-v4-flash
       api_key: os.environ/OPENCODE_GO_API_KEY
       api_base: http://opencode-go:8787
       input_cost_per_token: 1.4e-07
@@ -35,7 +35,7 @@ model_list:
 
   - model_name: kimi-k2.6
     litellm_params:
-      model: openai/opencode-go/kimi-k2.6
+      model: openai/kimi-k2.6
       api_key: os.environ/OPENCODE_GO_API_KEY
       api_base: http://opencode-go:8787
       input_cost_per_token: 9.5e-07
