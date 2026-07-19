@@ -10,25 +10,30 @@ services:
       - /mnt/cache/appdata/searxng/core/data:/var/cache/searxng
     networks:
       - net
-      - searxng
+      - proxy
     environment:
       TZ: "America/Chicago"
       SEARXNG_BIND_ADDRESS: "0.0.0.0"
+      SEARXNG_PORT: "8888"
       SEARXNG_SECRET: "${SEARXNG_SECRET:?SEARXNG_SECRET is required}"
       SEARXNG_IMAGE_PROXY: "true"
     depends_on:
       cache:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:8080"]
+      test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:8888"]
       interval: 30s
       timeout: 5s
       retries: 3
       start_period: 10s
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.searxng.rule: "Host(`searxng.trkm.io`)"
+      traefik.http.services.searxng.loadBalancer.server.port: "8888"
 
   cache:
     container_name: searxng_cache
-    image: docker.io/valkey/valkey:latest
+    image: docker.io/valkey/valkey:9
     restart: unless-stopped
     networks:
       - net
@@ -43,5 +48,5 @@ services:
 
 networks:
   net:
-  searxng:
+  proxy:
     external: true

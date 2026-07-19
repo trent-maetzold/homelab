@@ -1,7 +1,0 @@
-services:
-  app:
-    labels:
-      net.unraid.docker.managed: "composeman"
-      net.unraid.docker.icon: "https://sabre.io/img/baikal.png"
-      net.unraid.docker.webui: "https://dav.trkm.io"
-      net.unraid.docker.shell: "/bin/bash"

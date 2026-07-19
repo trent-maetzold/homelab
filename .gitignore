@@ -2,6 +2,7 @@
 *.env
 .env.*
 !.env.example
+!**/config/*.env
 stacks/bifrost/config/config.json
 *.swp
 *.swo
@@ -19,3 +20,6 @@ started_at
 has_build
 services
 services_cache_mode
+
+# Worktrees
+.worktrees/

@@ -1,0 +1,74 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+services:
+  server:
+    container_name: forgejo
+    image: codeberg.org/forgejo/forgejo:15
+    restart: unless-stopped
+    volumes:
+      - /mnt/cache/appdata/forgejo/server/data:/data
+    networks:
+      - net
+      - proxy
+    env_file:
+      - config/forgejo.env
+    environment:
+      TZ: "America/Chicago"
+      FORGEJO__database__PASSWD: "${POSTGRES_PASSWORD}"
+      FORGEJO__mailer__PASSWD: "${PROTONMAIL_SMTP_TOKEN:?PROTONMAIL_SMTP_TOKEN is required}"
+    depends_on:
+      db:
+        condition: service_healthy
+      cache:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "--quiet", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.forgejo.rule: "Host(`forge.trkm.io`)"
+      traefik.http.services.forgejo.loadBalancer.server.port: "3000"
+
+  cache:
+    container_name: forgejo_cache
+    image: docker.io/valkey/valkey:9
+    restart: unless-stopped
+    networks:
+      - net
+    environment:
+      TZ: "America/Chicago"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+  db:
+    container_name: forgejo_db
+    image: postgres:18
+    restart: unless-stopped
+    volumes:
+      - /mnt/cache/dbdata/postgres/forgejo/data:/var/lib/postgresql
+    networks:
+      - net
+    environment:
+      TZ: "America/Chicago"
+      POSTGRES_DB: "forgejo"
+      POSTGRES_USER: "forgejo"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "forgejo", "-d", "forgejo"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+      start_interval: 1s
+
+networks:
+  net:
+  proxy:
+    external: true
