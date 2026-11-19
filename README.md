@@ -43,23 +43,15 @@ PR CI uses Azure Kubernetes Bake with Kompose 1.38.0 and uploads a
 `kompose-preview-<stack>-not-for-deployment` artifact for each media stack.
 It uses placeholder values, not live credentials. Do not point Flux at these
 artifacts. Keep the reviewed Kubernetes manifests and overlays separate from
-`compose/`. Sonarr and Radarr each share one values file under `apps/media/`,
-with Flux HelmReleases for HD, UHD, and anime. They are not referenced by
-`clusters/nidavellir` yet.
+`compose/`. All eight migration stacks have Flux HelmReleases under
+`apps/media/`, using the same pinned app-template chart. Sonarr and Radarr each
+share one values file across HD, UHD, and anime. `clusters/nidavellir` does not
+reference these releases yet.
 
-Before enabling those releases, restore the six app configs and their main/log
-databases, and provide `media/sonarr` and `media/radarr` Secrets with `api-key`
-and `postgres-password` keys. The releases expect `arr-postgres-rw` and the
-`mimir-media` claim in `media`. They use Forms authentication until an external
-auth proxy is in place.
-
-Before enabling reconciliation, wire up Secrets, storage and permissions,
-unique workload and Service names, and ingress. Keep the media mount at `/data`,
-restore the app databases and configs from Mimir before starting the new writers,
-and validate the VPN-backed workloads. Prowlarr still needs its Gluetun network
-namespace translated explicitly; Kompose does not preserve it. Plex and the
-shared PostgreSQL stack stay on Unraid. Kometa and Recyclarr remain under
-`stacks/` and are excluded from conversion.
+Before enabling reconciliation, restore configs and databases, provision the
+Secrets and storage listed in [the cutover notes](docs/media-staging.md), and
+test VPN fail-closed behavior. Plex and the existing PostgreSQL stack stay on
+Unraid. Kometa and Recyclarr remain under `stacks/`.
 
 ## Usage
 

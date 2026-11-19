@@ -1,0 +1,56 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: qbittorrent
+  namespace: media
+spec:
+  interval: 1h
+  releaseName: qbittorrent
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+  values:
+    controllers:
+      app:
+        strategy: Recreate
+        containers:
+          app:
+            image:
+              repository: ghcr.io/hotio/qbittorrent
+              tag: release
+            securityContext:
+              capabilities:
+                add: [NET_ADMIN]
+            env:
+              PUID: "99"
+              PGID: "100"
+              UMASK: "022"
+              TZ: America/Chicago
+              WEBUI_PORTS: 8080/tcp
+              VPN_ENABLED: "true"
+              VPN_CONF: wg0
+              VPN_PROVIDER: proton
+              VPN_LAN_LEAK_ENABLED: "false"
+              VPN_AUTO_PORT_FORWARD: "true"
+    service:
+      app:
+        controller: app
+        type: ClusterIP
+        ports:
+          http:
+            port: 8080
+    persistence:
+      config:
+        type: persistentVolumeClaim
+        storageClass: local-path
+        accessMode: ReadWriteOnce
+        size: 5Gi
+        retain: true
+        globalMounts:
+          - path: /config
+      media:
+        type: persistentVolumeClaim
+        existingClaim: mimir-media
+        globalMounts:
+          - path: /data/torrents
+            subPath: torrents

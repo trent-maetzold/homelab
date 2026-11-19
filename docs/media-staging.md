@@ -9,6 +9,15 @@
 - **Networking:** Replace the Compose `pvr`, `proxy`, and `postgres` network assumptions with target DNS, routing, and access controls. Preserve the Radarr/Sonarr `/hd`, `/uhd`, and `/anime` URLs and check download-client, indexer, Plex, and FlareSolverr connectivity. Prowlarr still uses Gluetun and `network_mode: service:vpn`; it needs an explicit VPN networking design on the target.
 - **Downloaders:** Follow hotio's WireGuard guides for [qBittorrent](https://hotio.dev/containers/qbittorrent/#wireguard) and [SABnzbd](https://hotio.dev/containers/sabnzbd/#wireguard). Provision a separate Proton WireGuard file at `/config/wireguard/wg0.conf` in each app's config mount; keep keys and any generated tunnel files out of Git. Use a Proton endpoint and profile with port forwarding enabled for qBittorrent only. hotio handles that port natively; do not publish it on the host or reintroduce the old Gluetun callbacks. When testing restored config, check for stale qBittorrent interface bindings (`lo` or the old Gluetun interface). Verify WireGuard and `NET_ADMIN` support, VPN-only egress on tunnel loss, qBittorrent port updates, and Web UI/API reachability from Traefik and the Arr apps. The legacy downloader DNS aliases are retained on `pvr` for Compose only.
 
+## Helm release prerequisites
+
+The releases in `apps/media/` are not wired into `clusters/nidavellir`.
+
+- In `media`, provide `mimir-media` and the `local-path` StorageClass. Restore each app's `/config` (Seerr: `/app/config`) into its own PVC. FlareSolverr is stateless. Make sure the NFS `torrents` and `usenet` subdirectories exist and are writable by the downloaders.
+- Restore the Arr databases behind `arr-postgres-rw` and Seerr's database behind `seerr-postgres-rw`, both in `media`. The releases do not provision PostgreSQL.
+- Provide Secrets named `sonarr`, `radarr`, `lidarr`, and `prowlarr`, each with `api-key` and `postgres-password`, plus `seerr` with `postgres-password`. Prowlarr also needs `wireguard-private-key` and `firewall-outbound-subnets`. Scope the latter to the required internal endpoints; never use a default route as a bypass.
+- Seed each Hotio PVC with its own `wireguard/wg0.conf`. Check tunnel and local connectivity before starting production traffic, and verify egress is blocked when each tunnel is down.
+
 ## CI previews
 
 Convert each `compose/media/*/compose.yaml` separately into its own directory: stacks reuse service names such as `app` and `vpn`. Use dummy values for required interpolation (`ARR_API_KEY`, `POSTGRES_PASSWORD`, and Prowlarr's `WIREGUARD_PRIVATE_KEY`), never live credentials. Treat output as preview only: Compose aliases, shared VPN namespaces, host mounts, and Traefik labels do not establish equivalent Kubernetes routing, storage, or VPN behavior.
