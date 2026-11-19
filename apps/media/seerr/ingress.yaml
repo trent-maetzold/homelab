@@ -4,9 +4,14 @@ metadata:
   name: seerr
   namespace: media
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: web
+    cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
 spec:
   ingressClassName: traefik
+  tls:
+    - hosts:
+        - seerr.trkm.io
+      secretName: seerr-tls
   rules:
     - host: seerr.trkm.io
       http:
