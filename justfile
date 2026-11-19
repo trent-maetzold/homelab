@@ -21,7 +21,10 @@ sync-configs host='unraid':
 
 sync-stacks host='unraid':
     @ssh {{ host }} 'mkdir -p {{ unraid_stacks_root }}'
-    @rsync -av --delete stacks/ {{ host }}:{{ unraid_stacks_root }}/
+    # Keep the live Unraid media stacks until cutover.
+    @rsync -av --delete \
+      --exclude=/{flaresolverr,lidarr,prowlarr,qbittorrent,radarr,sabnzbd,seerr,sonarr}/ \
+      stacks/ {{ host }}:{{ unraid_stacks_root }}/
 
 gen-password:
     @openssl rand -hex 24

@@ -1,0 +1,47 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+services:
+  canvas:
+    container_name: openhands
+    image: ghcr.io/openhands/agent-canvas:latest
+    restart: unless-stopped
+    volumes:
+      - /mnt/cache/appdata/openhands/canvas/config:/home/openhands/.openhands
+      - /mnt/cache/appdata/openhands/shared/certs/client:/certs/client:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /mnt/cache/projects:/projects
+    networks:
+      - net
+      - proxy
+    environment:
+      LLM_API_KEY: "${TRKM_GATEWAY_API_KEY}"
+      LLM_BASE_URL: "https://api.trkm.io/v1"
+      LOCAL_BACKEND_API_KEY: "${LOCAL_BACKEND_API_KEY}"
+      OH_SECRET_KEY: "${OH_SECRET_KEY}"
+      LOG_ALL_EVENTS: "true"
+      DOCKER_HOST: "tcp://dind:2376"
+      DOCKER_CERT_PATH: "/certs/client"
+      DOCKER_TLS_VERIFY: "1"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.openhands.rule: "Host(`openhands.trkm.io`)"
+      traefik.http.routers.openhands.service: "openhands"
+      traefik.http.services.openhands.loadBalancer.server.port: "8000"
+
+  dind:
+    container_name: openhands_dind
+    image: docker:dind
+    restart: unless-stopped
+    privileged: true
+    volumes:
+      - /mnt/cache/appdata/openhands/shared/certs:/certs
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - net
+    environment:
+      DOCKER_TLS_CERTDIR: "/certs"
+
+networks:
+  net:
+  proxy:
+    external: true

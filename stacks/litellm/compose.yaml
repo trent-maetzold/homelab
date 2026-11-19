@@ -1,0 +1,62 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json
+
+services:
+  gateway:
+    container_name: litellm
+    image: litellm/litellm:main-stable
+    restart: unless-stopped
+    volumes:
+      - ./config/config.yaml:/app/config.yaml:ro
+      - ./config/models.yaml:/app/models.yaml:ro
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - net
+      - proxy
+    environment:
+      LITELLM_MASTER_KEY: "${LITELLM_MASTER_KEY:?}"
+      OPENCODE_GO_API_KEY: "${OPENCODE_GO_API_KEY:?}"
+    healthcheck:
+      test:
+        - "CMD"
+        - "python3"
+        - "-c"
+        - "import urllib.request; urllib.request.urlopen('http://localhost:4000/health/liveness')"
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    command: ["--config", "/app/config.yaml", "--port", "4000"]
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.litellm.rule: "Host(`api.trkm.io`) && !PathPrefix(`/hermes`)"
+      traefik.http.routers.litellm.service: "litellm"
+      traefik.http.services.litellm.loadBalancer.server.port: "4000"
+
+  opencode-go:
+    container_name: litellm_opencode_go
+    image: ghcr.io/chopratejas/headroom:latest
+    restart: unless-stopped
+    volumes:
+      - /mnt/cache/appdata/litellm/opencode-go/data:/data
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      - net
+      - proxy
+    environment:
+      HOME: "/data"
+      OPENAI_TARGET_API_URL: "https://opencode.ai/zen/go"
+      ANTHROPIC_TARGET_API_URL: "https://opencode.ai/zen/go"
+      GEMINI_TARGET_API_URL: "https://opencode.ai/zen/go"
+      HEADROOM_TELEMETRY: "off"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.litellm-headroom-opencode-go.rule: "Host(`headroom.trkm.io`) && PathPrefix(`/opencode-go`)"
+      traefik.http.routers.litellm-headroom-opencode-go.service: "litellm-headroom-opencode-go"
+      traefik.http.routers.litellm-headroom-opencode-go.middlewares: "litellm-headroom-opencode-go-strip"
+      traefik.http.middlewares.litellm-headroom-opencode-go-strip.stripPrefix.prefixes: "/opencode-go"
+      traefik.http.services.litellm-headroom-opencode-go.loadBalancer.server.port: "8787"
+
+networks:
+  net:
+  proxy:
+    external: true

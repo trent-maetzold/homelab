@@ -1,0 +1,14 @@
+services:
+  canvas:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/selfhst/icons/png/openhands.png"
+      net.unraid.docker.webui: "https://openhands.trkm.io"
+      net.unraid.docker.shell: "/bin/bash"
+
+  dind:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/docker.png"
+      net.unraid.docker.webui: ""
+      net.unraid.docker.shell: "/bin/sh"

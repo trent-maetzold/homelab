@@ -1,0 +1,47 @@
+controllers:
+  app:
+    strategy: Recreate
+    containers:
+      app:
+        image:
+          repository: lscr.io/linuxserver/sonarr
+          tag: latest
+        env:
+          PUID: "99"
+          PGID: "100"
+          UMASK: "022"
+          TZ: America/Chicago
+          SONARR__AUTH__METHOD: Forms
+          SONARR__AUTH__APIKEY:
+            valueFrom:
+              secretKeyRef:
+                name: sonarr
+                key: api-key
+          SONARR__UPDATE__MECHANISM: Docker
+          SONARR__POSTGRES__HOST: arr-postgres-rw
+          SONARR__POSTGRES__USER: sonarr
+          SONARR__POSTGRES__PASSWORD:
+            valueFrom:
+              secretKeyRef:
+                name: sonarr
+                key: postgres-password
+service:
+  app:
+    controller: app
+    ports:
+      http:
+        port: 8989
+persistence:
+  config:
+    type: persistentVolumeClaim
+    storageClass: local-path
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    retain: true
+    globalMounts:
+      - path: /config
+  media:
+    type: persistentVolumeClaim
+    existingClaim: mimir-media
+    globalMounts:
+      - path: /data

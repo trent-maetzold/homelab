@@ -1,0 +1,14 @@
+services:
+  gateway:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/selfhst/icons/png/litellm.png"
+      net.unraid.docker.webui: "https://litellm.trkm.io"
+      net.unraid.docker.shell: "/bin/bash"
+
+  opencode-go:
+    labels:
+      net.unraid.docker.managed: "composeman"
+      net.unraid.docker.icon: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/opencode-dark.png"
+      net.unraid.docker.webui: ""
+      net.unraid.docker.shell: "/bin/bash"

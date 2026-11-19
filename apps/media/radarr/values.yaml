@@ -1,0 +1,47 @@
+controllers:
+  app:
+    strategy: Recreate
+    containers:
+      app:
+        image:
+          repository: lscr.io/linuxserver/radarr
+          tag: latest
+        env:
+          PUID: "99"
+          PGID: "100"
+          UMASK: "022"
+          TZ: America/Chicago
+          RADARR__AUTH__METHOD: Forms
+          RADARR__AUTH__APIKEY:
+            valueFrom:
+              secretKeyRef:
+                name: radarr
+                key: api-key
+          RADARR__UPDATE__MECHANISM: Docker
+          RADARR__POSTGRES__HOST: arr-postgres-rw
+          RADARR__POSTGRES__USER: radarr
+          RADARR__POSTGRES__PASSWORD:
+            valueFrom:
+              secretKeyRef:
+                name: radarr
+                key: postgres-password
+service:
+  app:
+    controller: app
+    ports:
+      http:
+        port: 7878
+persistence:
+  config:
+    type: persistentVolumeClaim
+    storageClass: local-path
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    retain: true
+    globalMounts:
+      - path: /config
+  media:
+    type: persistentVolumeClaim
+    existingClaim: mimir-media
+    globalMounts:
+      - path: /data

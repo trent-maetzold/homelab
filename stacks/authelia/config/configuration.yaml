@@ -5,16 +5,30 @@ session:
       default_redirection_url: "https://auth.trkm.io/settings"
 
 access_control:
-  default_policy: two_factor
+  default_policy: "two_factor"
   rules:
     - domain:
+        - "api.trkm.io"
         - "auth.trkm.io"
+        - "forge.trkm.io"
         - "ha.trkm.io"
+        - "hermes.trkm.io"
         - "hs.trkm.io"
-        - "matrix.trkm.io"
+        - "searxng.trkm.io"
         - "seerr.trkm.io"
-        - "tea.trkm.io"
-      policy: bypass
+      policy: "bypass"
+
+    - domain: "traefik.trkm.io"
+      resources:
+        - "^/dashboard/"
+      policy: "bypass"
+
+    - domain: "unraid.trkm.io"
+      resources:
+        - "^/graphql"
+        - "^/plugins/"
+        - "^/sub/"
+      policy: "bypass"
 
     - domain:
         - "bt.trkm.io"
@@ -25,7 +39,7 @@ access_control:
         - "prowlarr.trkm.io"
       resources:
         - "^/api/"
-      policy: bypass
+      policy: "bypass"
 
     - domain:
         - "radarr.trkm.io"
@@ -34,17 +48,32 @@ access_control:
         - "^/hd/api/"
         - "^/uhd/api/"
         - "^/anime/api/"
-      policy: bypass
+      policy: "bypass"
 
-    - domain: "api.trkm.io"
-      resources:
-        - "^/t0/"
-        - "^/mcp"
-        - "^/webhook/github"
-      policy: bypass
-
-    - domain: "dav.trkm.io"
-      resources:
-        - "^/.well-known/"
-        - "^/dav.php/"
-      policy: bypass
+identity_providers:
+  oidc:
+    jwks:
+      - key_id: "main"
+        algorithm: "RS256"
+        use: "sig"
+        key: {{ secret "/config/oidc.pem" | mindent 10 "|" | msquote }}
+    clients:
+      - client_id: "forgejo"
+        client_name: "Forgejo"
+        client_secret: {{ env "AUTHELIA_FORGEJO_CLIENT_SECRET_HASH" }}
+        public: false
+        authorization_policy: "two_factor"
+        redirect_uris:
+          - "https://forge.trkm.io/user/oauth2/Authelia/callback"
+        scopes:
+          - "openid"
+          - "profile"
+          - "email"
+        grant_types:
+          - "authorization_code"
+        response_types:
+          - "code"
+        require_pkce: true
+        pkce_challenge_method: "S256"
+        userinfo_signed_response_alg: "none"
+        token_endpoint_auth_method: "client_secret_basic"

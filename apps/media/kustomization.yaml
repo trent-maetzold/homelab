@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - app-template.yaml
+  - flaresolverr/release.yaml
+  - lidarr/release.yaml
+  - prowlarr/release.yaml
+  - qbittorrent/release.yaml
+  - radarr
+  - sabnzbd/release.yaml
+  - seerr/release.yaml
+  - sonarr
