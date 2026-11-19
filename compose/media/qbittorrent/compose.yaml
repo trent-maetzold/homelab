@@ -3,44 +3,29 @@
 services:
   app:
     container_name: qbittorrent
-    image: lscr.io/linuxserver/qbittorrent:latest
-    restart: unless-stopped
-    volumes:
-      - /mnt/cache/appdata/qbittorrent/app/config:/config
-      - /mnt/user/data/torrents:/data/torrents
-    network_mode: "service:vpn"
-    environment:
-      PUID: "99"
-      PGID: "100"
-      UMASK: "022"
-      TZ: "America/Chicago"
-      WEBUI_PORT: "8080"
-    depends_on:
-      - vpn
-
-  vpn:
-    container_name: qbittorrent_vpn
-    image: qmcgaw/gluetun:latest
+    image: ghcr.io/hotio/qbittorrent:release
     restart: unless-stopped
     cap_add:
       - NET_ADMIN
-    devices:
-      - /dev/net/tun:/dev/net/tun
     volumes:
-      - /mnt/cache/appdata/qbittorrent/vpn/config:/gluetun
+      - /mnt/cache/appdata/qbittorrent/app/config:/config
+      - /mnt/user/data/torrents:/data/torrents
     networks:
-      - pvr
-      - proxy
+      proxy:
+      pvr:
+        aliases:
+          - qbittorrent_vpn
     environment:
       TZ: "America/Chicago"
-      SERVER_CITIES: "Chicago"
-      PORT_FORWARD_ONLY: "on"
-      VPN_TYPE: "wireguard"
-      VPN_SERVICE_PROVIDER: "protonvpn"
-      VPN_PORT_FORWARDING: "on"
-      VPN_PORT_FORWARDING_UP_COMMAND: "/bin/sh -c 'wget -O- -nv --retry-connrefused --post-data \"json={\\\"listen_port\\\":{{PORT}},\\\"current_network_interface\\\":\\\"{{VPN_INTERFACE}}\\\",\\\"random_port\\\":false,\\\"upnp\\\":false}\" http://127.0.0.1:8080/api/v2/app/setPreferences'"
-      VPN_PORT_FORWARDING_DOWN_COMMAND: "/bin/sh -c 'wget -O- -nv --retry-connrefused --post-data \"json={\\\"listen_port\\\":0,\\\"current_network_interface\\\":\\\"lo\\\"}\" http://127.0.0.1:8080/api/v2/app/setPreferences'"
-      WIREGUARD_PRIVATE_KEY: "${WIREGUARD_PRIVATE_KEY:?WIREGUARD_PRIVATE_KEY is required}"
+      PUID: "99"
+      PGID: "100"
+      WEBUI_PORTS: "8080/tcp"
+      VPN_ENABLED: "true"
+      VPN_CONF: "wg0"
+      VPN_PROVIDER: "proton"
+      VPN_LAN_LEAK_ENABLED: "false"
+      VPN_AUTO_PORT_FORWARD: "true"
+      UMASK: "022"
     labels:
       traefik.enable: "true"
       traefik.http.routers.qbittorrent.rule: "Host(`bt.trkm.io`)"

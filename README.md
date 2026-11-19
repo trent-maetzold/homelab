@@ -1,12 +1,13 @@
 # Homelab
 
-Docker Compose stacks for a home server running on Unraid.
+Docker Compose stacks for Unraid and Compose inputs for the k3s media migration.
 
 ## Structure
 
 ```
 stacks/<service>/compose.yaml   — Service definitions
-config/<service>/               — Service configuration files
+compose/media/<stack>/          — Compose inputs for Kompose
+compose/jobs/<job>/             — Compose inputs for Kometa and Recyclarr (not deployed)
 ```
 
 ## Stacks
@@ -36,6 +37,21 @@ config/<service>/               — Service configuration files
 | sabnzbd | Usenet downloader |
 | sonarr | TV management |
 | traefik | Reverse proxy |
+
+## k3s media migration
+
+PR CI runs Kompose 1.38.0 and uploads `kompose-preview-not-for-deployment`.
+It uses placeholder values, not live credentials. Do not point Flux at these
+artifacts. Keep the reviewed Kubernetes manifests and overlays separate from
+`compose/`; Flux will reconcile those once the workloads are ready.
+
+Before enabling reconciliation, wire up Secrets, storage and permissions,
+unique workload and Service names, and ingress. Keep the media mount at `/data`,
+restore the app databases and configs from Mimir before starting the new writers,
+and validate the VPN-backed workloads. Prowlarr still needs its Gluetun network
+namespace translated explicitly; Kompose does not preserve it. Plex and the
+shared PostgreSQL stack stay on Unraid. Kometa and Recyclarr are excluded from
+conversion until a scheduler is chosen.
 
 ## Usage
 

@@ -3,39 +3,29 @@
 services:
   app:
     container_name: sabnzbd
-    image: lscr.io/linuxserver/sabnzbd:latest
-    restart: unless-stopped
-    volumes:
-      - /mnt/cache/appdata/sabnzbd/app/config:/config
-      - /mnt/user/data/usenet:/data/usenet
-    network_mode: "service:vpn"
-    environment:
-      PUID: "99"
-      PGID: "100"
-      UMASK: "022"
-      TZ: "America/Chicago"
-    depends_on:
-      - vpn
-
-  vpn:
-    container_name: sabnzbd_vpn
-    image: qmcgaw/gluetun:latest
+    image: ghcr.io/hotio/sabnzbd:release
     restart: unless-stopped
     cap_add:
       - NET_ADMIN
-    devices:
-      - /dev/net/tun:/dev/net/tun
     volumes:
-      - /mnt/cache/appdata/sabnzbd/vpn/config:/gluetun
+      - /mnt/cache/appdata/sabnzbd/app/config:/config
+      - /mnt/user/data/usenet:/data/usenet
     networks:
-      - pvr
-      - proxy
+      proxy:
+      pvr:
+        aliases:
+          - sabnzbd_vpn
     environment:
       TZ: "America/Chicago"
-      VPN_SERVICE_PROVIDER: "protonvpn"
-      VPN_TYPE: "wireguard"
-      WIREGUARD_PRIVATE_KEY: "${WIREGUARD_PRIVATE_KEY:?WIREGUARD_PRIVATE_KEY is required}"
-      SERVER_CITIES: "Chicago"
+      PUID: "99"
+      PGID: "100"
+      WEBUI_PORTS: "8080/tcp"
+      VPN_ENABLED: "true"
+      VPN_CONF: "wg0"
+      VPN_PROVIDER: "proton"
+      VPN_LAN_LEAK_ENABLED: "false"
+      VPN_AUTO_PORT_FORWARD: "false"
+      UMASK: "022"
     labels:
       traefik.enable: "true"
       traefik.http.routers.sabnzbd.rule: "Host(`nzb.trkm.io`)"
