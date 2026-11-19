@@ -6,7 +6,7 @@ media() { k -n media "$@"; }
 
 k wait --for=condition=Ready node/yggdrasil --timeout=60s
 k -n flux-system wait --for=condition=Ready --timeout=120s \
-  fluxinstance/flux gitrepository/flux kustomization/flux
+  fluxinstance/flux gitrepository/flux-system kustomization/flux-system
 k -n cnpg-system rollout status deployment/cloudnative-pg --timeout=120s
 media wait --for=jsonpath='{.status.phase}'=Bound pvc/nas-data --timeout=60s
 k get storageclass/local-path
