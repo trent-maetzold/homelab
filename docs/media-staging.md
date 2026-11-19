@@ -13,7 +13,7 @@
 
 The releases in `apps/media/` are not wired into `clusters/nidavellir`.
 
-- In `media`, provide `mimir-media` and the `local-path` StorageClass. Restore each app's `/config` (Seerr: `/app/config`) into its own PVC. FlareSolverr is stateless. Make sure the NFS `torrents` and `usenet` subdirectories exist and are writable by the downloaders.
+- In `media`, provide `nas-data` and the `local-path` StorageClass. Restore each app's `/config` (Seerr: `/app/config`) into its own PVC. FlareSolverr is stateless. Make sure the NFS `torrents` and `usenet` subdirectories exist and are writable by the downloaders.
 - Restore the Arr databases behind `arr-postgres-rw` and Seerr's database behind `seerr-postgres-rw`, both in `media`. The releases do not provision PostgreSQL.
 - Provide Secrets named `sonarr`, `radarr`, `lidarr`, and `prowlarr`, each with `api-key` and `postgres-password`, plus `seerr` with `postgres-password`. Prowlarr also needs `wireguard-private-key` and `firewall-outbound-subnets`. Scope the latter to the required internal endpoints; never use a default route as a bypass.
 - Seed each Hotio PVC with its own `wireguard/wg0.conf`. Check tunnel and local connectivity before starting production traffic, and verify egress is blocked when each tunnel is down.

@@ -8,7 +8,7 @@ k wait --for=condition=Ready node/yggdrasil --timeout=60s
 k -n flux-system wait --for=condition=Ready --timeout=120s \
   fluxinstance/flux gitrepository/flux kustomization/flux
 k -n cnpg-system rollout status deployment/cloudnative-pg --timeout=120s
-media wait --for=jsonpath='{.status.phase}'=Bound pvc/mimir-media --timeout=60s
+media wait --for=jsonpath='{.status.phase}'=Bound pvc/nas-data --timeout=60s
 k get storageclass/local-path
 
 name="media-check-$RANDOM-$RANDOM"
@@ -90,7 +90,7 @@ spec:
             claimName: $name
         - name: media
           persistentVolumeClaim:
-            claimName: mimir-media
+            claimName: nas-data
 EOF_JOB
 job_created=true
 

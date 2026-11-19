@@ -42,6 +42,6 @@ persistence:
       - path: /config
   media:
     type: persistentVolumeClaim
-    existingClaim: mimir-media
+    existingClaim: nas-data
     globalMounts:
       - path: /data
