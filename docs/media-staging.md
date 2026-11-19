@@ -1,13 +1,13 @@
 # Media staging (not deployed)
 
-`compose/media/` contains migration inputs, not Flux workloads. Plex and the shared PostgreSQL stack stay on Unraid. The running media stacks also stay there for now: `just sync-stacks` excludes their old directories so `rsync --delete` leaves the production copies alone. Merge both phases together; the move-only commit does not contain this protection. Remove the exclusions only when intentionally retiring those copies.
+`apps/media/` is the source for the k3s media workloads. Plex and the existing PostgreSQL stack stay on Unraid. `just sync-stacks` excludes the migrated stacks so `rsync --delete` leaves the running Unraid copies alone. Remove the exclusions only when intentionally retiring those copies.
 
 ## Before cutover
 
 - **Storage:** Plan how to expose the existing app config and `/mnt/user/data` on the target. Keep the existing container paths (`/data`, `/data/torrents`, `/data/usenet`), UID/GID access, and the single filesystem view the Arr apps need for hardlinks and atomic moves. Do not point two live instances at the same config or databases.
 - **PostgreSQL:** Lidarr, Prowlarr, Radarr, and Sonarr still use the shared `postgres` host. Provide private reachability and the existing credentials without renaming any main or log database, including the separate HD/UHD/anime pairs. Seerr's input instead uses its own `db` service, `seerr` database, and existing dedicated data directory. Confirm the live Seerr DB before planning a backup/restore; do not assume the shared cluster's `seerr` DB is its active one. No database service, schema, or data was moved.
 - **Networking:** Replace the Compose `pvr`, `proxy`, and `postgres` network assumptions with Kubernetes Services and access controls. Prowlarr's Gluetun sidecar shares its pod network; verify it can reach the required internal services.
-- **Downloaders:** Follow hotio's WireGuard guides for [qBittorrent](https://hotio.dev/containers/qbittorrent/#wireguard) and [SABnzbd](https://hotio.dev/containers/sabnzbd/#wireguard). Provision a separate Proton WireGuard file at `/config/wireguard/wg0.conf` in each app's config mount; keep keys and any generated tunnel files out of Git. Use a Proton endpoint and profile with port forwarding enabled for qBittorrent only. hotio handles that port natively; do not publish it on the host or reintroduce the old Gluetun callbacks. When testing restored config, check for stale qBittorrent interface bindings (`lo` or the old Gluetun interface). Verify WireGuard and `NET_ADMIN` support, VPN-only egress on tunnel loss, qBittorrent port updates, and Web UI/API reachability from Traefik and the Arr apps. The legacy downloader DNS aliases are retained on `pvr` for Compose only.
+- **Downloaders:** Follow hotio's WireGuard guides for [qBittorrent](https://hotio.dev/containers/qbittorrent/#wireguard) and [SABnzbd](https://hotio.dev/containers/sabnzbd/#wireguard). Provision a separate Proton WireGuard file at `/config/wireguard/wg0.conf` in each app's config mount; keep keys and any generated tunnel files out of Git. Use a Proton endpoint and profile with port forwarding enabled for qBittorrent only. hotio handles that port natively; do not publish it on the host or reintroduce the old Gluetun callbacks. When testing restored config, check for stale qBittorrent interface bindings (`lo` or the old Gluetun interface). Verify WireGuard and `NET_ADMIN` support, VPN-only egress on tunnel loss, qBittorrent port updates, and Web UI/API reachability from Traefik and the Arr apps.
 
 ## Helm release prerequisites
 
@@ -43,6 +43,14 @@ After restoring app configs and databases, check saved URLs in each app's UI or 
   ssh -L 5055:127.0.0.1:5055 tm@10.10.20.10 'sudo k3s kubectl -n media port-forward svc/seerr 5055:5055'
   ```
 
-## CI previews
+## Validation
 
-Convert each `compose/media/*/compose.yaml` separately into its own directory: stacks reuse service names such as `app` and `vpn`. Use dummy values for required interpolation (`ARR_API_KEY`, `POSTGRES_PASSWORD`, and Prowlarr's `WIREGUARD_PRIVATE_KEY`), never live credentials. Treat output as preview only: Compose aliases, shared VPN namespaces, host mounts, and Traefik labels do not establish equivalent Kubernetes routing, storage, or VPN behavior.
+CI renders the pinned chart with the ConfigMap values and inline overrides, then validates the resulting workloads with kubeconform. It needs no cluster access.
+
+After k3s boots, run this from a checkout of this repo on Yggdrasil:
+
+```sh
+sudo bash scripts/nidavellir-preflight.sh
+```
+
+It checks Flux sync, the CNPG operator, and the storage claims. It creates a temporary Job and local PVC, tests UID 99/GID 100 writes and NFS hardlinks, then cleans up. It does not test database restores, live app connections, or VPN behavior.

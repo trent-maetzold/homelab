@@ -1,12 +1,12 @@
 # Homelab
 
-Docker Compose stacks for Unraid and Compose inputs for the k3s media migration.
+Docker Compose stacks for Unraid and Helm releases for k3s media apps.
 
 ## Structure
 
 ```
 stacks/<service>/compose.yaml   — Service definitions
-compose/media/<stack>/          — Compose inputs for Kompose
+apps/media/<app>/               — Flux HelmRelease definitions and values
 ```
 
 ## Stacks
@@ -39,12 +39,9 @@ compose/media/<stack>/          — Compose inputs for Kompose
 
 ## k3s media migration
 
-PR CI uses Azure Kubernetes Bake with Kompose 1.38.0 and uploads a
-`kompose-preview-<stack>-not-for-deployment` artifact for each media stack.
-It uses placeholder values, not live credentials. Do not point Flux at these
-artifacts. Keep the reviewed Kubernetes manifests and overlays separate from
-`compose/`. All eight migration stacks have Flux HelmReleases under
-`apps/media/`, using the same pinned app-template chart. Sonarr and Radarr each
+PR CI renders the Flux HelmReleases, validates the Kubernetes resources, and
+uploads the rendered manifests for review. It does not deploy them. All eight
+media apps use the same pinned app-template chart. Sonarr and Radarr each
 share one values file across HD, UHD, and anime. `clusters/nidavellir` does not
 reference these releases yet.
 
