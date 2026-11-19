@@ -43,7 +43,15 @@ PR CI uses Azure Kubernetes Bake with Kompose 1.38.0 and uploads a
 `kompose-preview-<stack>-not-for-deployment` artifact for each media stack.
 It uses placeholder values, not live credentials. Do not point Flux at these
 artifacts. Keep the reviewed Kubernetes manifests and overlays separate from
-`compose/`; Flux will reconcile those once the workloads are ready.
+`compose/`. Sonarr and Radarr each share one values file under `apps/media/`,
+with Flux HelmReleases for HD, UHD, and anime. They are not referenced by
+`clusters/nidavellir` yet.
+
+Before enabling those releases, restore the six app configs and their main/log
+databases, and provide `media/sonarr` and `media/radarr` Secrets with `api-key`
+and `postgres-password` keys. The releases expect `arr-postgres-rw` and the
+`mimir-media` claim in `media`. They use Forms authentication until an external
+auth proxy is in place.
 
 Before enabling reconciliation, wire up Secrets, storage and permissions,
 unique workload and Service names, and ingress. Keep the media mount at `/data`,
