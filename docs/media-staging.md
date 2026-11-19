@@ -37,7 +37,7 @@ After restoring app configs and databases, check saved URLs in each app's UI or 
 - [ ] **Prowlarr:** Update and test every Arr connection, Prowlarr's advertised URL for indexer sync, the FlareSolverr proxy, and any configured download clients. Verify its VPN permits those internal connections. Re-sync indexers and test them in Sonarr, Radarr, and Lidarr.
 - [ ] **Sonarr, Radarr, and Lidarr:** Test all saved download clients and check media paths and any remote path mappings. Check any connect hooks, webhooks, and indexers for old names. Verify the downloader paths still match `/data/torrents` and `/data/usenet`.
 - [ ] **Kometa and Recyclarr on Unraid:** Update any Arr URLs that point at migrated instances (`RADARR_*_URL` and `SONARR_*_URL` for Recyclarr; `radarrurl` and `sonarrurl` for Kometa). Use LAN-reachable routes, not Kubernetes Service names. Check other external clients and scripts for the same issue.
-- [ ] **Access:** Create a DNS-only `seerr.trkm.io` record pointing at Heimdall's public IP, not Yggdrasil. Heimdall passes TLS through to k3s Traefik; cert-manager provisions `media/seerr-tls` from the app's Ingress. The other apps remain internal; set up private routes before moving external clients that need them. To test Seerr directly, bypassing both proxies, forward `svc/seerr` and open `http://localhost:5055`:
+- [ ] **Access:** Create a DNS-only `seerr.trkm.io` record pointing at the public IP that forwards TCP 80 and 443 to Yggdrasil. k3s Traefik terminates HTTPS directly; cert-manager provisions `media/seerr-tls` from the app's Ingress. The other apps remain internal; set up private routes before moving external clients that need them. To test Seerr directly, bypassing Traefik, forward `svc/seerr` and open `http://localhost:5055`:
 
   ```sh
   ssh -L 5055:127.0.0.1:5055 tm@10.10.20.10 'sudo k3s kubectl -n media port-forward svc/seerr 5055:5055'
@@ -54,8 +54,8 @@ records only; create each app's DNS record manually.
 
 Before exposing Seerr, check `ClusterIssuer/letsencrypt-cloudflare` is Ready.
 After enabling the restored Seerr release and its Ingress, check
-`media/Certificate/seerr-tls` is Ready and verify the public URL and Headscale's
-`https://hs.trkm.io/health`. Merge alone does not enable any media releases.
+`media/Certificate/seerr-tls` is Ready and verify the public URL. Merge alone
+does not enable any media releases.
 
 ## Validation
 
