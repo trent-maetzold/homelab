@@ -9,4 +9,5 @@ resources:
   - radarr
   - sabnzbd/release.yaml
   - seerr/release.yaml
+  - seerr/ingress.yaml
   - sonarr

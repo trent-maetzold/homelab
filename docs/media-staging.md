@@ -37,7 +37,7 @@ After restoring app configs and databases, check saved URLs in each app's UI or 
 - [ ] **Prowlarr:** Update and test every Arr connection, Prowlarr's advertised URL for indexer sync, the FlareSolverr proxy, and any configured download clients. Verify its VPN permits those internal connections. Re-sync indexers and test them in Sonarr, Radarr, and Lidarr.
 - [ ] **Sonarr, Radarr, and Lidarr:** Test all saved download clients and check media paths and any remote path mappings. Check any connect hooks, webhooks, and indexers for old names. Verify the downloader paths still match `/data/torrents` and `/data/usenet`.
 - [ ] **Kometa and Recyclarr on Unraid:** Update any Arr URLs that point at migrated instances (`RADARR_*_URL` and `SONARR_*_URL` for Recyclarr; `radarrurl` and `sonarrurl` for Kometa). Use LAN-reachable routes, not Kubernetes Service names. Check other external clients and scripts for the same issue.
-- [ ] **Access:** Set up LAN ingress before moving external clients. These releases only expose ClusterIP services; for a quick test after deployment, forward `svc/seerr` from Yggdrasil over SSH and open `http://localhost:5055`:
+- [ ] **Access:** Once Seerr is restored and running, verify `https://seerr.trkm.io` through Heimdall → Yggdrasil Traefik → `media/seerr`. The public DNS record must point at Heimdall, not Yggdrasil. The other apps remain internal; set up private routes before moving external clients that need them. To test Seerr directly, bypassing both proxies, forward `svc/seerr` and open `http://localhost:5055`:
 
   ```sh
   ssh -L 5055:127.0.0.1:5055 tm@10.10.20.10 'sudo k3s kubectl -n media port-forward svc/seerr 5055:5055'
