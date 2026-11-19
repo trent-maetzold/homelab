@@ -13,30 +13,27 @@ permissions:
 jobs:
   convert:
     runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        stack: [flaresolverr, lidarr, prowlarr, qbittorrent, radarr, sabnzbd, seerr, sonarr]
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      - name: Install Kompose 1.38.0
-        run: |
-          curl --fail --silent --show-error --location --retry 3 \
-            https://github.com/kubernetes/kompose/releases/download/v1.38.0/kompose-linux-amd64 \
-            -o "$RUNNER_TEMP/kompose"
-          echo "65a6a720605bead3964e8b22d423a0763de451a236fe03de902e366cf3d9c147  $RUNNER_TEMP/kompose" | sha256sum --check
-          chmod +x "$RUNNER_TEMP/kompose"
-      - name: Convert Compose inputs (preview only)
+      - name: Bake Compose input (preview only)
+        id: bake
+        uses: Azure/k8s-bake@bf8bfd33b007edea820fe80983239bca24012239 # v4.1.1
+        with:
+          renderEngine: kompose
+          kompose-version: v1.38.0
+          dockerComposeFile: compose/media/${{ matrix.stack }}/compose.yaml
         env:
           ARR_API_KEY: preview-only
           POSTGRES_PASSWORD: preview-only
           WIREGUARD_PRIVATE_KEY: preview-only
-        run: |
-          for compose in compose/media/*/compose.yaml; do
-            stack=$(basename "$(dirname "$compose")")
-            mkdir -p "kompose-preview/$stack"
-            "$RUNNER_TEMP/kompose" convert -f "$compose" -o "kompose-preview/$stack/"
-          done
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: kompose-preview-not-for-deployment
-          path: kompose-preview/
+          name: kompose-preview-${{ matrix.stack }}-not-for-deployment
+          path: ${{ steps.bake.outputs.manifestsBundle }}
           if-no-files-found: error

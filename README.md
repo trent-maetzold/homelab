@@ -40,7 +40,8 @@ compose/jobs/<job>/             — Compose inputs for Kometa and Recyclarr (not
 
 ## k3s media migration
 
-PR CI runs Kompose 1.38.0 and uploads `kompose-preview-not-for-deployment`.
+PR CI uses Azure Kubernetes Bake with Kompose 1.38.0 and uploads a
+`kompose-preview-<stack>-not-for-deployment` artifact for each media stack.
 It uses placeholder values, not live credentials. Do not point Flux at these
 artifacts. Keep the reviewed Kubernetes manifests and overlays separate from
 `compose/`; Flux will reconcile those once the workloads are ready.
