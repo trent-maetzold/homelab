@@ -1,0 +1,36 @@
+name: Validate media Helm releases
+
+on:
+  pull_request:
+    paths:
+      - 'apps/media/**'
+      - 'clusters/nidavellir/**'
+      - 'scripts/render-media.py'
+      - '.github/workflows/media-helm.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: azure/setup-helm@b9e51907a09c216f16ebe8536097933489208112 # v4.3.0
+        with:
+          version: v4.3.1
+      - name: Render and validate
+        run: |
+          python3 -m venv --system-site-packages "$RUNNER_TEMP/media-venv"
+          "$RUNNER_TEMP/media-venv/bin/pip" install PyYAML==6.0.3
+          "$RUNNER_TEMP/media-venv/bin/python" scripts/render-media.py rendered
+          kubectl kustomize clusters/nidavellir >/dev/null
+          go run github.com/yannh/kubeconform/cmd/kubeconform@v0.8.0 -strict -summary -kubernetes-version 1.36.0 rendered/*.yaml
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: media-helm-rendered
+          path: rendered/
+          if-no-files-found: error

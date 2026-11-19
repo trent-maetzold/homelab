@@ -1,0 +1,103 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: prowlarr
+  namespace: media
+spec:
+  interval: 1h
+  releaseName: prowlarr
+  chartRef:
+    kind: OCIRepository
+    name: app-template
+  values:
+    controllers:
+      app:
+        strategy: Recreate
+        initContainers:
+          vpn:
+            # Gate Prowlarr startup on the tunnel in the shared pod network.
+            restartPolicy: Always
+            image:
+              repository: qmcgaw/gluetun
+              tag: latest
+            securityContext:
+              capabilities:
+                add: [NET_ADMIN]
+            env:
+              TZ: America/Chicago
+              VPN_SERVICE_PROVIDER: protonvpn
+              VPN_TYPE: wireguard
+              WIREGUARD_PRIVATE_KEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: prowlarr
+                    key: wireguard-private-key
+              SERVER_CITIES: Chicago
+              FIREWALL_INPUT_PORTS: "9696"
+              FIREWALL_OUTBOUND_SUBNETS:
+                valueFrom:
+                  secretKeyRef:
+                    name: prowlarr
+                    key: firewall-outbound-subnets
+            probes:
+              startup:
+                enabled: true
+                type: COMMAND
+                command: ["/gluetun-entrypoint", "healthcheck"]
+                spec:
+                  periodSeconds: 5
+                  timeoutSeconds: 5
+                  failureThreshold: 24
+        containers:
+          app:
+            image:
+              repository: lscr.io/linuxserver/prowlarr
+              tag: latest
+            env:
+              PUID: "99"
+              PGID: "100"
+              UMASK: "022"
+              TZ: America/Chicago
+              PROWLARR__APP__INSTANCENAME: Prowlarr
+              PROWLARR__AUTH__METHOD: Forms
+              PROWLARR__AUTH__APIKEY:
+                valueFrom:
+                  secretKeyRef:
+                    name: prowlarr
+                    key: api-key
+              PROWLARR__UPDATE__MECHANISM: Docker
+              PROWLARR__POSTGRES__HOST: arr-postgres-rw
+              PROWLARR__POSTGRES__USER: prowlarr
+              PROWLARR__POSTGRES__PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: prowlarr
+                    key: postgres-password
+              PROWLARR__POSTGRES__MAINDB: prowlarr
+              PROWLARR__POSTGRES__LOGDB: prowlarr_log
+    service:
+      app:
+        controller: app
+        type: ClusterIP
+        ports:
+          http:
+            port: 9696
+    persistence:
+      config:
+        type: persistentVolumeClaim
+        storageClass: local-path
+        accessMode: ReadWriteOnce
+        size: 5Gi
+        retain: true
+        advancedMounts:
+          app:
+            app:
+              - path: /config
+      tun:
+        type: hostPath
+        hostPath: /dev/net/tun
+        hostPathType: CharDevice
+        advancedMounts:
+          app:
+            vpn:
+              - path: /dev/net/tun
