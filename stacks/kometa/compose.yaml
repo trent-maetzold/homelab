@@ -12,6 +12,7 @@ services:
       - pvr
     environment:
       TZ: "America/Chicago"
+      KOMETA_TIMES: "${KOMETA_TIMES:?KOMETA_TIMES is required}"
       KOMETA_PLEXURL: "${PLEX_URL:?PLEX_URL is required}"
       KOMETA_PLEXTOKEN: "${PLEX_TOKEN:?PLEX_TOKEN is required}"
       KOMETA_TMDBKEY: "${TMDB_APIKEY:?TMDB_APIKEY is required}"
@@ -20,7 +21,6 @@ services:
       KOMETA_RADARRAPIKEY: "${RADARR_APIKEY:?RADARR_APIKEY is required}"
       KOMETA_SONARRURL: "${SONARR_URL:?SONARR_URL is required}"
       KOMETA_SONARRAPIKEY: "${SONARR_APIKEY:?SONARR_APIKEY is required}"
-    command: ["--run"]
 
 networks:
   pvr:

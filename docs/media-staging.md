@@ -9,17 +9,6 @@
 - **Networking:** Replace the Compose `pvr`, `proxy`, and `postgres` network assumptions with target DNS, routing, and access controls. Preserve the Radarr/Sonarr `/hd`, `/uhd`, and `/anime` URLs and check download-client, indexer, Plex, and FlareSolverr connectivity. Prowlarr still uses Gluetun and `network_mode: service:vpn`; it needs an explicit VPN networking design on the target.
 - **Downloaders:** Follow hotio's WireGuard guides for [qBittorrent](https://hotio.dev/containers/qbittorrent/#wireguard) and [SABnzbd](https://hotio.dev/containers/sabnzbd/#wireguard). Provision a separate Proton WireGuard file at `/config/wireguard/wg0.conf` in each app's config mount; keep keys and any generated tunnel files out of Git. Use a Proton endpoint and profile with port forwarding enabled for qBittorrent only. hotio handles that port natively; do not publish it on the host or reintroduce the old Gluetun callbacks. When testing restored config, check for stale qBittorrent interface bindings (`lo` or the old Gluetun interface). Verify WireGuard and `NET_ADMIN` support, VPN-only egress on tunnel loss, qBittorrent port updates, and Web UI/API reachability from Traefik and the Arr apps. The legacy downloader DNS aliases are retained on `pvr` for Compose only.
 
-## Manual jobs
-
-Kometa and Recyclarr stay out of generated Deployments. On a Compose host with the expected mounts, `pvr` network, service endpoints, and credentials, run from the repository root:
-
-```sh
-docker compose -f compose/jobs/kometa/compose.yaml run --rm app
-docker compose -f compose/jobs/recyclarr/compose.yaml run --rm app
-```
-
-These run Kometa with `--run` and Recyclarr with `sync` (v8 CLI syntax), then remove the one-off container. Both jobs write to the configured services; check the endpoints before running them.
-
 ## CI previews
 
-Convert each `compose/media/*/compose.yaml` separately into its own directory: stacks reuse service names such as `app` and `vpn`. Keep `compose/jobs/` out of conversion. Use dummy values for required interpolation (`ARR_API_KEY`, `POSTGRES_PASSWORD`, and Prowlarr's `WIREGUARD_PRIVATE_KEY`), never live credentials. Treat output as preview only: Compose aliases, shared VPN namespaces, host mounts, and Traefik labels do not establish equivalent Kubernetes routing, storage, or VPN behavior.
+Convert each `compose/media/*/compose.yaml` separately into its own directory: stacks reuse service names such as `app` and `vpn`. Use dummy values for required interpolation (`ARR_API_KEY`, `POSTGRES_PASSWORD`, and Prowlarr's `WIREGUARD_PRIVATE_KEY`), never live credentials. Treat output as preview only: Compose aliases, shared VPN namespaces, host mounts, and Traefik labels do not establish equivalent Kubernetes routing, storage, or VPN behavior.

@@ -7,7 +7,6 @@ Docker Compose stacks for Unraid and Compose inputs for the k3s media migration.
 ```
 stacks/<service>/compose.yaml   — Service definitions
 compose/media/<stack>/          — Compose inputs for Kompose
-compose/jobs/<job>/             — Compose inputs for Kometa and Recyclarr (not deployed)
 ```
 
 ## Stacks
@@ -51,8 +50,8 @@ unique workload and Service names, and ingress. Keep the media mount at `/data`,
 restore the app databases and configs from Mimir before starting the new writers,
 and validate the VPN-backed workloads. Prowlarr still needs its Gluetun network
 namespace translated explicitly; Kompose does not preserve it. Plex and the
-shared PostgreSQL stack stay on Unraid. Kometa and Recyclarr are excluded from
-conversion until a scheduler is chosen.
+shared PostgreSQL stack stay on Unraid. Kometa and Recyclarr remain under
+`stacks/` and are excluded from conversion.
 
 ## Usage
 
