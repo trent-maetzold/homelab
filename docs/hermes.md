@@ -6,7 +6,8 @@ tailnet through Heimdall's Traefik.
 
 ## Before Flux reconciles it
 
-Create the namespace Secret by hand; it is never committed:
+Flux creates the `hermes` namespace on the first reconcile. Create the Secret
+by hand once it exists (or create the namespace first); it is never committed:
 
 ```sh
 sudo k3s kubectl -n hermes create secret generic hermes-secrets \
