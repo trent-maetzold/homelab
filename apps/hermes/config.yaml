@@ -1,0 +1,20 @@
+# Mounted at /opt/data/config.yaml (HERMES_HOME) in the hermes container.
+# The dashboard host/port come from the HERMES_DASHBOARD_* environment; the
+# public URL matches the Ingress on the cluster Traefik.
+dashboard:
+  # Engages the auth gate for the non-loopback bind and gives sign-in a
+  # stable redirect origin behind the reverse proxy.
+  public_url: https://hermes.ts.trkm.io
+  # k3s Traefik pods are the only proxies in front of this backend.
+  trusted_proxies:
+    - 10.42.0.0/16
+
+privacy:
+  redact_pii: true
+
+checkpoints:
+  enabled: true
+
+skills:
+  guard_agent_created: true
+  write_approval: true
