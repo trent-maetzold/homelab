@@ -40,7 +40,7 @@ spec:
               value: 0.0.0.0
             - name: HERMES_DASHBOARD_PORT
               value: "9119"
-            # Browser sign-in for the dashboard and Webapp.
+            # Browser sign-in for the dashboard.
             - name: HERMES_DASHBOARD_BASIC_AUTH_USERNAME
               value: tm
             - name: HERMES_DASHBOARD_BASIC_AUTH_PASSWORD
