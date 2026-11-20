@@ -13,14 +13,16 @@ by hand once it exists (or create the namespace first); it is never committed:
 sudo k3s kubectl -n hermes create secret generic hermes-secrets \
   --from-literal=HERMES_DASHBOARD_BASIC_AUTH_PASSWORD="$(openssl rand -hex 16)" \
   --from-literal=HERMES_DASHBOARD_BASIC_AUTH_SECRET="$(openssl rand -base64 32)" \
-  --from-literal=HERMES_DASHBOARD_SESSION_TOKEN="$(openssl rand -hex 32)" \
+  --from-literal=HERMES_DASHBOARD_SESSION_TOKEN="$(sops -d --extract '["hermes"]["desktop-token"]' nix/hosts/muninn/secrets.yaml)" \
   --from-literal=DEEPSEEK_API_KEY=... \
   --from-literal=OPENCODE_API_KEY=...
 ```
 
 The browser signs in with `tm` plus the basic-auth password.
-`HERMES_DASHBOARD_SESSION_TOKEN` is the token Hermes Desktop presents; copy it
-into `~/.config/hermes/remote-token` (mode 0600) on a desktop.
+`HERMES_DASHBOARD_SESSION_TOKEN` is the token Hermes Desktop presents. It comes
+from the dotfiles sops file (`nix/hosts/muninn/secrets.yaml`, key
+`hermes/desktop-token`), which muninn decrypts into
+`/run/secrets/hermes-desktop-token` at boot — one value, never written to disk.
 
 ## Routing
 
