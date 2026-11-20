@@ -4,6 +4,7 @@ namespace: hermes
 resources:
   - namespace.yaml
   - workload.yaml
+  - ingress.yaml
 configMapGenerator:
   - name: hermes-config
     files:

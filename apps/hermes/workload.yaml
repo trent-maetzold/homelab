@@ -78,8 +78,6 @@ spec:
           ports:
             - name: dashboard
               containerPort: 9119
-            - name: webapp
-              containerPort: 9120
           readinessProbe:
             tcpSocket:
               port: dashboard
@@ -111,15 +109,10 @@ kind: Service
 metadata:
   name: hermes
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: hermes
   ports:
     - name: dashboard
       port: 9119
       targetPort: dashboard
-      nodePort: 30911
-    - name: webapp
-      port: 9120
-      targetPort: webapp
-      nodePort: 30912
