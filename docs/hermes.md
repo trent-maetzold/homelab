@@ -41,7 +41,7 @@ directly, not the NodePorts, so the two do not collide.
 ```sh
 sudo k3s kubectl -n hermes get deploy,svc,pvc
 sudo k3s kubectl -n hermes logs deploy/hermes -f
-curl -fsS http://100.64.0.2:30911/health
+curl -sSI http://100.64.0.2:30911/ | head -1  # 401 until you sign in
 ```
 
 `config.yaml` is generated into the `hermes-config` ConfigMap and mounted at
