@@ -1,0 +1,26 @@
+# Mounted at /opt/data/config.yaml (HERMES_HOME) in the hermes container.
+# Dashboard and Webapp host/port come from the HERMES_DASHBOARD_* and
+# webapp.* settings; the public URLs match the routes on Heimdall's Traefik.
+webapp:
+  enabled: true
+  host: 0.0.0.0
+  port: 9120
+  public_url: https://hermes.ts.trkm.io
+
+dashboard:
+  # Engages the auth gate for the non-loopback bind and gives sign-in a
+  # stable redirect origin behind the reverse proxy.
+  public_url: https://dash.hermes.ts.trkm.io
+  # Heimdall's Traefik reaches the NodePort from the tailnet.
+  trusted_proxies:
+    - 100.64.0.0/10
+
+privacy:
+  redact_pii: true
+
+checkpoints:
+  enabled: true
+
+skills:
+  guard_agent_created: true
+  write_approval: true
